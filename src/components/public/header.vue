@@ -23,19 +23,10 @@
         </el-autocomplete>
       </li>
       <li class="right">
-        <span class="right_word" @click="toRouter('/home')">首页</span>
-        <span class="right_word" @click="toRouter('/manage')">管理</span>
-        <span class="right_word">登录</span>
+        <span class="right_word" @click="toRouter('/home')">登录</span>
+        <span class="right_word" @click="toRouter('/register')" >注册</span>
+        <span class="right_word" @click="outLogin" v-show="showOutLogin">退出</span>
         <img src="" alt="">
-        <el-dropdown trigger="click" @command="handleCommand">
-  <span class="el-dropdown-link">
-      <i class="iconfont icon-xiala"></i>
-  </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>退出</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
       </li>
     </ul>
   </div>
@@ -47,13 +38,26 @@
     data() {
       return {
         restaurants: [],
-        state3: ''
+        state3: '',
+        showOutLogin:false,
       }
     },
     watch: {},
     methods: {
       goback(){
         window.history.go(-1);
+      },
+      outLogin() {
+        console.log('删除评论');
+        this.$confirm('是否退出?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.toRouter('/home')
+        }).catch(() => {
+
+        });
       },
       /*搜索下拉*/
       querySearch(queryString, cb) {
@@ -125,24 +129,24 @@
       handleIconClick(ev) {
         console.log(ev);
       },
-      /*下拉*/
-      handleCommand(){
-        console.log('点击了下拉菜单');
-      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
     },
-
     mounted() {
       this.restaurants = this.loadAll();
+      if(this.$route.path=='/home'||this.$route.path=='/'){
+        this.showOutLogin=false;
+      }else {
+        this.showOutLogin=true;
+      }
     }
   }
 </script>
 <style scoped lang='stylus' rel='stylesheet/stylus'>
   .my_header {
     background-color: #fff
-    height: 50px
+    height: 16%;
     width: 100%
     overflow hidden;
     font-size: 14px;
@@ -171,7 +175,7 @@
     .el-input__suffix-inner .icon-wxbsousuotuiguang {
       font-size: 24px;
       position: absolute;
-      top: 8px;
+      top: 4px;
       left: -24px
     }
     .el-input__inner {
@@ -182,7 +186,7 @@
       line-height: 36px;
     }
     .heaer_ul {
-      padding: 0 12px 0 6px;
+      padding: 2px 12px 2px 6px;
       box-sizing border-box;
       display: flex;
       justify-content space-between;
@@ -218,11 +222,11 @@
       }
       .right_word {
         margin-right: 36px
-        cursor :pointer
+        cursor: pointer
       }
-        .right_word:hover{
-          color skyblue
-        }
+      .right_word:hover {
+        color skyblue
+      }
     }
   }
 </style>

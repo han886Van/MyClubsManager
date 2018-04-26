@@ -1,5 +1,5 @@
 const state = {
-  showNav: false,/*显示侧边栏*/
+  showNav: true,/*显示侧边栏*/
 
 };
 

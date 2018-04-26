@@ -1,22 +1,22 @@
 <template>
-  <div class="home">
+  <div class="home register">
     <div class="bgc"></div>
     <div class="login">
-      <p>登录</p>
-      <el-radio-group v-model="formLabelAlign.radio" @change="chooseRule()">
+      <p>注册</p>
+      <el-radio-group v-model="formRegister.radio" @change="chooseRule()">
         <el-radio :label="1">社员</el-radio>
         <el-radio :label="2">社团管理员</el-radio>
         <el-radio :label="3">教师</el-radio>
       </el-radio-group>
       <div class="my_form">
-        <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+        <el-form :label-position="labelPosition" label-width="80px" :model="formRegister">
           <el-form-item label="账号">
-            <el-input v-model="formLabelAlign.name"></el-input>
+            <el-input v-model="formRegister.name"></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input type="password" v-model="formLabelAlign.passWord"></el-input>
+            <el-input type="password" v-model="formRegister.passWord"></el-input>
           </el-form-item>
-          <el-button type="primary" @click="login">立即登录</el-button>
+          <el-button type="primary" @click="toLogin" >立即注册</el-button>
         </el-form>
       </div>
     </div>
@@ -30,7 +30,7 @@
     data () {
       return {
         labelPosition: 'right',
-        formLabelAlign: {
+        formRegister: {
           name: '',
           passWord: '',
           radio: 3
@@ -39,13 +39,16 @@
     },
     methods: {
       chooseRule(){
-        console.log(this.formLabelAlign.radio);
+        console.log(this.formRegister.radio);
       },
-      login(){
-        console.log(this.formLabelAlign);
-        localStorage.setItem("userRole", this.formLabelAlign.radio);
-        this.$router.push({path: '/manage'});
-        console.log(localStorage.getItem('userRole'));;
+      toLogin(){
+        console.log(this.formRegister);
+        /*成功注册*/
+        this.$message({
+          message: '恭喜你，成功注册',
+          type: 'success'
+        });
+        this.$router.push({path: '/home'})
       }
     },
     mounted(){
@@ -56,7 +59,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .home {
+  .register {
     overflow: hidden
     width: 100%
     height: 100%
@@ -65,7 +68,7 @@
       width: 100%
       height: 93%
       position: absolute;
-      background: url("../assets/img/bg6.jpg") no-repeat;
+      background: url("../assets/img/bg5.jpg") no-repeat;
       background-position: center;
       background-size: 100% 100%;
       z-index: -22;
@@ -81,9 +84,9 @@
         font-size: 30px;
         margin-bottom :30px;
       }
-        .my_form{
+      .my_form{
 
-        }
+      }
 
     }
   }

@@ -10,6 +10,17 @@
   top: 5px;
   right: 12px;
 }
+/*论坛*/
+.discussion .el-textarea{
+  width: 94%;
+}
+.edit_btn .el-button--text{
+  color: #d9a641
+}
+.discussion .edit_btn .el-button{
+  padding:0;
+  border:none;
+}
 .discussion .el-upload-list__item{
   width: 48%;
 }
@@ -22,4 +33,26 @@
 .discussion .el-textarea__inner{
   height: 100px;
   margin-bottom: 10px;
+}
+/*首页*/
+.home .el-input__inner{
+  width: 40%;
+}
+.home .el-form{
+  margin-left: 34%;
+  margin-top: 30px;
+}
+.home .el-form-item__label{
+  font-size: 16px;
+  color: #fff;
+}
+.home .el-radio-group{
+  margin-left: 39.5%;
+}
+.home .el-radio__label{
+  color: #fff;
+}
+.home .el-button{
+  margin-top:20px;
+  margin-left: 18%;
 }

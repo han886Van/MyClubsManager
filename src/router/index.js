@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'
+import register from '@/components/register'
 import manage from '@/components/manage'
+import MySpace from '@/components/MySpace/MySpace'
 import news from '@/components/news/news_main'
 import society from '@/components/society/society_main'
 import member from '@/components/member/member_main'
@@ -21,6 +23,14 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: home
+    },{
+      path: '/MySpace',
+      name: 'MySpace',
+      component: MySpace
+    },{
+      path: '/register',
+      name: 'register',
+      component: register
     },{
       path: '/manage',
       name: 'manage',

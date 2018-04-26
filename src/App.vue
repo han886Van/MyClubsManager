@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!--<div class="bgc"></div>-->
     <my-header></my-header>
     <left-nav v-show="isShow" class="my_left_nav"></left-nav>
     <router-view class="my_router" />
@@ -27,6 +26,11 @@
             }
         },
         mounted:function(){
+          if(this.$route.path=='/home'||this.$route.path=='/'||this.$route.path=='/register'){
+            this.SET_SHOW_NAV(false);
+          }else {
+            this.SET_SHOW_NAV(true);
+          }
         },
         methods: {
           ...mapMutations([
@@ -34,18 +38,12 @@
           ]),
         },
         watch:{
-         /* '$route': function () {
-            console.log('刷新');
-            console.log(this.$route);
-          }*/
           $route(){
-              if(this.$route.path=='/home'||this.$route.path=='/'){
-                this.SET_SHOW_NAV(false);
-              }else {
-                this.SET_SHOW_NAV(true);
-              }
-            console.log(1);
-            console.log(this.$route.fullPath);
+            if(this.$route.path=='/home'||this.$route.path=='/'||this.$route.path=='/register'){
+              this.SET_SHOW_NAV(false);
+            }else {
+              this.SET_SHOW_NAV(true);
+            }
           }
         }
     }
@@ -60,10 +58,12 @@
   height: 100%;
   overflow hidden;
   box-sizing border-box;
-  background: rgba(33,33,33,0.1);
-  padding-bottom: 50px;
+  background: rgba(99,99,99,0.1);
   .my_router,.my_left_nav{
     float :left;
   }
+    .my_left_nav{
+      display: inline-block;
+    }
 }
 </style>
