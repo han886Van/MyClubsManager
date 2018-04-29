@@ -193,7 +193,6 @@
     .dis_box {
       margin-left: 90px;
       box-sizing border-box;
-
       li {
         width: 1024px
         background: #fff;

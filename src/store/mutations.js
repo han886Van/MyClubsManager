@@ -1,5 +1,5 @@
 import {
-  SET_SHOW_NAV
+  SET_SHOW_NAV,USER_ROULE
 
 
 } from './mutation-types'
@@ -7,6 +7,9 @@ import {
 const mutations = {
   [SET_SHOW_NAV](state, data) {
     state.showNav = data
+  },
+    [USER_ROULE](state, data) {
+    state.userRole = data
   },
 }
 
