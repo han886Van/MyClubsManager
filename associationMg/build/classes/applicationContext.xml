@@ -36,7 +36,7 @@
 	
 	
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="typeAliasesPackage" value="com.gpnu.association.pojo" />
+	<!-- 	<property name="typeAliasesPackage" value="com.gpnu.association.pojo" /> -->
 		<property name="dataSource" ref="dataSource"/>
 		<property name="mapperLocations" value="classpath:com/gpnu/association/mapper/*.xml"/>
 	</bean>

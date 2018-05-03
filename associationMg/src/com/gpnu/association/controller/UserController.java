@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gpnu.association.mapper.UserMapper;
-import com.gpnu.association.pojo.User;
 import com.gpnu.association.service.UserService;
 
 @Controller

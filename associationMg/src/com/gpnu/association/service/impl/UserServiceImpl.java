@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gpnu.association.mapper.UserMapper;
-import com.gpnu.association.pojo.User;
 import com.gpnu.association.service.UserService;
 import com.gpnu.association.util.CommonUtil;
 

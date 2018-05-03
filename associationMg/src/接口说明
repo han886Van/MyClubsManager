@@ -75,11 +75,14 @@ http://localhost:8080/association/user/saveOrUpdateUser
 接收数据类型
 注册时
 必须包含：account(账号)、password(密码)；
-可包含：password(密码)、userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)；
+可包含：userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)、
+userType(角色：2为老师，3为学生)、college(二级学院名称)、major(专业名称)、
+typeId(添加老师账号时需要传所属类别：1为专业学术类、2为科技创新类、3为艺术兴趣类、4为体育健身类、5为公益服务类)；
 
 修改个人信息时
 必须包含userId(用户id)；
-可包含password(密码)、userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)；
+可包含password(密码)、userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)、
+college(二级学院名称)、major(专业名称)；
 ------------------------------------------------------------------------------
 
 

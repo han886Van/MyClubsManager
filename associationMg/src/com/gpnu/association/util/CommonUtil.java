@@ -15,7 +15,11 @@ public class CommonUtil {
 	public static final String ALLOW_STATE = "1";	//通过状态
 	public static final String REFUSE_STATE = "2";	//拒绝状态
 	
-	
+	public static final String PROFESSIONAL_ACADEMIC = "1";	//专业学术类
+	public static final String SCIENCE_TECHNOLOGY = "2";	//科技创新类
+	public static final String INTEREST_ART = "3";			//艺术兴趣类
+	public static final String SPORTS_FITNESS = "4";		//体育健身类
+	public static final String PUBLIC_SERVICE = "5";		//公益服务类
 	
 	 //**上传附件类型**//
 	public static final String ATTACHMENT_TYPE_HEADIMG = "1";  //头像

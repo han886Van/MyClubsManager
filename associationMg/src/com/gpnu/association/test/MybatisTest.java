@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.gpnu.association.mapper.AssociationAndUserMapper;
+import com.gpnu.association.mapper.AssociationMapper;
+import com.gpnu.association.mapper.TypeMapper;
 import com.gpnu.association.mapper.UserMapper;
 import com.gpnu.association.util.CommonUtil;
 
@@ -21,6 +24,15 @@ public class MybatisTest {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private TypeMapper typeMapper;
+	
+	@Autowired
+	private AssociationMapper associationMapper;
+	
+	@Autowired
+	private AssociationAndUserMapper anuMapper;
+	
 	@Test
 	public void testUser() {
 		Map user = new HashMap();
@@ -61,5 +73,45 @@ public class MybatisTest {
 		System.out.println(user);
 	}
 
+	
+	@Test
+	public void testType(){
+		Map type = new HashMap();
+		type.put("type", "二级学院");
+		List<Map> res = typeMapper.get(type);
+		System.out.println(res);
+	}
+	
+	@Test
+	public void testAssociation(){
+		Map paraMap = new HashMap();
+		/*paraMap.put("name", "计科女篮");
+		paraMap.put("briefIntroduction", "无兄弟，不篮球！");
+		paraMap.put("applyComments", "锻炼身体，休闲娱乐");
+		associationMapper.add(paraMap);*/
+		
+	/*	paraMap.put("associationId", "1");
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		paraMap.put("place", "新旧篮球场");
+		associationMapper.update(paraMap);*/
+		
+	/*	paraMap.put("associationId", "1");
+		paraMap.put("name", "计科女篮");
+		paraMap.put("state", CommonUtil.REFUSE_STATE);
+		List<Map> res = associationMapper.get(paraMap);
+		System.out.println(res);*/
+		
+		paraMap.put("associationId", "1");
+		associationMapper.delete(paraMap);
+	}
+	
+	@Test
+	public void testAssociationAndUser(){
+		Map paraMap = new HashMap();
+		paraMap.put("id", "1");
+		paraMap.put("checkPersonId", "1");
+		paraMap.put("userState", CommonUtil.ALLOW_STATE);
+		anuMapper.delete(1);
+	}
 
 }

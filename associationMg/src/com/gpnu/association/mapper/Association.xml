@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gpnu.association.mapper.AssociationMapper">
+	<insert id="add" parameterType="Map">
+		insert into association (name, brief_introduction, state, place, type_id, create_person_id, create_time, apply_comments)
+		values (#{name}, #{briefIntroduction}, #{state}, #{place}, #{typeId}, #{userId}, #{createTime}, #{applyComments})
+		<selectKey keyProperty="association_id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="Map">
+		delete from association where association_id = #{associationId}
+	</delete>
+	
+	<select id="get" parameterType="Map" resultType="Map">
+		select * from association
+		<trim prefix="where" suffixOverrides="and">
+			<if test="associationId != null">
+				association_id = #{associationId} and
+			</if>
+			<if test="name != null">
+				name = #{name} and
+			</if>
+			<if test="state != null">
+				state = #{state} and
+			</if>
+			<if test="typeId != null">
+				type_id = #{typeId} and
+			</if>
+		</trim>
+	</select>
+	
+	<update id="update" parameterType="Map">
+		update association 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null">
+				name=#{name},
+			</if>
+			<if test="briefIntroduction != null">
+				brief_introduction=#{briefIntroduction}, 
+			</if>
+			<if test="state != null">
+				state=#{state}, 
+			</if>
+			<if test="place != null">
+				place=#{place}, 
+			</if>
+			<if test="typeId != null">
+				type_id=#{typeId}, 
+			</if>
+			<if test="checkPersonId != null">
+				check_person_id=#{checkPersonId}, 
+			</if>
+			<if test="checkTime != null">
+				check_time=#{checkTime}, 
+			</if>
+			<if test="checkComments != null">
+				check_comments=#{checkComments}, 
+			</if>
+		</trim> 
+		  where association_id=#{associationId}
+	</update>
+</mapper>

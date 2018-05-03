@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSONObject;
-import com.gpnu.association.pojo.User;
 
 public interface UserService {
 	public JSONObject login(Map paraMap);
