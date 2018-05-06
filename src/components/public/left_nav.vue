@@ -14,25 +14,38 @@
         <span slot="title" class="i_word">个人中心</span>
       </el-menu-item>
       <!--多选-->
-      <el-submenu v-show="myRole==1"  index="society?myRouter=1">
+      <el-submenu v-show="myRole==1"  index="society?myRouter=2">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
           <span class="i_word">社团管理</span>
         </template>
         <el-menu-item index="society?myRouter=1" class="li_son">
-          <span slot="title" class="i_word">已加入社团</span>
+          <span slot="title" class="i_word">已进社团</span>
         </el-menu-item>
         <el-menu-item index="society?myRouter=2" class="li_son">
           <span slot="title" class="i_word">全部社团</span>
         </el-menu-item>
         <el-menu-item  index="society?myRouter=3" class="li_son">
-          <span slot="title" class="i_word">加入中社团</span>
+          <span slot="title" class="i_word">管理社团</span>
         </el-menu-item>
         <el-menu-item  index="society?myRouter=4" class="li_son">
-          <span slot="title" class="i_word">退出中社团</span>
+          <span slot="title" class="i_word">申请记录</span>
         </el-menu-item>
       </el-submenu>
-      <el-submenu v-show="myRole==2"  index="society?myRouter=4">
+      <!--教师-->
+      <el-submenu v-show="myRole==2"  index="society?myRouter=7">
+        <template slot="title">
+          <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
+          <span class="i_word">社团管理</span>
+        </template>
+        <el-menu-item index="society?myRouter=4" class="li_son">
+          <span slot="title" class="i_word">已加入社团</span>
+        </el-menu-item>
+        <el-menu-item index="society?myRouter=5" class="li_son">
+          <span slot="title" class="i_word">已加入社团</span>
+        </el-menu-item>
+      </el-submenu>
+      <el-submenu v-show="myRole==3"  index="society?myRouter=8">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
           <span class="i_word">社团管理</span>
@@ -112,10 +125,8 @@
       },
       handleOpen(key, keyPath) {
         this.$router.push({path: key})
-        console.log(keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
       }
     },
     mounted() {

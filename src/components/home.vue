@@ -4,9 +4,9 @@
         <div class="login">
             <p>登录</p>
             <el-radio-group v-model="formLabelAlign.radio" @change="chooseRule()">
-                <el-radio :label="1">社员</el-radio>
-                <el-radio :label="2">社团管理员</el-radio>
-                <el-radio :label="3">教师</el-radio>
+                <el-radio :label="1">学生</el-radio>
+                <el-radio :label="2">教师</el-radio>
+                <el-radio :label="3">管理员</el-radio>
             </el-radio-group>
             <div class="my_form">
                 <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
@@ -50,7 +50,7 @@
                 localStorage.setItem("userRole", this.formLabelAlign.radio);
                 this.USER_ROULE(localStorage.getItem('userRole'));
                 this.$router.push({path: '/manage'});
-                console.log(localStorage.getItem('userRole') + '角色');
+
             }
         },
         mounted(){

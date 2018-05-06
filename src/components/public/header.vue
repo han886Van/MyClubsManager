@@ -24,7 +24,6 @@
             </li>
             <li class="right">
                 <span class="right_word" @click="toRouter('/home')" v-show="showLogin">登录</span>
-                <span class="right_word" @click="toRouter('/register')">注册</span>
                 <span class="right_word" @click="outLogin" v-show="showOutLogin">退出</span>
                 <img src="" alt="">
             </li>

@@ -71,7 +71,10 @@
   min-width: 119px;
 }
 .society .el-input{
-  width: 260px !important;
+  width: 182px !important;
+}
+.society .el-select .el-input{
+  width: 144px !important;
 }
 .society .el-button+.el-button{
   margin-left:0px;

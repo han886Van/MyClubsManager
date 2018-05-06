@@ -6,10 +6,13 @@ import manage from '@/components/manage'
 import MySpace from '@/components/MySpace/MySpace'
 import news from '@/components/news/news_main'
 import society from '@/components/society/society_main'
+import societyDetails from '@/components/society/societyDetails'
+import addSociety from '@/components/society/addSociety'
 import member from '@/components/member/member_main'
 import materials from '@/components/materials/materials_main'
 import discussion from '@/components/discussion/discussion_main'
 import activity from '@/components/activity/activity_main'
+
 
 Vue.use(Router)
 
@@ -59,6 +62,14 @@ export default new Router({
       path: '/activity',
       name: 'activity',
       component: activity
+    },{
+      path: '/societyDetails',
+      name: 'societyDetails',
+      component: societyDetails
+    },{
+      path: '/addSociety',
+      name: 'addSociety',
+      component: addSociety
     },
   ]
 })
