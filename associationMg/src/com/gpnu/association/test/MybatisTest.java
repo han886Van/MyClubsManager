@@ -13,6 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gpnu.association.mapper.AssociationAndUserMapper;
 import com.gpnu.association.mapper.AssociationMapper;
+import com.gpnu.association.mapper.EventMapper;
+import com.gpnu.association.mapper.MaterielMapper;
+import com.gpnu.association.mapper.NewsMapper;
 import com.gpnu.association.mapper.TypeMapper;
 import com.gpnu.association.mapper.UserMapper;
 import com.gpnu.association.util.CommonUtil;
@@ -32,6 +35,15 @@ public class MybatisTest {
 	
 	@Autowired
 	private AssociationAndUserMapper anuMapper;
+	
+	@Autowired
+	private EventMapper eventMapper;
+	
+	@Autowired
+	private MaterielMapper materielMapper;
+	
+	@Autowired
+	private NewsMapper newsMapper;
 	
 	@Test
 	public void testUser() {
@@ -114,4 +126,55 @@ public class MybatisTest {
 		anuMapper.delete(1);
 	}
 
+	@Test
+	public void testEvent(){
+		Map paraMap = new HashMap();
+		/*paraMap.put("title", "计科篮球赛活动申请");
+		paraMap.put("content", "计科院各班级比赛，决出名次并可领取相应奖励");
+		paraMap.put("associationId", "1");
+		paraMap.put("userId", "4");
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		eventMapper.add(paraMap);
+		
+		paraMap.put("id", "1");
+		eventMapper.delete(1);
+		
+		paraMap.put("title", "计科篮球赛活动申请111");
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		eventMapper.update(paraMap);*/
+		paraMap.put("id", "2");
+		List<Map> res = eventMapper.get(paraMap);
+		System.out.println(res);
+	}
+	
+	@Test
+	public void testMateriel(){
+		Map paraMap = new HashMap();
+		/*paraMap.put("title", "计科球队经费申请");
+		paraMap.put("content", "计科球队经费用于篮球、队服、矿泉水购买");
+		paraMap.put("associationId", "1");
+		paraMap.put("userId", "4");
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		materielMapper.add(paraMap);*/
+		paraMap.put("id", 1);
+		paraMap.put("applyComments", "穷死了，补贴一下好吧");
+		paraMap.put("checkComments", "通过");
+		paraMap.put("state", CommonUtil.REFUSE_STATE);
+		materielMapper.update(paraMap);
+		
+		List<Map> res = materielMapper.get(paraMap);
+		System.out.println(res);
+		
+		materielMapper.delete(1);
+	}
+	
+	@Test
+	public void testNews(){
+		Map paraMap = new HashMap();
+		paraMap.put("title", "计科院");
+		paraMap.put("id", "1");
+		List<Map> res = newsMapper.get(paraMap);
+		System.out.println(res);
+		
+	}
 }

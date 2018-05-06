@@ -22,13 +22,13 @@
 				user_id = #{userId} and
 			</if>
 			<if test="userName != null">
-				user_name = #{userName} and
+				user_name like '%${userName}%' and
 			</if>
 			<if test="userType != null">
 				user_type = #{userType} and
 			</if>
 			<if test="college != null">
-				college = #{college} and
+				college like '%${college}%' and
 			</if>
 		</trim>
 	</select>

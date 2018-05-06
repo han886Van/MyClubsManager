@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gpnu.association.mapper.NewsMapper">
+	<insert id="add" parameterType="Map">
+		insert into news (title, content, create_time, association_id, user_id, state, type_id)
+		values (#{title}, #{content}, #{createTime}, #{associationId}, #{userId}, #{state}, #{typeId})
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<delete id="delete" parameterType="_int">
+		delete from news where id = #{id}
+	</delete>
+	
+	<select id="get" parameterType="Map" resultType="Map">
+		select * from news
+		<trim prefix="where" suffixOverrides="and">
+			<if test="id != null">
+				id = #{id} and
+			</if>
+			<if test="title != null">
+				title like '%${title}%' and
+			</if>
+			<if test="associationId != null">
+				association_id = #{associationId} and
+			</if>
+			<if test="state != null">
+				state = #{state} and
+			</if>
+			<if test="typeId != null">
+				type_id = #{typeId} and
+			</if>
+		</trim>
+	</select>
+	
+	<update id="update" parameterType="Map">
+		update news 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="title != null">
+				title=#{title},
+			</if>
+			<if test="content != null">
+				content=#{content},
+			</if>
+			<if test="beginTime != null">
+				begin_time=#{beginTime},
+			</if>
+			<if test="endTime != null">
+				end_time=#{endTime},
+			</if>
+			<if test="state != null">
+				state=#{state}, 
+			</if>
+		</trim> 
+		 where id=#{id}
+	</update>
+	
+</mapper>
