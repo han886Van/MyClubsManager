@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gpnu.association.mapper.LikeCommentsMapper">
+	<insert id="add">
+		insert into like_comments (comments_id, user_id)
+		values (#{commentsId}, #{userId})
+	</insert>
+	
+	<delete id="cancelLike">
+		delete from like_comments
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="commentsId != null">
+				and comments_id = #{commentsId}
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+		</trim>
+	</delete>
+
+	<select id="get" parameterType="Map" resultType="Map">
+		select * from like_comments 
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="commentsId != null">
+				and comments_id = #{commentsId}
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getCount" parameterType="Map" resultType="Map">
+		SELECT
+			comments_id,
+			COUNT(*) AS likesum
+		FROM
+			like_comments
+		GROUP BY
+			comments_id
+	</select>
+</mapper>

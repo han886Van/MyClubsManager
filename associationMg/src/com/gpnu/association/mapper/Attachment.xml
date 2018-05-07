@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gpnu.association.mapper.AttachmentMapper">
+	<insert id="add" parameterType="Map">
+		insert into attachment (attachment_type, attachment_id, name, path, attachment_url, user_id, association_id, create_time, state)
+		values (#{attachmentType}, #{attachmentId}, #{name}, #{path}, #{attachmentUrl}, #{userId}, #{associationId}, #{createTime}, #{state})
+		<selectKey keyProperty="id" order="AFTER" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteFile" parameterType="Map">
+		delete from attachment 
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="attachmentId != null">
+				and attachment_id = #{attachmentId}
+			</if>
+			<if test="attachmentType != null">
+				and attachment_type like '%${attachmentType}%'
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+			<if test="associationId != null">
+				and association_id = #{associationId}
+			</if>
+			<if test="state != null">
+				and state = #{state}
+			</if>
+		</trim>
+	</delete>
+	
+	<select id="get" parameterType="Map" resultType="Map">
+		select * from attachment
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="name != null">
+				and name like '%${name}%'
+			</if>
+			<if test="attachmentType != null">
+				and attachment_type = #{attachmentType}
+			</if>
+			<if test="userId != null">
+				and user_id = #{userId}
+			</if>
+			<if test="attachmentId != null">
+				and attachment_id = #{attachmentId}
+			</if>
+			<if test="associationId != null">
+				and association_id = #{associationId}
+			</if>
+			<if test="state != null">
+				and state = #{state}
+			</if>
+		</trim>
+	</select>
+	
+	<update id="update" parameterType="Map">
+		update attachment
+		<trim prefix="set" prefixOverrides=",">
+			<if test="attachmentType != null">
+				, attachment_type = #{attachmentType}
+			</if>
+			<if test="attachmentId != null">
+				, attachment_id = #{attachmentId}
+			</if>
+			<if test="name != null">
+				, name=#{name}
+			</if>
+			<if test="state != null">
+				, state=#{state}
+			</if>
+		</trim>
+			where id = #{id}
+	</update>
+	
+</mapper>

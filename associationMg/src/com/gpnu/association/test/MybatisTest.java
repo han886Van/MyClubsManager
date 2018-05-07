@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gpnu.association.mapper.AssociationAndUserMapper;
 import com.gpnu.association.mapper.AssociationMapper;
+import com.gpnu.association.mapper.AttachmentMapper;
 import com.gpnu.association.mapper.EventMapper;
+import com.gpnu.association.mapper.LikeCommentsMapper;
 import com.gpnu.association.mapper.MaterielMapper;
 import com.gpnu.association.mapper.NewsMapper;
 import com.gpnu.association.mapper.TypeMapper;
@@ -44,6 +46,12 @@ public class MybatisTest {
 	
 	@Autowired
 	private NewsMapper newsMapper;
+	
+	@Autowired
+	private AttachmentMapper attachmentMapper;
+	
+	@Autowired
+	private LikeCommentsMapper likeComtMapper;
 	
 	@Test
 	public void testUser() {
@@ -176,5 +184,31 @@ public class MybatisTest {
 		List<Map> res = newsMapper.get(paraMap);
 		System.out.println(res);
 		
+	}
+	
+	@Test
+	public void testAttachment(){
+		Map paraMap = new HashMap();
+		paraMap.put("id", 1);
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		paraMap.put("name", "做我的猫");
+		attachmentMapper.update(paraMap);
+		List<Map> res = attachmentMapper.get(paraMap);
+		attachmentMapper.deleteFile(paraMap);
+		System.out.println(res);
+	}
+	
+	@Test
+	public void testLikeCommt(){
+		Map paraMap = new HashMap();
+		paraMap.put("commentsId", 1);
+		paraMap.put("userId", 6);
+		likeComtMapper.add(paraMap);
+		List<Map> res = likeComtMapper.get(paraMap);
+		
+		System.out.println(res);
+		res = likeComtMapper.getCount(paraMap);
+		System.out.println(res);
+		likeComtMapper.cancelLike(paraMap);
 	}
 }
