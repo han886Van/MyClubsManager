@@ -1,22 +1,25 @@
 <template>
   <div class="mySpace">
-    <div class="conten">
-      <div class="left_box">
-        <img src="../../assets/img/home1.jpg" alt="">
+    <div class="bgc">
+      <div class="top">
+        <span>个人信息</span>
+        <div>
+          <span class="editing">编辑</span>
+          <span>|</span>
+          <span class="editing">修改密码</span>
+        </div>
       </div>
-      <div class="right_box">
-        <ul class="inner_box">
-          <li><span>姓名：</span><span class="right_span">{{user.name}}</span></li>
-          <li><span>年级：</span><span class="right_span">{{user.grade}}</span></li>
-          <li><span>班级：</span><span class="right_span">{{user.classN}}</span></li>
-          <li><span>性别：</span><span class="right_span">{{user.sex}}</span></li>
-          <li><span>出生日期：</span><span class="right_span">{{user.birthday}}</span></li>
-          <li><span>学号：</span><span class="right_span">{{user.idNum}}</span></li>
-          <li><span>学校：</span><span class="right_span">{{user.schoolName}}</span></li>
-          <li><span>二级学院：</span><span class="right_span">{{user.branc}}</span></li>
-          <li><span>专业：</span><span class="right_span">{{user.profession}}</span></li>
-          <li v-show="false"><i class="iconfont icon-bianji"></i></li>
-        </ul>
+      <div class="info">
+        <div class="left_box">
+          <img src="../../assets/img/home1.jpg" alt="">
+        </div>
+        <div class="right_box">
+          <p v-for="(item,index) in user ">
+            <span>{{item.name}}：</span>
+            <span>{{item.conten}}</span>
+          </p>
+          <span v-show="false"><i class="iconfont icon-bianji"></i></span>
+        </div>
       </div>
     </div>
   </div>
@@ -28,11 +31,17 @@
     components: {},
     data () {
       return {
-        user: {
-          name: '小仙女', sex: '女', birthday: '1995.11.08', idNum: '2014035643000', schoolName: '广东技术师范学院',
-          profession: '电子商务', branc: '计算机科学学院',
-          grade: '大四', classN: '14商本'
-        }
+        user: [
+          {name: '学号', conten: '2014035643001'},
+          {name: '名字', conten: '陈小黄'},
+          {name: '年级', conten: '大四'},
+          {name: '性别', conten: '女'},
+          {name: '出生日期', conten: '2018.01.01'},
+          {name: '专业', conten: '电商软件'},
+          {name: '学院', conten: '计算机科学学院'},
+          {name: '邮箱', conten: '80456656665@qq.com'},
+          {name: '手机号', conten: '12345678945'},
+        ]
       }
     },
     mounted(){
@@ -44,64 +53,49 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .mySpace {
-    padding-top: 30px;
-    height: 100%
-    max-width: 90%;
-    min-width: 90%;
-    overflow hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .conten {
-      background-color: #fff
-      width: 912px;
-      height: 574px;
+    margin-left: 80px;
+    margin-top: 50px;
+    overflow: hidden;
+    width: 1024px;
+    background: #fff;
+    min-height: 600px;
+    border-radius: 8px;
+    padding: 20px 40px;
+    .bgc {
+      border-radius: 8px;
+      background-color: #fff;
+    }
+    .top{
+      line-height:50px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      justify-content:space-between;
+      font-size:18px;
+     .editing{
+       color: #409eff;
+       cursor :pointer;
+     }
+    }
+    .info {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .left_box {
+      display: inline-block;
       img {
-        width: 150px;
+        width: 140px;
         height: 140px;
       }
     }
-    .left_box {
-      width: 210px;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-    }
-
     .right_box {
       display: inline-block;
-      width: 700px
-      height: 100%;
-      box-sizing: border-box;
-      padding: 50px 0;
-
-    }
-    .inner_box {
-      height: 100%;
-      box-sizing: border-box;
-      border-left: 1px solid #999;
-      padding: 50px;
-      li {
-        font-size: 18px;
-        margin-bottom: 30px;
-        span {
-          color: #999
-        }
-      }
-      .right_span {
+      margin-left: 50px;
+      p {
         display: inline-block;
-        padding-left: 20px;
-        color: #666
+        line-height: 50px;
+        font-size: 18px;
+        min-width: 408px;
+        max-width: 408px;
       }
-    }
-    .icon-bianji {
-      font-size: 30px;
-      float: right;
     }
     .icon-bianji:hover {
       color: #d9a641

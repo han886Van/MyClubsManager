@@ -73,9 +73,24 @@
 .society .el-input{
   width: 182px !important;
 }
-.society .el-select .el-input{
+.member .el-input{
+  width: 150px !important;
+}
+.society .el-select .el-input,.member .el-select .el-input{
   width: 144px !important;
 }
 .society .el-button+.el-button{
   margin-left:0px;
+}
+.materials .el-input{
+  width: 280px !important;
+}
+.activity .el-input{
+  width: 280px !important;
+}
+.news .el-input{
+  width: 280px !important;
+}
+.allNews .el-input{
+  width: 280px !important;
 }

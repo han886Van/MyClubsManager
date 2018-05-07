@@ -3,7 +3,7 @@
         <ul class="heaer_ul">
             <li class="left">
                 <img src="../../assets/img/logo.jpg" alt="">
-                <div class="my_new">
+               <!-- <div class="my_new">
                     <el-badge :value="200" :max="99" class="item">
                         <i class="iconfont icon-xiaoxi" style="margin-left :4px"></i>
                     </el-badge>
@@ -20,12 +20,13 @@
                         <div class="name">{{ props.item.value }}</div>
                         <span class="addr">{{ props.item.address }}</span>
                     </template>
-                </el-autocomplete>
+                </el-autocomplete>-->
             </li>
+          <!--<li style="font-size: 18px;">高校社团管理系统</li>-->
             <li class="right">
                 <span class="right_word" @click="toRouter('/home')" v-show="showLogin">登录</span>
                 <span class="right_word" @click="outLogin" v-show="showOutLogin">退出</span>
-                <img src="" alt="">
+                <!--<img src="" alt="">-->
             </li>
         </ul>
     </div>

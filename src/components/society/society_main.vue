@@ -348,38 +348,6 @@
         width: 146px;
       }
     }
-    .list {
-      li {
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        line-height: 80px;
-        span {
-          width: 146px;
-          text-align: center;
-        }
-        div {
-          display: inline-block;
-          width: 146px;
-          text-align: center;
-        }
-      }
-      li:nth-child(2n) {
-        background-color: #fff
-
-      }
-      li:nth-child(2n+1) {
-        background-color: #f4f4f5
-      }
-      li:nth-child(2n):hover {
-        background: #e4e4e4;
-      }
-      li:nth-child(2n+1):hover {
-        background: #e4e4e4;
-      }
-    }
-
   }
 
 </style>

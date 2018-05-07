@@ -43,14 +43,26 @@
                 'USER_ROULE',
             ]),
             chooseRule(){
-//        console.log(this.formLabelAlign.radio);
             },
             login(){
-//        console.log(this.formLabelAlign);
-                localStorage.setItem("userRole", this.formLabelAlign.radio);
-                this.USER_ROULE(localStorage.getItem('userRole'));
-                this.$router.push({path: '/manage'});
+                var data=[];
+              let json = {
+               'account ': this.formLabelAlign.name,
+                'password ':this.formLabelAlign.passWord
+              };
+              data.push(json);
+                var url = 'http://localhost:8080/associationMg/user/login';
+                 this.$http.post(url,data).then(
+               (success) => {
+               var response = success.data;
+                 console.log(response);
 
+               },(error) => {
+
+               });
+              localStorage.setItem("userRole", this.formLabelAlign.radio);
+              this.USER_ROULE(localStorage.getItem('userRole'));
+              this.$router.push({path: '/manage'});
             }
         },
         mounted(){

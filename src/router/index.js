@@ -5,12 +5,15 @@ import register from '@/components/register'
 import manage from '@/components/manage'
 import MySpace from '@/components/MySpace/MySpace'
 import news from '@/components/news/news_main'
+import allNews from '@/components/news/allNews'
 import society from '@/components/society/society_main'
 import societyDetails from '@/components/society/societyDetails'
 import addSociety from '@/components/society/addSociety'
 import member from '@/components/member/member_main'
+import applicatMember from '@/components/member/applicatMember'
 import materials from '@/components/materials/materials_main'
 import discussion from '@/components/discussion/discussion_main'
+import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
 
 
@@ -70,6 +73,18 @@ export default new Router({
       path: '/addSociety',
       name: 'addSociety',
       component: addSociety
+    },{
+      path: '/applicatMember',
+      name: 'applicatMember',
+      component: applicatMember
+    },{
+      path: '/allNews',
+      name: 'allNews',
+      component: allNews
+    },{
+      path: '/owerDis',
+      name: 'owerDis',
+      component: owerDis
     },
   ]
 })

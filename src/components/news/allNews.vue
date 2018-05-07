@@ -1,5 +1,5 @@
 <template>
-  <div class="news">
+  <div class="allNews">
     <div class="bgc">
       <div class="search_box">
         <div>
@@ -36,8 +36,7 @@
           </el-select>
         </div>
         <div class="searchBtn">
-          <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addSociety')" type="primary">添加新闻</el-button>
+          <el-button @click="searchItem()" type="info" plain>&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;</el-button>
         </div>
       </div>
       <div>
@@ -45,30 +44,21 @@
           <span>序号</span>
           <span>编号</span>
           <span>标题</span>
+          <span>内容</span>
           <span>发送社团</span>
           <span>发送人</span>
           <span>发送时间</span>
-          <span>状态</span>
-          <span>操作</span>
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in newsArr">
             <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.Numbering}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.name}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.content}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.society}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.applicant}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span class="agreetBtn" @click="toRouter('/societyDetails',item.societyId)"
-                  v-show="item.status==1">已发送</span>
-            <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
-                  v-show="item.status==2">草稿箱</span>
-            <div>
-             <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
-                   v-show="item.status==1">删除</span>
-              <span class="delBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==2">重发</span>
-            </div>
+
           </li>
         </ul>
       </div>
@@ -90,7 +80,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 1
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -98,7 +88,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 2
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -106,7 +96,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 1
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -114,7 +104,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 1
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -122,7 +112,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 1
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -130,7 +120,7 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 2
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
           {
             Numbering: 1254688,
@@ -138,16 +128,9 @@
             starTime: '2018.5.12',
             applicant: '孟山支',
             society: '跆拳道社团',
-            status: 1
+            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
           },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            status: 1
-          },
+
 
         ],
         idInput: '',
@@ -216,7 +199,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .news {
+  .allNews {
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;

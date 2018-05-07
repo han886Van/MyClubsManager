@@ -13,7 +13,7 @@
         <i class="iconfont icon-geren"></i>
         <span slot="title" class="i_word">个人中心</span>
       </el-menu-item>
-      <!--多选-->
+      <!--社团管理-->
       <el-submenu v-show="myRole==1"  index="society?myRouter=2">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
@@ -57,10 +57,18 @@
           <span slot="title" class="i_word">已加入社团</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="member">
-        <i class="iconfont icon-yuangongliebiao"></i>
-        <span slot="title" class="i_word">成员管理</span>
-      </el-menu-item>
+      <el-submenu index="member">
+        <template slot="title">
+          <i class="iconfont icon-yuangongliebiao"></i>
+          <span class="i_word">成员管理</span>
+        </template>
+        <el-menu-item index="member?myRouter=1" class="li_son">
+          <span slot="title" class="i_word">社团成员</span>
+        </el-menu-item>
+        <el-menu-item index="applicatMember" class="li_son">
+          <span slot="title" class="i_word">申请社员</span>
+        </el-menu-item>
+      </el-submenu>
       <el-menu-item index="materials">
         <i class="iconfont icon-cailiaozhengli"></i>
         <span slot="title" class="i_word">物质管理</span>
@@ -69,16 +77,35 @@
         <i class="iconfont icon-huodong"></i>
         <span slot="title" class="i_word">活动管理</span>
       </el-menu-item>
-      <el-menu-item index="news">
+      <!--新闻-->
+      <el-menu-item v-show="myRole==0" index="allNews">
         <i class="iconfont icon-shangwutubiao-"></i>
         <span slot="title" class="i_word">新闻管理</span>
       </el-menu-item>
-      <el-menu-item index="discussion">
-        <i class="iconfont icon-icon"></i>
-        <span slot="title" class="i_word_sp">论坛</span>
-      </el-menu-item>
-    </el-menu>
 
+      <el-submenu v-show="myRole==1" index="news">
+        <template slot="title">
+          <i class="iconfont icon-shangwutubiao-"></i>
+          <span class="i_word">新闻管理</span>
+        </template>
+        <el-menu-item index="news?myRouter=1" class="li_son">
+          <span slot="title" class="i_word">社团新闻</span>
+        </el-menu-item>
+        <el-menu-item index="allNews" class="li_son">
+          <span slot="title" class="i_word">全部新闻</span>
+        </el-menu-item>
+      </el-submenu>
+      <!--论坛-->
+      <el-submenu  index="discussion">
+        <template slot="title">
+          <i class="iconfont icon-icon"></i>
+          <span class="i_word_sp">论坛</span>
+        </template>
+        <el-menu-item index="owerDis" class="li_son">
+          <span slot="title" class="i_word">管理帖子</span>
+        </el-menu-item>
+      </el-submenu>
+    </el-menu>
   </div>
 </template>
 

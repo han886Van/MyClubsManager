@@ -1,7 +1,14 @@
 <template>
-  <div class="member">
+  <div class="member applicatMember">
     <div class="bgc">
       <div class="search_box">
+        <div>
+          <span>申请分类：</span>
+          <el-select v-model="operating" placeholder="申请分类">
+            <el-option label="加入" value="1"></el-option>
+            <el-option label="退出" value="2"></el-option>
+          </el-select>
+        </div>
         <div>
           <span>社团分类：</span>
           <el-select v-model="sortSociety" placeholder="社团分类">
@@ -47,6 +54,7 @@
           <span>社团</span>
           <span>分类</span>
           <span>职位</span>
+          <span>申请</span>
           <span>操作</span>
         </div>
         <ul class="list">
@@ -63,9 +71,11 @@
             <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
             <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.position}}</span>
+            <span v-show="item.status==1" @click="toRouter('/societyDetails',item.societyId)">加入</span>
+            <span v-show="item.status==2" @click="toRouter('/societyDetails',item.societyId)">退出</span>
             <div>
-              <span class="editBtn">编辑</span>
-              <span class="delBtn">删除</span>
+              <span class="editBtn">同意</span>
+              <span class="delBtn">拒绝</span>
             </div>
           </li>
         </ul>
@@ -91,7 +101,8 @@
             position:'社员',
             grade:'大一',
             sort: 1,
-            profession:'电子商务'
+            profession:'电子商务',
+            status:2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -101,7 +112,8 @@
             position:'社员',
             grade:'大一',
             sort: 2,
-            profession:'电子商务'
+            profession:'电子商务',
+            status:1
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -111,7 +123,8 @@
             position:'副社长',
             grade:'大一',
             sort: 3,
-            profession:'电子商务'
+            profession:'电子商务',
+            status:2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -121,7 +134,8 @@
             position:'社员',
             grade:'大一',
             sort: 1,
-            profession:'电子商务'
+            profession:'电子商务',
+           status:1
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -131,7 +145,8 @@
             position:'社员',
             grade:'大一',
             sort: 1,
-            profession:'电子商务'
+            profession:'电子商务',
+            status:2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -141,12 +156,14 @@
             position:'社员',
             grade:'大一',
             sort: 1,
-            profession:'电子商务'
+            profession:'电子商务',
+            status:1
           },
         ],
         sortSociety:'',
         nameInput:'',
         idInput:'',
+        operating:''
       }
     },
     methods: {
@@ -209,7 +226,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .member{
+  .applicatMember{
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;
@@ -230,9 +247,9 @@
         margin-right: 10px;
       }
     }
-      .searchBtn{
-        /*float :right;*/
-      }
+    .searchBtn{
+      /*float :right;*/
+    }
     .title {
       color: #000000;
       display: flex;
@@ -244,11 +261,11 @@
         width: 146px;
       }
     }
-      .editBtn{
-        color : #409eff;
-      }
-     .delBtn{
-       color : #f56c6c;
-     }
+    .editBtn{
+      color : #67c23a;
+    }
+    .delBtn{
+      color : #f56c6c;
+    }
   }
 </style>
