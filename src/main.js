@@ -12,7 +12,7 @@ import '@/assets/css/my_element.css'
 import '@/assets/css/public.css'
 import store from './store'
 
-
+axios.defaults.withCredentials = true;
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.use(ElementUI);
