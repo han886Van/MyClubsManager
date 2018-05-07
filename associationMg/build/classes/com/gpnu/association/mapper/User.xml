@@ -4,8 +4,8 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gpnu.association.mapper.UserMapper">
 	<insert id="add" parameterType="Map" >
-		insert into user (user_name, account, password, phone, email, sex, user_type, college, major, type_id, create_time)
-		values ( #{userName}, #{account}, #{password}, #{phone}, #{email}, #{sex}, #{userType}, #{college}, #{major}, #{typeId}, #{createTime})
+		insert into user (user_name, account, password, phone, email, sex, student_num, grade, birthday, user_type, college, major, type_id, create_time)
+		values ( #{userName}, #{account}, #{password}, #{phone}, #{email}, #{sex}, #{studentNum}, #{grade}, #{birthday}, #{userType}, #{college}, #{major}, #{typeId}, #{createTime})
 		<selectKey keyProperty="user_id" order="AFTER" resultType="int">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
@@ -30,7 +30,19 @@
 			<if test="college != null">
 				college like '%${college}%' and
 			</if>
+			<if test="major != null">
+				major like '%${major}%' and
+			</if>
+			<if test="studentNum != null">
+				student_num like '%${studentNum}%' and
+			</if>
+			<if test="grade != null">
+				grade = #{grade} and
+			</if>
 		</trim>
+		<if test="start!=null and pagesize!=null">  
+       		 limit #{start},#{pagesize}  
+   	    </if>  
 	</select>
 	
 	<update id="update" parameterType="Map">
@@ -57,23 +69,23 @@
 			<if test="major != null">
 				major=#{major},
 			</if>
+			<if test="studentNum != null">
+				student_num=#{studentNum},
+			</if>
+			<if test="grade != null">
+				grade=#{grade},
+			</if>
+			<if test="birthday != null">
+				birthday=#{birthday},
+			</if>
+			<if test="typeId != null">
+				type_id=#{typeId},
+			</if>
 		</trim> 
 		  where user_id=#{userId}
 	</update>
 	
-	<select id="list" resultType="Map">
-		select * from user
-	</select>
-	
 	<select id="findPasswordByAccount" parameterType="Map" resultType="Map">
-		select * from user
-		<trim prefix="where" prefixOverrides="and">
-			<if test="account != null">
-				and account = #{account}
-			</if>
-			<if test="password != null">
-				and password = #{password}
-			</if>
-		</trim>
+		select * from user where account = #{account} and password = #{password}
 	</select>
 </mapper>

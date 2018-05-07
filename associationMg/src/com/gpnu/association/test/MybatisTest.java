@@ -55,11 +55,14 @@ public class MybatisTest {
 	
 	@Test
 	public void testUser() {
-		Map user = new HashMap();
-	/*	user.put("userId", 13);
-		user.put("userName", "小群软糖");
-		user = userMapper.get(user);
-		System.out.println(user);*/
+		Map paraMap = new HashMap();
+		int pagesize = 2; //每页的数量
+		
+		//3是从第几页开始
+		paraMap.put("start", (9-1)*pagesize);
+		paraMap.put("pagesize", pagesize);
+		List<Map> user = userMapper.get(paraMap);
+		System.out.println(user);
 		
 		/*user.put("userName", "大猪蹄子");
 		user.put("account", "dazhutizi");
@@ -87,10 +90,9 @@ public class MybatisTest {
 		/*List<Map> resultMap = userMapper.list();
 		System.out.println(resultMap);*/
 		
-		user.put("account", "dazhutizi");
+	/*	user.put("account", "dazhutizi");
 		user.put("password", "123");
-		user = userMapper.findPasswordByAccount(user);
-		System.out.println(user);
+		user = userMapper.findPasswordByAccount(user);*/
 	}
 
 	

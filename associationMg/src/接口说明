@@ -2,7 +2,7 @@
 //用户登录接口demo
 function login(){
 	$.ajax({ //异步执行方法 
-	    url: jsContextPath+"/association/user/login", //执行后台方法   jsContextPath这个路径需要定义  不要写死
+	    url: jsContextPath+"/associationMg/user/login", //执行后台方法   jsContextPath这个路径需要定义  不要写死
 	    data:{  //传到后台的数据
 	    	account : "1223",
 	    	password : "123123"
@@ -16,9 +16,17 @@ function login(){
 	        }else if(data.msg =="555" ){  
 	        	//请求失败
 	       }   
+	       
+	       
+	       //或者是这样判断
+	       if(data.status == 200 ){
+	    		//请求成功  
+	        }else if(data.status =="500" ){  
+	        	//请求失败
+	       }   
 	    },  
 	    error: function (data, status, e){  
-	        //异常
+	        //服务器异常
 	    }  
 	}); 
 }
@@ -63,7 +71,7 @@ function ajaxFileUpload() {
 
 --------------------------------------
 用户登录接口
-http://localhost:8080/association/user/login
+http://localhost:8080/associationMg/user/login
 接收数据类型  必须包含account(账号)、password(密码)
 ---------------------------------------------
 
@@ -71,7 +79,7 @@ http://localhost:8080/association/user/login
 
 -------------------------------------------------------
 用户注册或修改个人信息接口(不传userId时是注册，传userId时是修改)
-http://localhost:8080/association/user/saveOrUpdateUser
+http://localhost:8080/associationMg/user/saveOrUpdateUser
 接收数据类型
 注册时
 必须包含：account(账号)、password(密码)；

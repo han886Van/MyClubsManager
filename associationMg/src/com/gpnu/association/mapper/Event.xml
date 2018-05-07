@@ -31,6 +31,9 @@
 				state = #{state} and
 			</if>
 		</trim>
+		<if test="start!=null and pagesize!=null">  
+       		 limit #{start},#{pagesize}  
+   	    </if>  
 	</select>
 	
 	<update id="update" parameterType="Map">

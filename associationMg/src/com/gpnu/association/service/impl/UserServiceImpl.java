@@ -24,10 +24,6 @@ public class UserServiceImpl implements UserService {
 	/*@Autowired
 	CommonMapper commonMapper;*/
 	
-	@Override
-	public List<Map> list() {
-		return userMapper.list();
-	}
 
 	@Override
 	public JSONObject saveOrUpdate(Map paraMap) {
@@ -66,6 +62,13 @@ public class UserServiceImpl implements UserService {
 			json.put("comment", "账号或密码错误！");
 		}
 		return json;
+	}
+	
+	@Override
+	public List<Map> getList(Map paraMap) {
+		JSONObject json = new JSONObject();
+		List<Map> loginUser = userMapper.get(paraMap);
+		return loginUser;
 	}
 
 }

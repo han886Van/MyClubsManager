@@ -38,9 +38,20 @@
 	      <param-name>encoding</param-name>
 	      <param-value>UTF-8</param-value>
 	    </init-param>
-	  </filter>
-	  <filter-mapping>
+	</filter>
+	<filter-mapping>
 	    <filter-name>EncodingFilter</filter-name>
 	    <url-pattern>/*</url-pattern>
-	  </filter-mapping>
+	 </filter-mapping>
+	 
+	 
+	 <!--解决跨域访问-->
+	<filter>
+	   <filter-name>CORSFilter</filter-name>
+	   <filter-class>com.gpnu.association.interceptor.CORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	   <filter-name>CORSFilter</filter-name>
+	   <url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>

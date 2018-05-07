@@ -24,6 +24,14 @@
     
     <mvc:default-servlet-handler />
 
+	<!-- 配置跨域访问拦截器 springMVC4.2以上 -->
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+			拦截所有
+			<mvc:mapping path="*/**"/>
+			<bean class="com.gpnu.association.interceptor.AccessInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
 
     <bean
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
