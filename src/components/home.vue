@@ -46,7 +46,7 @@
             },
             login(){
                 var data=[];
-              let json = {
+              var json = {
                account : this.formLabelAlign.name,
                 password :this.formLabelAlign.passWord
               };
