@@ -5,8 +5,6 @@
         <span>编辑个人信息</span>
         <div>
           <span class="editing">保存</span>
-          <span>|</span>
-          <span class="editing">修改密码</span>
         </div>
       </div>
       <div class="info">
@@ -15,13 +13,29 @@
         </div>
         <div class="right_box">
           <div>
-            <p><span>学号：</span><span></span></p>
+            <p><span>学号：</span><span>{{user.userId}}</span></p>
+            <p><span>年级：</span><span>{{user.grade}}</span></p>
+          </div>
+          <div>
+            <p><span>名字：</span><span>{{user.name}}</span></p>
+            <p><span>专业：</span><span>{{user.profession}}</span></p>
+          </div>
+          <div>
+            <p><span>性别：</span>
+              <span v-show="user.sex==0">女</span>
+              <span v-show="user.sex==1">男</span>
+            </p>
+            <p><span>专业：</span><span>{{user.College}}</span></p>
+          </div>
+          <div>
+            <p><span>出生日期：</span><span>{{user.birth}}</span></p>
+            <p><span>邮箱：</span>
+              <el-input v-model="user.email" placeholder="请输入内容"></el-input></p>
           </div>
           <div>
            <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
            <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
           </div>
-          <span v-show="false"><i class="iconfont icon-bianji"></i></span>
         </div>
       </div>
     </div>
@@ -34,17 +48,7 @@
     components: {},
     data () {
       return {
-        user: [
-          {name: '学号', conten: '2014035643001'},
-          {name: '年级', conten: '大四'},
-          {name: '名字', conten: '陈小黄'},
-          {name: '专业', conten: '电商软件'},
-          {name: '性别', conten: '女'},
-          {name: '学院', conten: '计算机科学学院'},
-          {name: '出生日期', conten: '2018.01.01'},
-          {name: '邮箱', conten: '80456656665@qq.com'},
-          {name: '手机号', conten: '12345678945'},
-        ]
+        user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'}
       }
     },
     mounted(){

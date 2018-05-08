@@ -16,7 +16,7 @@
                     <el-form-item label="密码">
                         <el-input type="password" v-model="formLabelAlign.passWord"></el-input>
                     </el-form-item>
-                    <el-button type="primary" @click="login">立即登录</el-button>
+                    <el-button type="primary" @click="Login">立即登录</el-button>
                 </el-form>
             </div>
         </div>
@@ -44,17 +44,15 @@
             ]),
             chooseRule(){
             },
-            login(){
-                var data=[];
+            Login(){
               var json = {
                account : this.formLabelAlign.name,
                 password :this.formLabelAlign.passWord
               };
-              data.push(json);
-              console.log(JSON.stringify(json));
-
+              console.log(data);
+              var data =JSON.stringify(json);
               var url = 'http://localhost:8080/associationMg/user/login';
-                 this.$http.post(url,json).then(
+                 this.$http.post(url,data).then(
                (success) => {
                var response = success.data;
                  console.log(response);
