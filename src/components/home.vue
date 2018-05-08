@@ -51,7 +51,6 @@
                 password :this.formLabelAlign.passWord
               };
               data.push(json);
-              console.log(json);
               console.log(JSON.stringify(json));
 
               var url = 'http://localhost:8080/associationMg/user/login';
