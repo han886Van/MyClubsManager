@@ -54,7 +54,7 @@
               console.log(JSON.stringify(json));
 
               var url = 'http://localhost:8080/associationMg/user/login';
-                 this.$http.post(url,JSON.stringify(json)).then(
+                 this.$http.post(url,json).then(
                (success) => {
                var response = success.data;
                  console.log(response);
