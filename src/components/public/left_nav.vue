@@ -33,16 +33,16 @@
         </el-menu-item>
       </el-submenu>
       <!--教师-->
-      <el-submenu v-show="myRole==2"  index="society?myRouter=7">
+      <el-submenu v-show="myRole==2"  index="society?myRouter=1">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
           <span class="i_word">社团管理</span>
         </template>
-        <el-menu-item index="society?myRouter=4" class="li_son">
-          <span slot="title" class="i_word">已加入社团</span>
+        <el-menu-item index="society?myRouter=3" class="li_son">
+          <span slot="title" class="i_word">全部社团</span>
         </el-menu-item>
-        <el-menu-item index="society?myRouter=5" class="li_son">
-          <span slot="title" class="i_word">已加入社团</span>
+        <el-menu-item index="society?myRouter=2" class="li_son">
+          <span slot="title" class="i_word">申请社团</span>
         </el-menu-item>
       </el-submenu>
       <el-submenu v-show="myRole==3"  index="society?myRouter=8">

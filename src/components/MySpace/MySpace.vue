@@ -6,7 +6,7 @@
         <div>
           <span class="editing" @click="toRouter('/editUerInfo')">编辑</span>
           <span>|</span>
-          <span class="editing">修改密码</span>
+          <span class="editing" @click="toRouter('/editPass')">修改密码</span>
         </div>
       </div>
       <div class="info">

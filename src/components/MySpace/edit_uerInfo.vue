@@ -4,7 +4,7 @@
       <div class="top">
         <span>编辑个人信息</span>
         <div>
-          <span class="editing">保存</span>
+          <span class="editing" @click="toRouter('/mySpace')">保存</span>
         </div>
       </div>
       <div class="info">
@@ -33,8 +33,8 @@
               <el-input v-model="user.email" placeholder="请输入内容"></el-input></p>
           </div>
           <div>
-           <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
-           <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
+            <p><span>电话号码：</span>
+              <el-input v-model="user.phoneNum" placeholder="请输入内容"></el-input></p>
           </div>
         </div>
       </div>
@@ -50,6 +50,11 @@
       return {
         user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'}
       }
+    },
+    methods:{
+      toRouter(myRouter){
+        this.$router.push({path: myRouter})
+      },
     },
     mounted(){
 
