@@ -49,3 +49,12 @@
 .list li:nth-child(2n+1):hover {
   background: #e4e4e4;
 }
+.blue{
+  color: #409EFF;
+}
+.red_color{
+  color : #f56c6c;
+}
+.green_color{
+  color : #67c23a;
+}

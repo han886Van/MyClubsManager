@@ -1,6 +1,13 @@
 <template>
   <div class="society">
     <div class="bgc">
+      <div class="top" v-show="userRole==2">
+        <span>社团管理</span>
+        <span>	&gt;</span>
+        <span v-show="showAll==1" class="blue">全部社团</span>
+        <span v-show="showAll==3" class="blue">全部社团</span>
+        <span v-show="showAll==2" class="blue">申请社团</span>
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -91,10 +98,12 @@
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
             <div v-show="showAll==1">
-              <el-button @click="outSociety(index)" type="danger">退出</el-button>
+              <span class="blue">编辑</span>
+              <span class="red_color">删除</span>
             </div>
-            <div v-show="showAll==3">
-              <el-button @click="outSociety(index)" type="danger">退出</el-button>
+            <div class="red_color" v-show="showAll==3">
+              <span class="blue">编辑</span>
+              <span class="red_color">删除</span>
             </div>
             <div v-show="showAll==2">
               <el-button @click="outSociety(index)" v-show="item.status==1" type="danger">退出</el-button>
@@ -331,11 +340,17 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding: 40px;
+    padding:10px 40px 20px 40px;
     .bgc {
       border-radius: 8px;
       background-color: #fff;
     }
+    .top{
+        line-height:50px;
+        font-size:16px;
+        border-bottom :1px solid #ccc;
+        margin-bottom:40px;
+      }
     /*.list {
       border-radius: 8px;
       padding: 20px 50px 40px;
@@ -353,12 +368,14 @@
       }
     }
     .title {
-      color: #000000;
+      color: #333;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      span {
+      line-height:50px;
+      border-bottom : 1px solid #ccc;
+      border-radius :8px 8px 0 0;
+  span {
         text-align: center;
         width: 146px;
       }
