@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gpnu.association.mapper.AssociationAndUserMapper;
 import com.gpnu.association.mapper.AssociationMapper;
+import com.gpnu.association.mapper.AttachmentMapper;
 import com.gpnu.association.mapper.EventMapper;
+import com.gpnu.association.mapper.LikeCommentsMapper;
 import com.gpnu.association.mapper.MaterielMapper;
 import com.gpnu.association.mapper.NewsMapper;
 import com.gpnu.association.mapper.TypeMapper;
@@ -45,13 +47,22 @@ public class MybatisTest {
 	@Autowired
 	private NewsMapper newsMapper;
 	
+	@Autowired
+	private AttachmentMapper attachmentMapper;
+	
+	@Autowired
+	private LikeCommentsMapper likeComtMapper;
+	
 	@Test
 	public void testUser() {
-		Map user = new HashMap();
-	/*	user.put("userId", 13);
-		user.put("userName", "小群软糖");
-		user = userMapper.get(user);
-		System.out.println(user);*/
+		Map paraMap = new HashMap();
+		int pagesize = 2; //每页的数量
+		
+		//3是从第几页开始
+		paraMap.put("start", (9-1)*pagesize);
+		paraMap.put("pagesize", pagesize);
+		List<Map> user = userMapper.get(paraMap);
+		System.out.println(user);
 		
 		/*user.put("userName", "大猪蹄子");
 		user.put("account", "dazhutizi");
@@ -79,10 +90,9 @@ public class MybatisTest {
 		/*List<Map> resultMap = userMapper.list();
 		System.out.println(resultMap);*/
 		
-		user.put("account", "dazhutizi");
+	/*	user.put("account", "dazhutizi");
 		user.put("password", "123");
-		user = userMapper.findPasswordByAccount(user);
-		System.out.println(user);
+		user = userMapper.findPasswordByAccount(user);*/
 	}
 
 	
@@ -176,5 +186,31 @@ public class MybatisTest {
 		List<Map> res = newsMapper.get(paraMap);
 		System.out.println(res);
 		
+	}
+	
+	@Test
+	public void testAttachment(){
+		Map paraMap = new HashMap();
+		paraMap.put("id", 1);
+		paraMap.put("state", CommonUtil.ALLOW_STATE);
+		paraMap.put("name", "做我的猫");
+		attachmentMapper.update(paraMap);
+		List<Map> res = attachmentMapper.get(paraMap);
+		attachmentMapper.deleteFile(paraMap);
+		System.out.println(res);
+	}
+	
+	@Test
+	public void testLikeCommt(){
+		Map paraMap = new HashMap();
+		paraMap.put("commentsId", 1);
+		paraMap.put("userId", 6);
+		likeComtMapper.add(paraMap);
+		List<Map> res = likeComtMapper.get(paraMap);
+		
+		System.out.println(res);
+		res = likeComtMapper.getCount(paraMap);
+		System.out.println(res);
+		likeComtMapper.cancelLike(paraMap);
 	}
 }
