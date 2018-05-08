@@ -47,12 +47,15 @@
             login(){
                 var data=[];
               let json = {
-               'account ': this.formLabelAlign.name,
-                'password ':this.formLabelAlign.passWord
+               account : this.formLabelAlign.name,
+                password :this.formLabelAlign.passWord
               };
               data.push(json);
-                var url = 'http://localhost:8080/associationMg/user/login';
-                 this.$http.post(url,data).then(
+              console.log(json);
+              console.log(JSON.stringify(json));
+
+              var url = 'http://localhost:8080/associationMg/user/login';
+                 this.$http.post(url,JSON.stringify(json)).then(
                (success) => {
                var response = success.data;
                  console.log(response);

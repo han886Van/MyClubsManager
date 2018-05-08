@@ -2,9 +2,9 @@
   <div class="mySpace">
     <div class="bgc">
       <div class="top">
-        <span>个人信息</span>
+        <span>编辑个人信息</span>
         <div>
-          <span class="editing" @click="toRouter('/editUerInfo')">编辑</span>
+          <span class="editing">保存</span>
           <span>|</span>
           <span class="editing">修改密码</span>
         </div>
@@ -14,10 +14,13 @@
           <img src="../../assets/img/home1.jpg" alt="">
         </div>
         <div class="right_box">
-          <p v-for="(item,index) in user ">
-            <span>{{item.name}}：</span>
-            <span>{{item.conten}}</span>
-          </p>
+          <div>
+            <p><span>学号：</span><span></span></p>
+          </div>
+          <div>
+           <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
+           <p><span></span><el-input v-model="input" placeholder="请输入内容"></el-input></p>
+          </div>
           <span v-show="false"><i class="iconfont icon-bianji"></i></span>
         </div>
       </div>
@@ -44,11 +47,6 @@
         ]
       }
     },
-    methods:{
-      toRouter(myRouter){
-        this.$router.push({path: myRouter})
-      },
-    },
     mounted(){
 
     }
@@ -74,13 +72,16 @@
       line-height:50px;
       display: flex;
       justify-content:space-between;
-      font-size:18px;
+      font-size:16px;
       border-bottom :1px solid #ccc;
       margin-bottom:20px;
+      span{
+        color: #666
+      }
       .editing{
-       color: #409eff;
-       cursor :pointer;
-     }
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .info {
       display: flex;

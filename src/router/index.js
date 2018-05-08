@@ -4,6 +4,7 @@ import home from '@/components/home'
 import register from '@/components/register'
 import manage from '@/components/manage'
 import MySpace from '@/components/MySpace/MySpace'
+  import editUerInfo from '@/components/MySpace/edit_uerInfo'
 import news from '@/components/news/news_main'
 import allNews from '@/components/news/allNews'
 import society from '@/components/society/society_main'
@@ -85,6 +86,10 @@ export default new Router({
       path: '/owerDis',
       name: 'owerDis',
       component: owerDis
+    },{
+      path: '/editUerInfo',
+      name: 'editUerInfo',
+      component: editUerInfo
     },
   ]
 })
