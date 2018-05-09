@@ -1,0 +1,100 @@
+------------------------------------------
+//用户登录接口demo
+function login(){
+	$.ajax({ //异步执行方法 
+	    url: jsContextPath+"/associationMg/user/login", //执行后台方法   jsContextPath这个路径需要定义  不要写死
+	    data:{  //传到后台的数据
+	    	account : "1223",
+	    	password : "123123"
+	    },  
+	    type:'post',  
+		cache:false,  
+		dataType:'json',  
+	    success: function(data){ //这里的data是后台返回来的数据
+	    	if(data.msg =="666" ){
+	    		//请求成功  
+	        }else if(data.msg =="555" ){  
+	        	//请求失败
+	       }   
+	       
+	       
+	       //或者是这样判断
+	       if(data.status == 200 ){
+	    		//请求成功  
+	        }else if(data.status =="500" ){  
+	        	//请求失败
+	       }   
+	    },  
+	    error: function (data, status, e){  
+	        //服务器异常
+	    }  
+	}); 
+}
+----------------------------------------------------------------
+
+
+
+---------------------------------------------------------------
+//上传文件接口demo
+前端页面需引入ajaxfileupload.js文件 已放在js文件下
+前端用Input框上传示例如下
+<input type="file" class="myFileUpload" id="uploadPic" name="uploadPic" onchange="ajaxFileUpload()"/>
+ajax请求
+function ajaxFileUpload() {
+	$.ajaxFileUpload({  
+	    type: "POST", 
+	    url: jsContextPath+"/internMg/importExcel/importExcel.do", //执行后台方法 
+	    data:{  //传到后台的数据
+	    	userId : "上传人的userId",
+	    },  
+	    secureuri : false,//是否启用安全提交，默认为false  
+	    fileElementId: 'uploadPic', //文件上传域的ID 注意和Input框的id对应  
+	    enctype:'multipart/form-data',//注意一定要有该参数
+	   dataType : 'json', //服务器返回的格式  (后台返回的数据的格式)
+	    async : false,  
+	    success: function(data){ //这里的data是后台返回来的数据
+	    	if(data.msg=='666'){  
+				//上传成功
+	        }else if(data.msg=='555'){  
+	        	//上传失败
+	        }  
+	    },  
+	    error: function (data, status, e){  
+	    	//异常错误
+	    }  
+	});  
+}	
+-------------------------------------
+
+
+
+
+--------------------------------------
+用户登录接口
+http://localhost:8080/associationMg/user/login
+接收数据类型  必须包含account(账号)、password(密码)
+---------------------------------------------
+
+
+
+-------------------------------------------------------
+用户注册或修改个人信息接口(不传userId时是注册，传userId时是修改)
+http://localhost:8080/associationMg/user/saveOrUpdateUser
+接收数据类型
+注册时
+必须包含：account(账号)、password(密码)；
+可包含：userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)、
+userType(角色：2为老师，3为学生)、college(二级学院名称)、major(专业名称)、
+typeId(添加老师账号时需要传所属类别：1为专业学术类、2为科技创新类、3为艺术兴趣类、4为体育健身类、5为公益服务类)；
+
+修改个人信息时
+必须包含userId(用户id)；
+可包含password(密码)、userName(用户名)、phone(手机号)、email(邮箱)、sex(性别:1为男，0为女)、
+college(二级学院名称)、major(专业名称)；
+------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------
+
