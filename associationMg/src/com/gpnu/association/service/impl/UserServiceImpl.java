@@ -49,10 +49,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public JSONObject login(Map paraMap) {
+	public JSONObject login(Map paraMap) { 
 		JSONObject json = new JSONObject();
 		Map user = new HashMap();
 		Map loginUser = userMapper.findPasswordByAccount(paraMap);
+		String m = (String) paraMap.get("account");
 		if(loginUser != null){
 			json.put("msg", "666");
 			json.put("comment", "登陆成功");

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="home">
         <div class="bgc"></div>
         <div class="login">
@@ -46,16 +46,14 @@
             },
             Login(){
               var json = {
-               account : this.formLabelAlign.name,
-                password :this.formLabelAlign.passWord
+               account: this.formLabelAlign.name,
+                password: this.formLabelAlign.passWord
               };
-              console.log(data);
-              var data =JSON.stringify(json);
               var url = 'http://localhost:8080/associationMg/user/login';
-                 this.$http.post(url,data).then(
+                 this.$http.post(url,json).then(
                (success) => {
-               var response = success.data;
-                 console.log(response);
+               // var response = success.data;
+                 console.log(success) 
 
                },(error) => {
 

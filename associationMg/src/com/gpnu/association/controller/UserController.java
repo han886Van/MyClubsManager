@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +32,7 @@ public class UserController {
 	
 	@RequestMapping("/login")
 	@ResponseBody
-	public JSONObject login(@RequestParam Map paraMap, HttpServletRequest request,
+	public JSONObject login(@RequestBody Map paraMap, HttpServletRequest request,
 			HttpServletResponse response){
 		JSONObject json = new JSONObject();
 		try {
@@ -45,7 +46,7 @@ public class UserController {
 	
 	@RequestMapping("/saveOrUpdateUser")
 	@ResponseBody
-	public JSONObject saveOrUpdateUser(@RequestParam Map paraMap, HttpServletRequest request,
+	public JSONObject saveOrUpdateUser(@RequestBody Map paraMap, HttpServletRequest request,
 			HttpServletResponse response) {
 		JSONObject json = new JSONObject();
 		try {
@@ -60,7 +61,7 @@ public class UserController {
 	
 	@RequestMapping("/getList")
 	@ResponseBody
-	public JSONObject homepage(Map paraMap, @RequestParam(required = false,defaultValue = "1",value = "pn")Integer pn){
+	public JSONObject homepage(@RequestBody Map paraMap){
 		JSONObject json = new JSONObject();
 		try {
 			List<Map> userList = userService.getList(paraMap);

@@ -9,5 +9,5 @@ public interface UserMapper {
 	public void delete(int id);
 	public List<Map> get(Map paraMap);
 	public void update(Map paraMap);
-	public Map findPasswordByAccount(Map paraMap);
+	public Map findPasswordByAccount(Object paraMap);
 }
