@@ -1,1 +1,6 @@
+/applicationContext.xml
 /com/
+/common.properties
+/log4j.properties
+/springMVC.xml
+/接口说明

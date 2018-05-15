@@ -16,19 +16,34 @@
 	</delete>
 	
 	<select id="get" parameterType="Map" resultType="Map">
-		select * from event
+		SELECT
+			e.*,
+		  a.name AS association_name,
+			u.user_name,
+			CASE
+		WHEN e.state = 0 THEN
+			'待审核'
+		WHEN e.state = 1 THEN
+			'同意申请'
+		WHEN e.state = 2 THEN
+			'拒绝申请'
+		END AS state_name
+		FROM
+			EVENT e
+		INNER JOIN association a ON e.association_id = a.association_id
+		LEFT JOIN USER u ON e.user_id = u.user_id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="id != null">
-				id = #{id} and
+				e.id = #{id} and
 			</if>
 			<if test="title != null">
-				title like '%${title}%' and
+				e.title like '%${title}%' and
 			</if>
 			<if test="associationId != null">
-				association_id = #{associationId} and
+				e.association_id = #{associationId} and
 			</if>
 			<if test="state != null">
-				state = #{state} and
+				e.state = #{state} and
 			</if>
 		</trim>
 		<if test="start!=null and pagesize!=null">  

@@ -15,20 +15,54 @@
 		delete from association_user where id = #{id}
 	</delete>
 	
-	<select id="get" parameterType="_int" resultType="Map">
-		select * from association_user
+	<select id="getSingle" parameterType="Map" resultType="Map">
+		select * from association_user where id = #{id}
+	</select>
+	
+	<select id="get" parameterType="Map" resultType="Map">
+		SELECT
+			au.*, 
+			u.user_name,
+			u.student_num,
+			u.major,
+			u.grade,
+			a.name AS association_name,
+			t.name AS type_name,
+			CASE
+		WHEN au.user_type = 1 THEN
+			'社长'
+		WHEN au.user_type = 2 THEN
+			'副社长'
+		WHEN au.user_type = 3 THEN
+			'社员'
+		END AS user_type_name,
+		 CASE
+		WHEN au.user_state = 0 THEN
+			'待审核'
+		WHEN au.user_state = 1 THEN
+			'审核通过'
+		WHEN au.user_state = 2 THEN
+			'审核不通过'
+		WHEN au.user_state = 3 THEN
+			'申请退出'
+		END AS user_state_name
+		FROM
+			association_user au
+		INNER JOIN user u ON au.user_id = u.user_id
+		LEFT JOIN association a ON au.association_id = a.association_id
+		LEFT JOIN type t ON a.type_id = t.id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="id != null">
-				id = #{id} and
+				au.id = #{id} and
 			</if>
 			<if test="associationId != null">
-				association_id = #{associationId} and
+				au.association_id = #{associationId} and
 			</if>
 			<if test="userType != null">
-				user_type = #{userType} and
+				au.user_type = #{userType} and
 			</if>
 			<if test="userState != null">
-				user_state = #{userState} and
+				au.user_state = #{userState} and
 			</if>
 		</trim>
 		<if test="start!=null and pagesize!=null">  
@@ -41,6 +75,12 @@
 		<trim prefix="set" suffixOverrides=",">
 			<if test="userState != null">
 				user_state=#{userState},
+			</if>
+			<if test="applyComments != null">
+				apply_comments=#{applyComments},
+			</if>
+			<if test="applyTime != null">
+				apply_time=#{applyTime},
 			</if>
 			<if test="checkPersonId != null">
 				check_person_id=#{checkPersonId}, 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,43 @@ public class UserController {
 		JSONObject json = new JSONObject();
 		try {
 			json = userService.login(paraMap);
+			if(json.get("msg").equals("666")){
+				//登录成功，将用户信息存入session中。
+				HttpSession session = request.getSession();
+				session.setAttribute("loginUser", json.get("loginUser"));
+			}
 		} catch (Exception e) {
 			json.put("msg", "发生错误！");
+			logger.error(e);
+		}
+		return json;
+	}
+	
+	@RequestMapping("/loginOut")
+	@ResponseBody
+	public JSONObject loginOut(@RequestBody Map paraMap, HttpServletRequest request,
+			HttpServletResponse response){
+		JSONObject json = new JSONObject();
+		try {
+			//退出账号
+			HttpSession session = request.getSession();
+			session.removeAttribute("loginUser");
+		} catch (Exception e) {
+			json.put("msg", "发生错误！");
+			logger.error(e);
+		}
+		return json;
+	}
+	
+	@RequestMapping("/modifyPassword")
+	@ResponseBody
+	public JSONObject modifyPassword(@RequestBody Map paraMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		try {
+			json = userService.modifyPassword(paraMap);
+		} catch (Exception e) {
+			json.put("msg", "发生错误，操作失败！");
 			logger.error(e);
 		}
 		return json;

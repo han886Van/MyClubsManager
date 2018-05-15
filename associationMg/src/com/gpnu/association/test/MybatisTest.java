@@ -107,24 +107,21 @@ public class MybatisTest {
 	@Test
 	public void testAssociation(){
 		Map paraMap = new HashMap();
-		/*paraMap.put("name", "计科女篮");
+		paraMap.put("name", "计科女篮");
 		paraMap.put("briefIntroduction", "无兄弟，不篮球！");
 		paraMap.put("applyComments", "锻炼身体，休闲娱乐");
-		associationMapper.add(paraMap);*/
+		associationMapper.add(paraMap);
 		
 	/*	paraMap.put("associationId", "1");
 		paraMap.put("state", CommonUtil.ALLOW_STATE);
 		paraMap.put("place", "新旧篮球场");
 		associationMapper.update(paraMap);*/
 		
-	/*	paraMap.put("associationId", "1");
-		paraMap.put("name", "计科女篮");
-		paraMap.put("state", CommonUtil.REFUSE_STATE);
 		List<Map> res = associationMapper.get(paraMap);
-		System.out.println(res);*/
+		System.out.println(res);
 		
-		paraMap.put("associationId", "1");
-		associationMapper.delete(paraMap);
+		/*paraMap.put("associationId", "1");
+		associationMapper.delete(paraMap);*/
 	}
 	
 	@Test

@@ -16,19 +16,31 @@
 	</delete>
 	
 	<select id="get" parameterType="Map" resultType="Map">
-		select * from association
+		SELECT
+			a.*, t. NAME AS type_name,
+			u.user_name,
+			CASE
+		WHEN a.state = 0 THEN
+			'待审核'
+		WHEN a.state = 1 THEN
+			'同意创建'
+		END AS state_name
+		FROM
+			association a
+		LEFT JOIN type t ON a.type_id = t.id
+		LEFT JOIN user u ON a.create_person_id = u.user_id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="associationId != null">
-				association_id = #{associationId} and
+				a.association_id = #{associationId} and
 			</if>
 			<if test="name != null">
-				name like '%${name}%'  and
+				a.name like '%${name}%'  and
 			</if>
 			<if test="state != null">
-				state = #{state} and
+				a.state = #{state} and
 			</if>
 			<if test="typeId != null">
-				type_id = #{typeId} and
+				a.type_id = #{typeId} and
 			</if>
 		</trim>
 		<if test="start!=null and pagesize!=null">  

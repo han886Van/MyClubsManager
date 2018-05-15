@@ -10,4 +10,5 @@ public interface UserService {
 	public JSONObject login(Map paraMap);
 	public JSONObject saveOrUpdate(Map paraMap);
 	public List<Map> getList(Map paraMap);
+	public JSONObject modifyPassword(Map paraMap);
 }

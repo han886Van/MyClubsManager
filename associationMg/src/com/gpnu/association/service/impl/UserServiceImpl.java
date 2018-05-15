@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gpnu.association.mapper.AttachmentMapper;
 import com.gpnu.association.mapper.UserMapper;
 import com.gpnu.association.service.UserService;
 import com.gpnu.association.util.CommonUtil;
@@ -20,6 +21,9 @@ import com.gpnu.association.util.CommonUtil;
 public class UserServiceImpl implements UserService {
 	@Resource
 	UserMapper userMapper;
+	
+	@Resource
+	AttachmentMapper attachmentMapper;
 	
 	/*@Autowired
 	CommonMapper commonMapper;*/
@@ -53,8 +57,9 @@ public class UserServiceImpl implements UserService {
 		JSONObject json = new JSONObject();
 		Map user = new HashMap();
 		Map loginUser = userMapper.findPasswordByAccount(paraMap);
-		String m = (String) paraMap.get("account");
 		if(loginUser != null){
+			paraMap.put("attachmentType", CommonUtil.ATTACHMENT_TYPE_HEADIMG);
+		//	Map headPic = 
 			json.put("msg", "666");
 			json.put("comment", "登陆成功");
 			json.put("loginUser", loginUser);
@@ -70,6 +75,26 @@ public class UserServiceImpl implements UserService {
 		JSONObject json = new JSONObject();
 		List<Map> loginUser = userMapper.get(paraMap);
 		return loginUser;
+	}
+
+	@Override
+	public JSONObject modifyPassword(Map paraMap) {
+		JSONObject json = new JSONObject();
+		List<Map> getUser = userMapper.get(paraMap);
+		if(getUser.size() == 0 || getUser.isEmpty()){
+			json.put("msg", "555");
+			json.put("comment", "服务器登录超时，请重新登录！");
+		}else{
+			if(getUser.get(0).get("passowrd").equals("originalPassword")){
+				userMapper.update(paraMap);
+				json.put("msg", "666");
+				json.put("comment", "修改密码成功！");
+			}else{
+				json.put("msg", "555");
+				json.put("comment", "原始密码错误！");
+			}
+		}
+		return json;
 	}
 
 }
