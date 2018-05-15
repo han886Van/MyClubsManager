@@ -265,27 +265,47 @@
       },
       /*退出社团*/
       outSociety(index) {
-        console.log('退出' + index);
-        this.$confirm('是否确定退出社团?', '提示', {
+        this.$prompt('请输退出理由', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+          center: true,
+          /*          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,*/
+          inputErrorMessage: '邮箱格式不正确'
+        }).then(({ value }) => {
+          console.log(value);
           this.$message({
             type: 'success',
-            message: '请求发送成功!'
+            message: '已发送申请'
           });
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '请求发送失败'
+            message: '取消输入'
           });
         });
       },
       /*加入社团*/
       enterSociety(index){
+        this.$prompt('请输加入理由', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          center: true,
+/*          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,*/
+          inputErrorMessage: '邮箱格式不正确'
+        }).then(({ value }) => {
+          console.log(value);
+          this.$message({
+            type: 'success',
+            message: '已发送申请'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
         console.log('加入请求' + index);
-        this.$confirm('是否确定加入社团?', '提示', {
+/*        this.$confirm('是否确定加入社团?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -299,7 +319,7 @@
             type: 'info',
             message: '请求发送失败'
           });
-        });
+        });*/
       },
       /*编辑社团*/
       editSociety(index){

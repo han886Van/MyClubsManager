@@ -1,14 +1,14 @@
 <template>
-  <div class="addSociety">
+  <div class="addMember">
     <div class="bgc">
       <div class="top">
-       <div>
-         <span>社团管理</span>
-        <span>	&gt;</span>
-        <span class="blue">创建社团</span>
-       </div>
         <div>
-          <span class="editing" @click="toRouter('/society')">取消</span>
+          <span>成员管理</span>
+          <span>	&gt;</span>
+          <span class="blue">添加成员</span>
+        </div>
+        <div>
+          <span class="editing" @click="toRouter('/member')">取消</span>
         </div>
       </div>
       <div class="info">
@@ -23,32 +23,21 @@
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
           </p>
-          <p><span >社团名称：</span> <el-input  placeholder="请输入内容"></el-input></p>
-          <p><span >&nbsp;&nbsp;&nbsp;申请人：</span> <el-input  placeholder="请输入内容"></el-input></p>
-          <p><span class="title_span">社团简介：</span><el-input
+          <p>
+            <span>成员职能：</span>
+            <el-select v-model="societyPosition" placeholder="社团分类">
+              <el-option label="社员" value="1"></el-option>
+              <el-option label="社长" value="2"></el-option>
+            </el-select>
+          </p>
+          <p><span   class="title_span">社团名称：</span> <el-input  placeholder="请输入内容"></el-input></p>
+          <p><span  class="title_span">学生账号：</span> <el-input  placeholder="请输入内容"></el-input></p>
+          <p><span class="title_span">添加理由：</span><el-input
             type="textarea"
             resize="none"
             placeholder="请输入内容"
             v-model="textarea">
           </el-input></p>
-          <p><span class="title_span">申请理由：</span><el-input
-              type="textarea"
-              resize="none"
-              placeholder="请输入内容"
-              v-model="textarea">
-            </el-input></p>
-          <p><span>社团图片：</span>
-            <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-          </p>
           <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
         </div>
       </div>
@@ -63,6 +52,7 @@
     data () {
       return {
         sortSociety:'',
+        societyPosition:'',
         textarea:'',
         dialogImageUrl: '',
         dialogVisible: false,
@@ -90,7 +80,7 @@
         });
         setTimeout(() => {
           loading.close();
-          this.toRouter('/society')
+          this.toRouter('/member')
         }, 2000);
 
       },
@@ -107,7 +97,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .addSociety {
+  .addMember {
     /*box-sizing border-box;*/
     /*padding: 80px 100px;*/
     margin-left: 80px;
@@ -145,9 +135,9 @@
 
       }
     }
-      .title_span{
-        min-width:80px;
-      }
+    .title_span{
+      min-width:80px;
+    }
 
   }
 

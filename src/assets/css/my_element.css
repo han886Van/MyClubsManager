@@ -106,14 +106,25 @@
 .addSociety .el-input{
   width: 310px !important;
 }
-.addSociety .el-textarea{
 
-}
 .addSociety .el-textarea__inner{
-  width: 510px !important;
+  width: 500px !important;
   height: 100px;
 }
 .addSociety .el-upload-list__item{
   margin-right:10px;
 }
-
+.addMember .el-input{
+  width: 310px !important;
+}
+.addMember .el-textarea__inner{
+  width: 500px !important;
+  height: 100px;
+}
+.addMaterials .el-textarea__inner{
+  width: 500px !important;
+  height: 100px;
+}
+.addMaterials .el-input{
+  width: 310px !important;
+}

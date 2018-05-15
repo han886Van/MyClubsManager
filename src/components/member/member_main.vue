@@ -39,7 +39,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addSociety')" type="primary">添加成员</el-button>
+          <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>
         </div>
       </div>
       <div>

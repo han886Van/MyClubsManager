@@ -13,7 +13,9 @@ import societyDetails from '@/components/society/societyDetails'
 import addSociety from '@/components/society/addSociety'
 import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
+import addMember from '@/components/member/addMember'
 import materials from '@/components/materials/materials_main'
+import addMaterials from '@/components/materials/addMaterials'
 import discussion from '@/components/discussion/discussion_main'
 import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
@@ -95,6 +97,14 @@ export default new Router({
       path: '/editPass',
       name: 'editPass',
       component: editPass
+    },{
+      path: '/addMember',
+      name: 'addMember',
+      component: addMember
+    },{
+      path: '/addMaterials',
+      name: 'addMaterials',
+      component: addMaterials
     },
   ]
 })
