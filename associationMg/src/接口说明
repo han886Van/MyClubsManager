@@ -43,7 +43,7 @@ ajax请求
 function ajaxFileUpload() {
 	$.ajaxFileUpload({  
 	    type: "POST", 
-	    url: jsContextPath+"/internMg/importExcel/importExcel.do", //执行后台方法 
+	    url: jsContextPath+"/internMg/attachment/uploadFile.do", //执行后台方法 
 	    data:{  //传到后台的数据
 	    	attachmentType : "headpic",  //上传文件类型，头像为headpic,
 	    	attachmentId : "123214",    //文件附属id，如上传头像则附属id为userId，如上传评论图片，则附属id为评论id

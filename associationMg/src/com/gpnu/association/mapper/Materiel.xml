@@ -16,7 +16,22 @@
 	</delete>
 	
 	<select id="get" parameterType="Map" resultType="Map">
-		select * from materiel 
+		SELECT
+			m.*,
+		    a.name AS association_name,
+			u.user_name,
+			CASE
+		WHEN m.state = 0 THEN
+			'待审核'
+		WHEN m.state = 1 THEN
+			'同意申请'
+		WHEN m.state = 2 THEN
+			'拒绝申请'
+		END AS state_name
+		FROM
+			materiel m
+		INNER JOIN association a ON m.association_id = a.association_id
+		LEFT JOIN user u ON m.user_id = u.user_id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="id != null">
 				id = #{id} and

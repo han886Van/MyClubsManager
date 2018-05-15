@@ -32,14 +32,13 @@ public class AttachmentController {
 
 	@RequestMapping("/uploadFile")
 	@ResponseBody
-	public JSONObject uploadFile(@RequestBody Map paraMap, @RequestParam(value = "uploadExcel", required = false) MultipartFile file, HttpServletRequest request,
+	public JSONObject uploadFile(@RequestBody Map paraMap, @RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request,
 			HttpServletResponse response){
 		JSONObject json = new JSONObject();
 		response.setCharacterEncoding("utf-8");
 		PrintWriter pw = null;
 		try {
 			paraMap.put("name", file.getOriginalFilename());
-			paraMap.put("attachmentType", CommonUtil.ATTACHMENT_TYPE_HEADIMG);
 			attachmentService.uploadFile(paraMap, file, request, response);
 			json.put("msg", "success");
 		} catch (Exception e) {
