@@ -1,5 +1,5 @@
 <template>
-  <div class="member">
+  <div class="changeMain">
     <div class="bgc">
       <div class="top" >
         <span>成员管理</span>
@@ -7,24 +7,6 @@
         <span class="blue">社团成员</span>
       </div>
       <div class="search_box">
-        <div>
-          <span>社团分类：</span>
-          <el-select v-model="sortSociety" placeholder="社团分类">
-            <el-option label="专业学术类" value="1"></el-option>
-            <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
-            <el-option label="体育健身类" value="4"></el-option>
-            <el-option label="公益服务类" value="5"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>社团编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
         <div>
           <span>学生编号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
@@ -37,14 +19,16 @@
           <span>学生年级：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
-        <div class="searchBtn">
+        <div>
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>
+        </div>
+        <div class="searchBtn">
+          <el-button @click="toRouter('/edtiSociety',hadArr[radio2].memberId)" type="primary">确认选择</el-button>
         </div>
       </div>
       <div>
         <div class="title">
-          <span>序号</span>
+          <span>选择</span>
           <span>学号</span>
           <span>名字</span>
           <span>专业</span>
@@ -52,11 +36,12 @@
           <span>社团</span>
           <span>分类</span>
           <span>职位</span>
-          <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in hadArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
+          <li v-for="(item,index) in hadArr">
+           <div class="checkBox"> <el-radio-group v-model="radio2">
+              <el-radio :label=index >{{index+1}}</el-radio>
+            </el-radio-group></div>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberId}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberName}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.profession}}</span>
@@ -68,9 +53,6 @@
             <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
             <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.position}}</span>
-            <div>
-              <span class="delBtn" @click="delMember(index)">删除</span>
-            </div>
           </li>
         </ul>
       </div>
@@ -112,7 +94,7 @@
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'副社长',
+            position:'社员',
             grade:'大一',
             sort: 3,
             profession:'电子商务'
@@ -151,6 +133,7 @@
         sortSociety:'',
         nameInput:'',
         idInput:'',
+        radio2:''
       }
     },
     methods: {
@@ -202,24 +185,8 @@
 
       },
       toRouter(myRouter,societyId){
+        console.log(myRouter,societyId);
         this.$router.push({path: myRouter, query: {'societyId': societyId}})
-      },
-      delMember(index) {
-        this.$confirm('是否删除该成员?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
       },
     },
     mounted(){
@@ -230,7 +197,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .member{
+  .changeMain{
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;
@@ -256,10 +223,11 @@
         display: inline-block;
         margin-right: 10px;
       }
-    }
       .searchBtn{
-        /*float :right;*/
+        margin-top:20px;
       }
+    }
+
     .title {
       color: #000000;
       display: flex;
@@ -267,15 +235,29 @@
       align-items: center;
       margin-bottom: 20px;
       span {
+        min-width: 128px;
         text-align: center;
-        width: 146px;
+
       }
     }
-      .editBtn{
-        color : #409eff;
+      .list{
+        li{
+          span{
+            display: inline-block;
+            min-width: 128px;
+            text-align: center;
+          }
+        }
       }
-     .delBtn{
-       color : #f56c6c;
-     }
+        .checkBox{
+          overflow :hidden;
+          max-width: 146px;
+        }
+    .editBtn{
+      color : #409eff;
+    }
+    .delBtn{
+      color : #f56c6c;
+    }
   }
 </style>

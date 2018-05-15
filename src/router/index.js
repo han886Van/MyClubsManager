@@ -12,6 +12,8 @@ import allNews from '@/components/news/allNews'
 import society from '@/components/society/society_main'
 import societyDetails from '@/components/society/societyDetails'
 import addSociety from '@/components/society/addSociety'
+import edtiSociety from '@/components/society/edtiSociety'
+import changeMain from '@/components/society/changeMain'
 import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
 import addMember from '@/components/member/addMember'
@@ -115,6 +117,14 @@ export default new Router({
       path: '/addNews',
       name: 'addNews',
       component: addNews
+    },{
+      path: '/edtiSociety',
+      name: 'edtiSociety',
+      component: edtiSociety
+    },{
+      path: '/changeMain',
+      name: 'changeMain',
+      component: changeMain
     },
   ]
 })

@@ -216,6 +216,7 @@
       }
     },
     methods: {
+
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -268,7 +269,7 @@
         this.$prompt('请输退出理由', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          center: true,
+          /*center: true,*/
           /*          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,*/
           inputErrorMessage: '邮箱格式不正确'
         }).then(({ value }) => {
@@ -323,6 +324,7 @@
       },
       /*编辑社团*/
       editSociety(index){
+        this.$router.push({path: 'edtiSociety', query: {'societyId': index}})
         console.log('管理社团' + index);
       },
       /*取消操作*/

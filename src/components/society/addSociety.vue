@@ -8,7 +8,7 @@
         <span class="blue">创建社团</span>
        </div>
         <div>
-          <span class="editing" @click="toRouter('/society')">取消</span>
+          <span class="editing" @click="goBack()">取消</span>
         </div>
       </div>
       <div class="info">
@@ -37,18 +37,6 @@
               placeholder="请输入内容"
               v-model="textarea">
             </el-input></p>
-          <p><span>社团图片：</span>
-            <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-          </p>
           <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
         </div>
       </div>
@@ -64,21 +52,16 @@
       return {
         sortSociety:'',
         textarea:'',
-        dialogImageUrl: '',
         dialogVisible: false,
         fullscreenLoading: false
       }
     },
     methods: {
+        goBack(){
+          this.$router.back(-1)
+        },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
       },
       /*创建请求*/
       addSociety() {
@@ -90,7 +73,7 @@
         });
         setTimeout(() => {
           loading.close();
-          this.toRouter('/society')
+          this.toRouter('/society?myRouter=5')
         }, 2000);
 
       },

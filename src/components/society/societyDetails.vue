@@ -78,6 +78,9 @@
       }
     },
     methods: {
+      goBack(){
+        this.$router.back(-1)
+      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
