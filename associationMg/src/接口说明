@@ -76,13 +76,19 @@ function ajaxFileUpload() {
 --------------------------------------
 用户登录接口
 http://localhost:8080/associationMg/user/login
-接收数据类型  必须包含account(账号)、password(密码)
+接收数据类型  必须包含account(账号)、password(密码)、userType(用户角色：1为管理员、2为老师、3为学生)
 ---------------------------------------------
 
 ----------------------------------------------
 用户退出接口
 http://localhost:8080/associationMg/user/loginOut
 无需传数据
+---------------------------------------------
+
+----------------------------------------------
+用户个人中心接口
+http://localhost:8080/associationMg/user/personalCenter
+接收数据类型 userId(用户userId)
 ---------------------------------------------
 
 

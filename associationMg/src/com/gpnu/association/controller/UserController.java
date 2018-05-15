@@ -1,6 +1,7 @@
 package com.gpnu.association.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gpnu.association.mapper.UserMapper;
+import com.gpnu.association.service.AttachmentService;
 import com.gpnu.association.service.UserService;
+import com.gpnu.association.util.CommonUtil;
 
 
 @Controller
@@ -30,6 +33,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	AttachmentService attachmentService;
 	
 	@RequestMapping("/login")
 	@ResponseBody
@@ -95,14 +101,22 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping("/getList")
+	@RequestMapping("/personalCenter")
 	@ResponseBody
-	public JSONObject homepage(@RequestBody Map paraMap){
+	public JSONObject personalCenter(@RequestBody Map paraMap, HttpServletRequest request,
+			HttpServletResponse response){
 		JSONObject json = new JSONObject();
 		try {
-			List<Map> userList = userService.getList(paraMap);
-			
-		    //pageINfo封装了分页的详细信息，也可以指定连续显示的页数  
+			Map searchMap = (Map) request.getSession().getAttribute("loginUser");
+			List<Map> personalCenter = userService.getList(searchMap);
+			searchMap.put("attachmentType", CommonUtil.ATTACHMENT_TYPE_HEADIMG);
+			List<Map> headImg = attachmentService.getFile(searchMap);
+			if(headImg.size() != 0 && !headImg.isEmpty()){
+				json.put("headImg", headImg);
+			}
+			json.put("msg", "666");
+			json.put("comment", "请求成功");
+			json.put("getUser", personalCenter.get(0));
 		} catch (Exception e) {
 			json.put("msg", "发生错误，操作失败！");
 			logger.error(e);

@@ -73,7 +73,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
 
 	@Override
-	public List<Map<?, ?>> getHeade(Object param) {
+	public List<Map> getFile(Map param) {
 		return null;//获取头像
 	}
 
