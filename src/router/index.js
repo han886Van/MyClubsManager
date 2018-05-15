@@ -7,6 +7,7 @@ import MySpace from '@/components/MySpace/MySpace'
 import editUerInfo from '@/components/MySpace/edit_uerInfo'
 import editPass from '@/components/MySpace/edit_pass'
 import news from '@/components/news/news_main'
+import addNews from '@/components/news/addNews'
 import allNews from '@/components/news/allNews'
 import society from '@/components/society/society_main'
 import societyDetails from '@/components/society/societyDetails'
@@ -19,6 +20,7 @@ import addMaterials from '@/components/materials/addMaterials'
 import discussion from '@/components/discussion/discussion_main'
 import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
+import addActivity from '@/components/activity/addActivity'
 
 
 Vue.use(Router)
@@ -105,6 +107,14 @@ export default new Router({
       path: '/addMaterials',
       name: 'addMaterials',
       component: addMaterials
+    },{
+      path: '/addActivity',
+      name: 'addActivity',
+      component: addActivity
+    },{
+      path: '/addNews',
+      name: 'addNews',
+      component: addNews
     },
   ]
 })

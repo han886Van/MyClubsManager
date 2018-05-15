@@ -38,7 +38,7 @@
             placeholder="请输入内容"
             v-model="textarea">
           </el-input></p>
-          <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
+          <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">立即添加</el-button></div>
         </div>
       </div>
     </div>

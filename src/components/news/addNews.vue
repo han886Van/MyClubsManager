@@ -1,22 +1,32 @@
 <template>
-  <div class="addMaterials">
+  <div class="addNews">
     <div class="bgc">
       <div class="top">
         <div>
-          <span>物资管理</span>
+          <span>新闻管理</span>
           <span>	&gt;</span>
-          <span class="blue">申请物资</span>
+          <span class="blue">添加新闻</span>
         </div>
         <div>
-          <span class="editing" @click="toRouter('/materials')">取消</span>
+          <span class="editing" @click="toRouter('/news')">取消</span>
         </div>
       </div>
       <div class="info">
         <div class="edit_input">
-          <p><span class="title_span">申请标题：</span>
+          <p>
+            <span>新闻分类：</span>
+            <el-select v-model="newSociety" placeholder="社团分类">
+              <el-option label="专业学术类" value="1"></el-option>
+              <el-option label="科技创新类" value="2"></el-option>
+              <el-option label="艺术兴趣类" value="2"></el-option>
+              <el-option label="体育健身类" value="4"></el-option>
+              <el-option label="公益服务类" value="5"></el-option>
+            </el-select>
+          </p>
+          <p><span class="title_span">新闻标题：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
-          <p><span class="title_span">申请内容：</span>
+          <p><span class="title_span">新闻内容：</span>
             <el-input
               type="textarea"
               resize="none"
@@ -30,19 +40,8 @@
           <p><span class="title_span">社长账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
-          <p><span class="title_span">申请时间：</span>
-            <el-date-picker
-              v-model="value4"
-              :disabledDate="disabledDate"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
-          </p>
-          <div>
-            <el-button type="primary" @click="addMaterials()" v-loading.fullscreen.lock="fullscreenLoading">发送申请</el-button>
+          <div class="btn">
+            <el-button type="primary" @click="addNews()" v-loading.fullscreen.lock="fullscreenLoading">发送新闻</el-button>
           </div>
         </div>
       </div>
@@ -57,6 +56,7 @@
     data () {
       return {
         textarea: '',
+        newSociety:'',
         dialogVisible: false,
         fullscreenLoading: false,
         value4:'',
@@ -80,7 +80,7 @@
         this.dialogVisible = true;
       },
       /*创建请求*/
-      addMaterials() {
+      addNews() {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -89,7 +89,7 @@
         });
         setTimeout(() => {
           loading.close();
-          this.toRouter('/materials')
+          this.toRouter('/news')
         }, 2000);
 
       },
@@ -110,7 +110,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .addMaterials {
+  .addNews {
     /*box-sizing border-box;*/
     /*padding: 80px 100px;*/
     margin-left: 80px;
@@ -155,6 +155,9 @@
       min-width: 30px;
       text-align: center;
     }
+      .btn{
+        margin-top:60px;
+      }
   }
 
 </style>

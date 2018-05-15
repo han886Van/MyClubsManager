@@ -128,3 +128,17 @@
 .addMaterials .el-input{
   width: 310px !important;
 }
+.addActivity .el-input{
+  width: 310px !important;
+}
+.addActivity .el-textarea__inner{
+  width: 500px !important;
+  height: 100px;
+}
+.addNews .el-textarea__inner{
+  width: 500px !important;
+  height: 100px;
+}
+.addNews .el-input{
+  width: 310px !important;
+}

@@ -1,22 +1,22 @@
 <template>
-  <div class="addMaterials">
+  <div class="addActivity">
     <div class="bgc">
       <div class="top">
         <div>
-          <span>物资管理</span>
+          <span>活动管理</span>
           <span>	&gt;</span>
-          <span class="blue">申请物资</span>
+          <span class="blue">申请活动</span>
         </div>
         <div>
-          <span class="editing" @click="toRouter('/materials')">取消</span>
+          <span class="editing" @click="toRouter('/activity')">取消</span>
         </div>
       </div>
       <div class="info">
         <div class="edit_input">
-          <p><span class="title_span">申请标题：</span>
+          <p><span class="title_span">活动标题：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
-          <p><span class="title_span">申请内容：</span>
+          <p><span class="title_span">活动内容：</span>
             <el-input
               type="textarea"
               resize="none"
@@ -24,13 +24,7 @@
               v-model="textarea">
             </el-input>
           </p>
-          <p><span class="title_span">社团账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
-          </p>
-          <p><span class="title_span">社长账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
-          </p>
-          <p><span class="title_span">申请时间：</span>
+          <p><span class="title_span">活动时间：</span>
             <el-date-picker
               v-model="value4"
               :disabledDate="disabledDate"
@@ -41,8 +35,22 @@
               end-placeholder="结束日期">
             </el-date-picker>
           </p>
+          <p><span class="title_span">社团账号：</span>
+            <el-input placeholder="请输入内容"></el-input>
+          </p>
+          <p><span class="title_span">社长账号：</span>
+            <el-input placeholder="请输入内容"></el-input>
+          </p>
+          <p><span class="title_span">申请理由：</span>
+            <el-input
+              type="textarea"
+              resize="none"
+              placeholder="请输入内容"
+              v-model="textarea">
+            </el-input>
+          </p>
           <div>
-            <el-button type="primary" @click="addMaterials()" v-loading.fullscreen.lock="fullscreenLoading">发送申请</el-button>
+            <el-button type="primary" @click="addActivity()" v-loading.fullscreen.lock="fullscreenLoading">发送申请</el-button>
           </div>
         </div>
       </div>
@@ -80,7 +88,7 @@
         this.dialogVisible = true;
       },
       /*创建请求*/
-      addMaterials() {
+      addActivity() {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -89,7 +97,7 @@
         });
         setTimeout(() => {
           loading.close();
-          this.toRouter('/materials')
+          this.toRouter('/activity')
         }, 2000);
 
       },
@@ -110,7 +118,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .addMaterials {
+  .addActivity {
     /*box-sizing border-box;*/
     /*padding: 80px 100px;*/
     margin-left: 80px;
