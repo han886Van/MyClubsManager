@@ -79,6 +79,9 @@
 .society .el-select .el-input,.member .el-select .el-input{
   width: 144px !important;
 }
+.society .el-message-box>.el-message-box__content .el-input__inner{
+  height: 78px !important;
+}
 .society .el-button+.el-button{
   margin-left:0px;
 }
@@ -99,5 +102,18 @@
 }
 .editPass .el-input{
   width: 310px !important;
+}
+.addSociety .el-input{
+  width: 310px !important;
+}
+.addSociety .el-textarea{
+
+}
+.addSociety .el-textarea__inner{
+  width: 510px !important;
+  height: 100px;
+}
+.addSociety .el-upload-list__item{
+  margin-right:10px;
 }
 

@@ -1,6 +1,16 @@
 <template>
   <div class="society">
     <div class="bgc">
+      <!--学生-->
+      <div class="top" v-show="userRole==1">
+        <span>社团管理</span>
+        <span>	&gt;</span>
+        <span v-show="showAll==2" class="blue">全部社团</span>
+        <span v-show="showAll==5" class="blue">全部社团</span>
+        <span v-show="showAll==1" class="blue">已进社团</span>
+        <span v-show="showAll==3" class="blue">管理社团</span>
+        <span v-show="showAll==4" class="blue">申请记录</span>
+      </div>
       <div class="top" v-show="userRole==2">
         <span>社团管理</span>
         <span>	&gt;</span>
@@ -56,18 +66,24 @@
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
             <div v-show="showAll==1">
-              <el-button @click="outSociety(index)" type="danger">退出</el-button>
+              <span @click="outSociety(index)" class="red_color">退出</span>
+              <!--<el-button  type="danger">退出</el-button>-->
             </div>
             <div v-show="showAll==2">
-              <el-button @click="outSociety(index)" v-show="item.status==1" type="danger">退出</el-button>
-              <el-button @click="enterSociety(index)" v-show="item.status==2" type="primary">加入</el-button>
+              <span @click="outSociety(index)" v-show="item.status==1" class="red_color">退出</span>
+              <span  @click="enterSociety(index)" v-show="item.status==2" class="blue">加入</span>
+            </div>
+            <div v-show="showAll==5">
+              <span @click="outSociety(index)" v-show="item.status==1" class="red_color">退出</span>
+              <span  @click="enterSociety(index)" v-show="item.status==2" class="blue">加入</span>
             </div>
             <div v-show="showAll==3">
-              <el-button type="success" @click="editSociety(index)" plain>编辑</el-button>
+              <span  @click="editSociety(index)" class="green_color">编辑</span>
             </div>
             <div v-show="showAll==4">
-              <el-button @click="cancelOperating(1,index)" v-show="item.status==1" plain>取消加入</el-button>
-              <el-button @click="cancelOperating(2,index)" v-show="item.status==2" type="success" plain>取消退出</el-button>
+              <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
+              <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
+              <!--<el-button  type="success" plain>取消退出</el-button>-->
             </div>
           </li>
         </ul>
@@ -373,7 +389,6 @@
       justify-content: space-between;
       align-items: center;
       line-height:50px;
-      border-bottom : 1px solid #ccc;
       border-radius :8px 8px 0 0;
   span {
         text-align: center;

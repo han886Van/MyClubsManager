@@ -86,7 +86,7 @@
       justify-content: center;
       flex-wrap:wrap;
     }
-      .edit_input{
+    .edit_input{
         width: 600px;
         p{
           margin-bottom :40px;

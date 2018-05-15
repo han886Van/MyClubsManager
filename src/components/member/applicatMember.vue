@@ -1,6 +1,11 @@
 <template>
   <div class="member applicatMember">
     <div class="bgc">
+      <div class="top" >
+        <span>成员管理</span>
+        <span>	&gt;</span>
+        <span class="blue">申请成员</span>
+      </div>
       <div class="search_box">
         <div>
           <span>申请分类：</span>
@@ -234,10 +239,16 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding:20px 40px;
+    padding: 10px 40px 20px 40px;
     .bgc {
       border-radius: 8px;
       background-color: #fff;
+    }
+    .top{
+      line-height:50px;
+      font-size:16px;
+      border-bottom :1px solid #ccc;
+      margin-bottom:10px;
     }
     .search_box {
       margin-bottom: 20px;

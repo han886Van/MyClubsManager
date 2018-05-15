@@ -14,17 +14,18 @@
         <span slot="title" class="i_word">个人中心</span>
       </el-menu-item>
       <!--社团管理-->
-      <el-submenu v-show="myRole==1"  index="society?myRouter=2">
+      <el-submenu v-show="myRole==1"  index="society?myRouter=5">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
           <span class="i_word">社团管理</span>
         </template>
-        <el-menu-item index="society?myRouter=1" class="li_son">
-          <span slot="title" class="i_word">已进社团</span>
-        </el-menu-item>
         <el-menu-item index="society?myRouter=2" class="li_son">
           <span slot="title" class="i_word">全部社团</span>
         </el-menu-item>
+        <el-menu-item index="society?myRouter=1" class="li_son">
+          <span slot="title" class="i_word">已进社团</span>
+        </el-menu-item>
+
         <el-menu-item  index="society?myRouter=3" class="li_son">
           <span slot="title" class="i_word">管理社团</span>
         </el-menu-item>
