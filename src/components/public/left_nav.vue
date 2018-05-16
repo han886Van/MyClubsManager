@@ -25,7 +25,6 @@
         <el-menu-item index="society?myRouter=1" class="li_son">
           <span slot="title" class="i_word">已进社团</span>
         </el-menu-item>
-
         <el-menu-item  index="society?myRouter=3" class="li_son">
           <span slot="title" class="i_word">管理社团</span>
         </el-menu-item>
@@ -43,9 +42,13 @@
           <span slot="title" class="i_word">全部社团</span>
         </el-menu-item>
         <el-menu-item index="society?myRouter=2" class="li_son">
-          <span slot="title" class="i_word">申请社团</span>
+          <span slot="title" class="i_word">社团申请</span>
+        </el-menu-item>
+        <el-menu-item index="society?myRouter=4" class="li_son">
+          <span slot="title" class="i_word">申请记录</span>
         </el-menu-item>
       </el-submenu>
+      <!--管理员-->
       <el-submenu v-show="myRole==3"  index="society?myRouter=8">
         <template slot="title">
           <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
@@ -58,6 +61,7 @@
           <span slot="title" class="i_word">已加入社团</span>
         </el-menu-item>
       </el-submenu>
+      <!--成员管理-->
       <el-submenu index="member">
         <template slot="title">
           <i class="iconfont icon-yuangongliebiao"></i>
@@ -66,25 +70,46 @@
         <el-menu-item index="member?myRouter=1" class="li_son">
           <span slot="title" class="i_word">社团成员</span>
         </el-menu-item>
-        <el-menu-item index="applicatMember" class="li_son">
+        <el-menu-item index="applicatMember" class="li_son" v-show="myRole==1" >
           <span slot="title" class="i_word">申请社员</span>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="materials">
+      <!--物资管理-->
+      <el-menu-item index="materials" v-show="myRole==1">
         <i class="iconfont icon-cailiaozhengli"></i>
         <span slot="title" class="i_word">物质管理</span>
       </el-menu-item>
-      <el-menu-item index="activity">
+      <el-submenu   index="materials?myRouter=1"  v-show="myRole==2">
+        <template slot="title">
+          <i class="iconfont icon-cailiaozhengli"></i>
+          <span class="i_word">物质管理</span>
+        </template>
+        <el-menu-item index="materials" class="li_son">
+          <span slot="title" class="i_word">申请记录</span>
+        </el-menu-item>
+        <el-menu-item index="appliMaterials" class="li_son">
+          <span slot="title" class="i_word">物资申请</span>
+        </el-menu-item>
+      </el-submenu>
+      <!--活动管理-->
+      <el-menu-item index="activity" v-show="myRole==1">
         <i class="iconfont icon-huodong"></i>
         <span slot="title" class="i_word">活动管理</span>
       </el-menu-item>
+      <el-submenu   index="activity?myRouter=1"  v-show="myRole==2">
+        <template slot="title">
+          <i class="iconfont icon-huodong"></i>
+          <span class="i_word">活动管理</span>
+        </template>
+        <el-menu-item index="activity" class="li_son">
+          <span slot="title" class="i_word">申请记录</span>
+        </el-menu-item>
+        <el-menu-item index="appliActivity" class="li_son">
+          <span slot="title" class="i_word">活动申请</span>
+        </el-menu-item>
+      </el-submenu>
       <!--新闻-->
-      <el-menu-item v-show="myRole==0" index="allNews">
-        <i class="iconfont icon-shangwutubiao-"></i>
-        <span slot="title" class="i_word">新闻管理</span>
-      </el-menu-item>
-
-      <el-submenu v-show="myRole==1" index="news">
+      <el-submenu  index="news">
         <template slot="title">
           <i class="iconfont icon-shangwutubiao-"></i>
           <span class="i_word">新闻管理</span>
@@ -96,7 +121,6 @@
           <span slot="title" class="i_word">全部新闻</span>
         </el-menu-item>
       </el-submenu>
-      <!--论坛-->
       <el-submenu  index="discussion">
         <template slot="title">
           <i class="iconfont icon-icon"></i>

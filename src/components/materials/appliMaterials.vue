@@ -1,10 +1,10 @@
 <template>
-  <div class="allNews">
+  <div class="materials">
     <div class="bgc">
       <div class="top" >
-        <span>新闻管理</span>
+        <span >物资管理</span>
         <span>	&gt;</span>
-        <span class="blue">全部新闻</span>
+        <span class="blue">物资申请</span>
       </div>
       <div class="search_box">
         <div>
@@ -18,7 +18,7 @@
           </el-select>
         </div>
         <div>
-          <span>新闻编号：</span>
+          <span>借用编号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
@@ -26,7 +26,7 @@
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>新闻标题：</span>
+          <span>物资名称：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
@@ -34,41 +34,44 @@
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>发送日期：</span>
+          <span>借用时间：</span>
           <el-date-picker
             v-model="value1"
             type="date"
             placeholder="选择日期">
           </el-date-picker>
         </div>
-        <div class="searchBtn" v-show="userRole==1">
-          <el-button @click="searchItem()" type="info" plain>&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;</el-button>
-        </div>
-        <div class="searchBtn" v-show="userRole==2">
-          <el-button @click="searchItem()" type="info" plain>&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;</el-button>
-          <el-button @click="toRouter('/addNews')" type="primary">添加新闻</el-button>
+        <div class="searchBtn">
+          <el-button @click="searchItem()" type="info" plain>搜索</el-button>
+          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物质</el-button>
         </div>
       </div>
       <div>
         <div class="title">
           <span>序号</span>
           <span>编号</span>
-          <span>标题</span>
           <span>内容</span>
-          <span>发送社团</span>
-          <span>发送人</span>
-          <span>发送日期</span>
+          <span>借用时间</span>
+          <span>归还时间</span>
+          <span>申请社团</span>
+          <span>申请人</span>
+          <span>申请教师</span>
+          <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in newsArr" @click="toRouter('/detailNews',item.Numbering)">
-            <span >{{index+1}}</span>
-            <span >{{item.Numbering}}</span>
-            <span >{{item.name}}</span>
-            <span >{{item.content}}</span>
-            <span >{{item.society}}</span>
-            <span >{{item.applicant}}</span>
-            <span >{{item.starTime}}</span>
-
+          <li class="societyList" v-for="(item,index) in materialsArr">
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{index+1}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.Numbering}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.content}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.starTime}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.starTime}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.society}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.teacher}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.applicant}}</span>
+            <div>
+              <span class="delBtn">同意</span>
+              <span class="refuseBtn" >拒绝</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -94,74 +97,87 @@
     components: {},
     data () {
       return {
-        sendStatus:"",
-        newsArr: [
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-          {
-            Numbering: 1254688,
-            name: '跆拳道又招新啦',
-            starTime: '2018.5.12',
-            applicant: '孟山支',
-            society: '跆拳道社团',
-            content:'寻梦，是每个人心中的那片橄榄叶。然而学生会举行的隆重的招新大会为新生提供了一个服务同学，锻炼自我的平台。学生会招新是为了保证校学生会有新鲜的血液的注入，有足够高素质的后备力量，能更有效地开展学生会工作，实现学生会干部的新老交替，培养和壮大'
-          },
-
-
-        ],
+        value1:'',
         idInput: '',
         nameInput: '',
         sortSociety: '',
+        materialsStatus:'',
+        materialsArr: [
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 1,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 2,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 3,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 4,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 2,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+          {
+            Numbering: 1254688,
+            name: '帐篷',
+            num: '5',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            society: '跆拳道社团',
+            applicant: '陈小黄',
+            status: 1,
+            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
+          },
+        ],
         currentPage:1,
-        userRole:'',
-        value1:''
-
+        userRole:''
       }
     },
     methods: {
@@ -220,8 +236,8 @@
 
       },
       /*退出社团*/
-      toRouter(myRouter, societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter, Numbering){
+        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
       },
     },
     mounted(){
@@ -232,7 +248,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .allNews {
+  .materials {
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;

@@ -97,7 +97,8 @@
           <span>名字</span>
           <span>社长</span>
           <span>地点</span>
-          <span>人数</span>
+          <span v-show="showAll!=3">申请</span>
+          <span v-show="showAll==3">人数</span>
           <span>操作</span>
         </div>
         <ul class="list">
@@ -112,18 +113,24 @@
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyManage}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.changeName==0 && showAll!=3">编辑申请</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.changeName==1 && showAll!=3">创建申请</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="showAll==3">{{item.num}}</span>
             <div v-show="showAll==1">
-              <span class="blue">编辑</span>
+              <span class="blue"  @click="editSociety(index)">编辑</span>
               <span class="red_color">删除</span>
             </div>
             <div class="red_color" v-show="showAll==3">
-              <span class="blue">编辑</span>
+              <span class="blue"  @click="editSociety(index)">编辑</span>
               <span class="red_color">删除</span>
             </div>
             <div v-show="showAll==2">
-              <el-button @click="outSociety(index)" v-show="item.status==1" type="danger">退出</el-button>
-              <el-button @click="enterSociety(index)" v-show="item.status==2" type="primary">加入</el-button>
+              <span  class="blue" >同意</span>
+              <span  class="red_color" >拒绝</span>
+            </div>
+            <div v-show="showAll==4">
+              <span @click="toRouter('/societyDetails',item.societyId)"  v-show="item.status==1">同意</span>
+              <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.status==2">拒绝</span>
             </div>
           </li>
         </ul>
@@ -164,9 +171,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 0,
             sort: 1,
-            status: 1
+            status: 1,
+            num:55
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -174,9 +182,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 1,
             sort: 2,
-            status: 1
+            status: 1,
+            num:55
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -184,9 +193,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 0,
             sort: 3,
-            status: 2
+            status: 2,
+            num:55
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -194,9 +204,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 1,
             sort: 4,
-            status: 1
+            status: 1,
+            num:55
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -204,9 +215,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 0,
             sort: 5,
-            status: 2
+            status: 2,
+            num:55
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -214,9 +226,10 @@
             societyManage: '小可爱',
             societyName: '摄影社团',
             adress: '操场',
-            num: 55,
+            changeName: 0,
             sort: 1,
-            status: 1
+            status: 1,
+            num:55
           },
         ],
         myRouter: '',

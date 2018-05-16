@@ -39,7 +39,8 @@
           {name: '出生日期', conten: '2018.01.01'},
           {name: '邮箱', conten: '80456656665@qq.com'},
           {name: '手机号', conten: '12345678945'},
-        ]
+        ],
+        memberId:''
       }
     },
     methods:{
@@ -51,7 +52,7 @@
       },
     },
     mounted(){
-
+      this.memberId = this.$route.query.memberId;
     }
   }
 </script>

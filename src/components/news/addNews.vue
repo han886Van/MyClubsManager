@@ -34,10 +34,13 @@
               v-model="textarea">
             </el-input>
           </p>
-          <p><span class="title_span">社团账号：</span>
+          <p v-show="userRole==1"><span class="title_span">社团账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
-          <p><span class="title_span">社长账号：</span>
+          <p v-show="userRole==1"><span class="title_span">社长账号：</span>
+            <el-input placeholder="请输入内容"></el-input>
+          </p>
+          <p v-show="userRole==2"><span class="title_span">教师账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
           <div class="btn">
@@ -65,10 +68,14 @@
             return  time.getTime() < Date.now()-(24*60*60*1000)
           }
         },
+        userRole:''
 
       }
     },
     methods: {
+      goBack(){
+        this.$router.back(-1)
+      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
@@ -89,7 +96,7 @@
         });
         setTimeout(() => {
           loading.close();
-          this.toRouter('/news')
+          this.goBack()
         }, 2000);
 
       },
@@ -99,7 +106,7 @@
     },
 
     mounted(){
-
+      this.userRole = localStorage.getItem('userRole');
     },
     created(){
 

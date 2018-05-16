@@ -42,17 +42,17 @@
            <div class="checkBox"> <el-radio-group v-model="radio2">
               <el-radio :label=index >{{index+1}}</el-radio>
             </el-radio-group></div>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberId}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.profession}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.grade}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.position}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberId}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberName}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.profession}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.societyName}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.position}}</span>
           </li>
         </ul>
       </div>
@@ -184,9 +184,9 @@
          });*/
 
       },
-      toRouter(myRouter,societyId){
-        console.log(myRouter,societyId);
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter,memberId){
+        console.log(myRouter,memberId);
+        this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
     },
     mounted(){

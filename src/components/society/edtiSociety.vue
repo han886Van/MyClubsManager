@@ -26,7 +26,7 @@
           <p><span class="title_span">社团名称：</span> <el-input  placeholder="请输入内容"></el-input></p>
           <p><span class="title_span">社长账号：</span><el-input
             placeholder="请输入内容"
-            v-model="societyId"
+            v-model="memberId"
             :disabled="true">
           </el-input>
             <span class="changeMain" @click="toRouter('/changeMain','001')">更改社长</span></p>
@@ -80,7 +80,8 @@
         dialogImageUrl: '',
         dialogVisible: false,
         fullscreenLoading: false,
-        societyId:'12321654646'
+        societyId:'12321654646',
+        memberId:''
       }
     },
     methods: {
@@ -132,6 +133,7 @@
 
     mounted(){
       this.societyId = this.$route.query.societyId;
+      this.memberId = this.$route.query.memberId;
     },
     watch: {
 

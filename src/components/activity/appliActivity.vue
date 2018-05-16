@@ -1,13 +1,10 @@
 <template>
-  <div class="materials">
+  <div class="activity">
     <div class="bgc">
-      <div class="top" v-show="userRole==1" >
-        <span class="blue">物资管理</span>
-      </div>
       <div class="top" v-show="userRole==2" >
-        <span>物资管理</span>
+        <span>活动管理</span>
         <span>	&gt;</span>
-        <span  class="blue">申请记录</span>
+        <span  class="blue">活动申请</span>
       </div>
       <div class="search_box">
         <div>
@@ -21,7 +18,7 @@
           </el-select>
         </div>
         <div>
-          <span>借用编号：</span>
+          <span>活动编号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
@@ -29,7 +26,7 @@
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>物资名称：</span>
+          <span>活动名称：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
@@ -37,46 +34,48 @@
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>申请状态：</span>
-          <el-select v-model="materialsStatus" placeholder="申请状态">
-            <el-option label="使用中" value="1"></el-option>
-            <el-option label="已归还" value="2"></el-option>
-            <el-option label="拒绝申请" value="2"></el-option>
-            <el-option label="同意申请" value="4"></el-option>
-          </el-select>
+          <span>活动时间：</span>
+          <el-date-picker
+            v-model="value1"
+            type="date"
+            placeholder="选择日期">
+          </el-date-picker>
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物质</el-button>
+          <el-button @click="toRouter('/addActivity')" type="primary"  v-show="userRole==1">申请活动</el-button>
         </div>
       </div>
       <div>
         <div class="title">
           <span>序号</span>
           <span>编号</span>
-          <span>内容</span>
-          <span>借用时间</span>
-          <span>归还时间</span>
+          <span>名称</span>
           <span>申请社团</span>
           <span>申请人</span>
+          <span>开始时间</span>
+          <span>结束时间</span>
+          <span>地点</span>
+          <span>借用物资</span>
           <span>申请教师</span>
-          <span>状态</span>
+          <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in materialsArr" @click="toRouter('/detailMaterials',item.Numbering)">
-            <span >{{index+1}}</span>
-            <span>{{item.Numbering}}</span>
-            <span>{{item.content}}</span>
-            <span>{{item.starTime}}</span>
-            <span>{{item.starTime}}</span>
-            <span>{{item.society}}</span>
-            <span>{{item.teacher}}</span>
-            <span>{{item.applicant}}</span>
+          <li class="societyList" v-for="(item,index) in activityArr"  >
+            <span @click="toRouter('/detaileActivity',item.actNum)">{{index+1}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.actNum}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.name}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.societyName}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.applicant}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.starTime}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.starTime}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.adress}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" v-show="item.isMaterials==1" >有</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" v-show="item.isMaterials==2" >无</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)">{{item.teacher}}</span>
             <div>
-              <span class="delBtn"  v-show="item.status==1">使用中</span>
-              <span class="editBtn" v-show="item.status==2">已归还</span>
-              <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
-              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
+              <span class="delBtn">同意</span>
+              <span class="refuseBtn" >拒绝</span>
             </div>
           </li>
         </ul>
@@ -100,99 +99,64 @@
 <script>
   export default {
     name: '',
-    components: {},
+    components: {
+
+    },
     data () {
       return {
+        value1:'',
+        activityArr:[
+          {actNum:'145662',
+            name:'招新活动',
+            societyName:'跆拳道协会',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            applicant: '陈小黄',
+            adress:'综合馆',
+            isMaterials:1,
+            status: 1},
+          {actNum:'145662',
+            name:'招新活动',
+            societyName:'跆拳道协会',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            applicant: '陈小黄',
+            adress:'综合馆',
+            isMaterials:2,
+            status: 2},
+          {actNum:'145662',
+            name:'招新活动',
+            societyName:'跆拳道协会',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            applicant: '陈小黄',
+            adress:'综合馆',
+            isMaterials:1,
+            status: 3},
+          {actNum:'145662',
+            name:'招新活动',
+            societyName:'跆拳道协会',
+            starTime: '2018.5.12',
+            endTime: '2018.06.16',
+            teacher: '孟山支',
+            applicant: '陈小黄',
+            adress:'综合馆',
+            isMaterials:1,
+            status: 4},
+
+        ],
+        actiStatus:'',
         idInput: '',
         nameInput: '',
         sortSociety: '',
-        materialsStatus:'',
-        materialsArr: [
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 1,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 2,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 3,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 4,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 2,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 1,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-        ],
         currentPage:1,
         userRole:''
       }
     },
     methods: {
-        /*分页器*/
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -240,9 +204,15 @@
          });*/
 
       },
-      /*退出社团*/
-      toRouter(myRouter, Numbering){
-        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
+      toRouter(myRouter,actNum){
+        this.$router.push({path: myRouter, query: {'actNum': actNum}})
+      },
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
       },
     },
     mounted(){
@@ -253,7 +223,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .materials {
+  .activity {
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;

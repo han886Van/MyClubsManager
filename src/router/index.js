@@ -22,10 +22,12 @@ import detailMember from '@/components/member/detailMember'
 import materials from '@/components/materials/materials_main'
 import addMaterials from '@/components/materials/addMaterials'
 import detailMaterials from '@/components/materials/detailMaterials'
+import appliMaterials from '@/components/materials/appliMaterials'
 import discussion from '@/components/discussion/discussion_main'
 import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
 import addActivity from '@/components/activity/addActivity'
+import appliActivity from '@/components/activity/appliActivity'
 import detaileActivity from '@/components/activity/detaileActivity'
 
 
@@ -145,6 +147,14 @@ export default new Router({
       path: '/detailNews',
       name: 'detailNews',
       component: detailNews
+    },{
+      path: '/appliMaterials',
+      name: 'appliMaterials',
+      component: appliMaterials
+    },{
+      path: '/appliActivity',
+      name: 'appliActivity',
+      component: appliActivity
     },
   ]
 })

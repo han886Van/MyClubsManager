@@ -1,10 +1,13 @@
 <template>
   <div class="activity">
     <div class="bgc">
-      <div class="top" >
+      <div class="top" v-show="userRole==1" >
         <span class="blue">活动管理</span>
-        <!--<span>	&gt;</span>
-        <span >社团成员</span>-->
+      </div>
+      <div class="top" v-show="userRole==2" >
+        <span>活动管理</span>
+        <span>	&gt;</span>
+        <span  class="blue">申请记录</span>
       </div>
       <div class="search_box">
         <div>
@@ -44,7 +47,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addActivity')" type="primary">申请活动</el-button>
+          <el-button @click="toRouter('/addActivity')" type="primary"  v-show="userRole==1">申请活动</el-button>
         </div>
       </div>
       <div>
@@ -154,7 +157,8 @@
         idInput: '',
         nameInput: '',
         sortSociety: '',
-        currentPage:1
+        currentPage:1,
+        userRole:''
       }
     },
     methods: {
@@ -217,7 +221,7 @@
       },
     },
     mounted(){
-
+      this.userRole = localStorage.getItem('userRole');
     }
   }
 </script>
