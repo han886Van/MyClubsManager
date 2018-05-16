@@ -1,6 +1,11 @@
 <template>
   <div class="activity">
     <div class="bgc">
+      <div class="top" >
+        <span class="blue">活动管理</span>
+        <!--<span>	&gt;</span>
+        <span >社团成员</span>-->
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -57,30 +62,38 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in activityArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.actNum}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.name}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.applicant}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
-            <span v-show="item.isMaterials==1" @click="toRouter('/societyDetails',item.societyId)">有</span>
-            <span v-show="item.isMaterials==2" @click="toRouter('/societyDetails',item.societyId)">无</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.teacher}}</span>
+          <li class="societyList" v-for="(item,index) in activityArr"  @click="toRouter('/detaileActivity',item.actNum)">
+            <span>{{index+1}}</span>
+            <span >{{item.actNum}}</span>
+            <span >{{item.name}}</span>
+            <span >{{item.societyName}}</span>
+            <span >{{item.applicant}}</span>
+            <span >{{item.starTime}}</span>
+            <span >{{item.starTime}}</span>
+            <span >{{item.adress}}</span>
+            <span v-show="item.isMaterials==1" >有</span>
+            <span v-show="item.isMaterials==2" >无</span>
+            <span>{{item.teacher}}</span>
             <div>
-              <span class="delBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==1">举办中</span>
-              <span class="editBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==2">已结束</span>
-              <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==3">拒绝申请</span>
-              <span class="agreetBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==4">同意申请</span>
+              <span class="delBtn"     v-show="item.status==1">举办中</span>
+              <span class="editBtn"    v-show="item.status==2">已结束</span>
+              <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
+              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
             </div>
           </li>
         </ul>
+      </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -140,7 +153,8 @@
         actiStatus:'',
         idInput: '',
         nameInput: '',
-        sortSociety: ''
+        sortSociety: '',
+        currentPage:1
       }
     },
     methods: {
@@ -191,8 +205,15 @@
          });*/
 
       },
-      toRouter(myRouter,societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter,actNum){
+        this.$router.push({path: myRouter, query: {'actNum': actNum}})
+      },
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
       },
     },
     mounted(){
@@ -211,7 +232,13 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding: 20px 40px;
+    padding: 10px 40px 20px 40px;
+    .top{
+      line-height:50px;
+      font-size:16px;
+      border-bottom :1px solid #ccc;
+      margin-bottom:10px;
+    }
     .bgc {
       border-radius: 8px;
       background-color: #fff;

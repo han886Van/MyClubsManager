@@ -8,7 +8,7 @@
           <span class="blue">申请物资</span>
         </div>
         <div>
-          <span class="editing" @click="toRouter('/materials')">取消</span>
+          <span class="editing" @click="goBack()">取消</span>
         </div>
       </div>
       <div class="info">
@@ -69,6 +69,9 @@
       }
     },
     methods: {
+      goBack(){
+        this.$router.back(-1)
+      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },

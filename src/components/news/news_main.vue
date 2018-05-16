@@ -1,6 +1,11 @@
 <template>
   <div class="news">
     <div class="bgc">
+      <div class="top" >
+        <span>新闻管理</span>
+        <span>	&gt;</span>
+        <span class="blue">社团新闻</span>
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -53,24 +58,36 @@
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in newsArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.Numbering}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.name}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.society}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.applicant}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span class="agreetBtn" @click="toRouter('/societyDetails',item.societyId)"
+            <span @click="toRouter('/detailNews',item.Numbering)">{{index+1}}</span>
+            <span @click="toRouter('/detailNews',item.Numbering)">{{item.Numbering}}</span>
+            <span @click="toRouter('/detailNews',item.Numbering)">{{item.name}}</span>
+            <span @click="toRouter('/detailNews',item.Numbering)">{{item.society}}</span>
+            <span @click="toRouter('/detailNews',item.Numbering)">{{item.applicant}}</span>
+            <span @click="toRouter('/detailNews',item.Numbering)">{{item.starTime}}</span>
+            <span class="agreetBtn" @click="toRouter('/detailNews',item.Numbering)"
                   v-show="item.status==1">已发送</span>
-            <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
+            <span class="refuseBtn" @click="toRouter('/detailNews',item.Numbering)"
                   v-show="item.status==2">草稿箱</span>
             <div>
-             <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
+             <span class="refuseBtn" @click="delNew(index)"
                    v-show="item.status==1">删除</span>
-              <span class="delBtn" @click="toRouter('/societyDetails',item.societyId)"
+              <span class="delBtn" @click="sendAgainNew(index)"
                     v-show="item.status==2">重发</span>
             </div>
           </li>
         </ul>
+      </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -152,10 +169,18 @@
         ],
         idInput: '',
         nameInput: '',
-        sortSociety: ''
+        sortSociety: '',
+        currentPage:1
       }
     },
     methods: {
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -204,8 +229,39 @@
 
       },
       /*退出社团*/
-      toRouter(myRouter, societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter, Numbering){
+        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
+      },
+      delNew(index) {
+        this.$confirm('是否删除该新闻?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      sendAgainNew(index) {
+        this.$confirm('是否需要编辑再重新发送?', '提示', {
+          confirmButtonText: '直接发送',
+          cancelButtonText: '编辑',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.toRouter('/addNews', '14145')
+        });
       },
     },
     mounted(){
@@ -224,7 +280,13 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding: 20px 40px;
+    padding: 10px 40px 20px 40px;
+    .top{
+      line-height:50px;
+      font-size:16px;
+      border-bottom :1px solid #ccc;
+      margin-bottom:10px;
+    }
     .bgc {
       border-radius: 8px;
       background-color: #fff;

@@ -1,6 +1,11 @@
 <template>
   <div class="materials">
     <div class="bgc">
+      <div class="top" >
+        <span class="blue">物资管理</span>
+        <!--<span>	&gt;</span>
+        <span >社团成员</span>-->
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -56,28 +61,36 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in materialsArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.Numbering}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.name}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.starTime}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.teacher}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.society}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.applicant}}</span>
+          <li class="societyList" v-for="(item,index) in materialsArr" @click="toRouter('/detailMaterials',item.Numbering)">
+            <span >{{index+1}}</span>
+            <span>{{item.Numbering}}</span>
+            <span>{{item.name}}</span>
+            <span>{{item.num}}</span>
+            <span>{{item.starTime}}</span>
+            <span>{{item.starTime}}</span>
+            <span>{{item.teacher}}</span>
+            <span>{{item.society}}</span>
+            <span>{{item.applicant}}</span>
             <div>
-              <span class="delBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==1">使用中</span>
-              <span class="editBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==2">已归还</span>
-              <span class="refuseBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==3">拒绝申请</span>
-              <span class="agreetBtn" @click="toRouter('/societyDetails',item.societyId)"
-                    v-show="item.status==4">同意申请</span>
+              <span class="delBtn"  v-show="item.status==1">使用中</span>
+              <span class="editBtn" v-show="item.status==2">已归还</span>
+              <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
+              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
             </div>
           </li>
         </ul>
+      </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -160,10 +173,18 @@
             applicant: '陈小黄',
             status: 1
           },
-        ]
+        ],
+        currentPage:1
       }
     },
     methods: {
+        /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -212,8 +233,8 @@
 
       },
       /*退出社团*/
-      toRouter(myRouter, societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter, Numbering){
+        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
       },
     },
     mounted(){
@@ -232,7 +253,13 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding: 20px 40px;
+    padding: 10px 40px 20px 40px;
+    .top{
+      line-height:50px;
+      font-size:16px;
+      border-bottom :1px solid #ccc;
+      margin-bottom:10px;
+    }
     .bgc {
       border-radius: 8px;
       background-color: #fff;

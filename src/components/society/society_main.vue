@@ -132,6 +132,18 @@
       <div class="manage_menber" v-show="userRole==3">
         管理员
       </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -210,13 +222,20 @@
         myRouter: '',
         idInput: '',
         nameInput: '',
-        sortSociety: ''
+        sortSociety: '',
+        currentPage:1
 
 
       }
     },
     methods: {
-
+        /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];

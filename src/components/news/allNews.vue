@@ -1,6 +1,11 @@
 <template>
   <div class="allNews">
     <div class="bgc">
+      <div class="top" >
+        <span>新闻管理</span>
+        <span>	&gt;</span>
+        <span class="blue">全部新闻</span>
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -61,6 +66,18 @@
 
           </li>
         </ul>
+      </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -135,10 +152,18 @@
         ],
         idInput: '',
         nameInput: '',
-        sortSociety: ''
+        sortSociety: '',
+        currentPage:1
       }
     },
     methods: {
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -207,7 +232,13 @@
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    padding: 20px 40px;
+    padding: 10px 40px 20px 40px;
+    .top{
+      line-height:50px;
+      font-size:16px;
+      border-bottom :1px solid #ccc;
+      margin-bottom:10px;
+    }
     .bgc {
       border-radius: 8px;
       background-color: #fff;

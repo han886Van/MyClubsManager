@@ -180,3 +180,9 @@
   width: 18px;
   height:18px;
 }
+.myPagination  .el-input {
+  width: 70px !important;
+}
+.myPagination  .el-pager li{
+  font-size:16px;
+}

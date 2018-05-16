@@ -9,6 +9,7 @@ import editPass from '@/components/MySpace/edit_pass'
 import news from '@/components/news/news_main'
 import addNews from '@/components/news/addNews'
 import allNews from '@/components/news/allNews'
+import detailNews from '@/components/news/detailNews'
 import society from '@/components/society/society_main'
 import societyDetails from '@/components/society/societyDetails'
 import addSociety from '@/components/society/addSociety'
@@ -17,12 +18,15 @@ import changeMain from '@/components/society/changeMain'
 import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
 import addMember from '@/components/member/addMember'
+import detailMember from '@/components/member/detailMember'
 import materials from '@/components/materials/materials_main'
 import addMaterials from '@/components/materials/addMaterials'
+import detailMaterials from '@/components/materials/detailMaterials'
 import discussion from '@/components/discussion/discussion_main'
 import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
 import addActivity from '@/components/activity/addActivity'
+import detaileActivity from '@/components/activity/detaileActivity'
 
 
 Vue.use(Router)
@@ -125,6 +129,22 @@ export default new Router({
       path: '/changeMain',
       name: 'changeMain',
       component: changeMain
+    },{
+      path: '/detailMember',
+      name: 'detailMember',
+      component: detailMember
+    },{
+      path: '/detailMaterials',
+      name: 'detailMaterials',
+      component: detailMaterials
+    },{
+      path: '/detaileActivity',
+      name: 'detaileActivity',
+      component: detaileActivity
+    },{
+      path: '/detailNews',
+      name: 'detailNews',
+      component: detailNews
     },
   ]
 })

@@ -58,3 +58,9 @@
 .green_color{
   color : #67c23a;
 }
+.myPagination{
+  margin-top: 40px;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}

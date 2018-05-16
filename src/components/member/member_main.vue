@@ -56,23 +56,35 @@
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in hadArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberId}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.memberName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.profession}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.grade}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.position}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{index+1}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberId}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberName}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.profession}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.societyName}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.position}}</span>
             <div>
               <span class="delBtn" @click="delMember(index)">删除</span>
             </div>
           </li>
         </ul>
+      </div>
+      <div  class="myPagination">
+        <div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="400">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -151,9 +163,17 @@
         sortSociety:'',
         nameInput:'',
         idInput:'',
+        currentPage:1
       }
     },
     methods: {
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];

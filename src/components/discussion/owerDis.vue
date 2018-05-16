@@ -2,13 +2,14 @@
   <div class="owerDis">
     <ul class="dis_box">
       <li class="top">
-        <span>时间筛选：</span>
-        <el-date-picker
-          v-model="value1"
-          type="date"
-          placeholder="选择日期">
-        </el-date-picker>
-        <el-button>搜索</el-button>
+        <div>
+          <span>新闻管理</span>
+          <span>	&gt;</span>
+          <span class="blue">全部新闻</span>
+        </div>
+        <div>
+          <span>时间筛选：</span> <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker> <el-button>搜索</el-button>
+        </div>
       </li>
       <li v-for="(item,index) in disList">
         <div class="dis_user flex_box">
@@ -21,8 +22,9 @@
         <span>{{item.speech}}</span>
         <div class="dis_img"><img :src="item.innerPic" alt=""></div>
         <div class="edit_btn">
-          <i class="iconfont icon-dianzan orange" @click="isLike(index)" :class="{'orange_color':item.like}"></i>
-          <i class="iconfont icon-pinglun orange"></i>
+          <i class="iconfont icon-dianzan orange" @click="isLike(index)" :class="{'orange_color':item.like}"></i><span :class="{'orange_color':item.like}">123</span>
+          <i class="iconfont icon-pinglun orange" @click="addDis(index)"></i>
+          <span>12</span>
           <el-button type="text" @click="deletDis" v-show="item.isAccount"><i class="iconfont icon-shanchu orange"></i>
           </el-button>
         </div>
@@ -31,13 +33,26 @@
           <div>
             <span>小可爱：lallalalallalalalallalal</span>
             <span class="span_mar_top">2017.08.11&nbsp;&nbsp;&nbsp;12:00
-               <i class="iconfont icon-dianzan orange" @click="isLike(index)" :class="{'orange_color':item.like}"></i>
-            <i class="iconfont icon-pinglun orange"></i>
+               <i class="iconfont icon-dianzan orange" @click="isLike(index)" :class="{'orange_color':item.like}"></i><span :class="{'orange_color':item.like}" class="dis_detail_i">123</span>
+            <i class="iconfont icon-pinglun orange" @click="addDis(index)"></i>
+                  <span  class="dis_detail_i">123</span>
             </span>
           </div>
         </div>
       </li>
     </ul>
+    <div  class="myPagination">
+      <div>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="10"
+          layout="total, prev, pager, next, jumper"
+          :total="400">
+        </el-pagination>
+      </div>
+    </div>
     <!--添加评论-->
     <el-dialog
       title="提示"
@@ -113,13 +128,54 @@
             speech: '评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论',
             like: false,
           },
-        ]
+        ],
+        currentPage:1
       }
     },
     mounted(){
 
     },
     methods: {
+      /*分页器*/
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      addDis(index) {
+        this.$prompt('请输评论信息', '评论', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputErrorMessage: '评论不能为空',
+          inputValidator(value){
+            if(value ==''){
+              return false
+
+            }else {
+              return true
+            }
+          },
+        }).then(({ value }) => {
+          var reg = /^\s*$/g;
+          if(reg.test(value)){
+
+            this.$message({
+              type: 'success',
+              message: '已发表评论'
+            });
+          }else {
+
+          }
+          console.log(value);
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
+      },
       /*
        * 上传文件方法
        * */
@@ -172,16 +228,21 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .owerDis {
+    margin-top: 50px;
+    margin-left: 90px;
     box-sizing border-box;
+    background: #fff;
+    padding: 10px 8px;
+    border-radius :8px;
+
     font-size: 18px;
     color: #666;
     padding-bottom: 50px;
+    .iconfont{
+      cursor: pointer;
+    }
     .dis_box {
-      margin-top: 50px;
-      margin-left: 90px;
       box-sizing border-box;
-      background: #fff;
-      padding: 10px 8px;
       li {
         width: 1024px
         padding: 20px;
@@ -192,8 +253,15 @@
       li:nth-last-child(1){
         border-bottom: none ;
       }
-      li:first-child{
-        border-bottom: none ;
+      .top{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0px;
+        padding: 10px;
+        line-height:50px;
+        font-size:16px;
+        border-bottom :1px solid #ccc;
+        margin-bottom:10px;
       }
     }
     .dis_user {
@@ -211,6 +279,7 @@
         font-size: 14px;
         display: block;
       }
+
     }
     .dis_img {
       margin: 10px 0;
@@ -251,6 +320,10 @@
       span {
         font-size: 14px;
         display: block;
+      }
+      .dis_detail_i{
+        display: inline-block;
+        font-size:12px;
       }
       .icon-pinglun {
         font-size: 16px;
