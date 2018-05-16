@@ -19,6 +19,10 @@ import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
 import addMember from '@/components/member/addMember'
 import detailMember from '@/components/member/detailMember'
+import student from '@/components/member/student'
+import addStudent from '@/components/member/addStudent'
+import teacher from '@/components/member/teacher'
+import addTeacher from '@/components/member/addTeacher'
 import materials from '@/components/materials/materials_main'
 import addMaterials from '@/components/materials/addMaterials'
 import detailMaterials from '@/components/materials/detailMaterials'
@@ -155,6 +159,22 @@ export default new Router({
       path: '/appliActivity',
       name: 'appliActivity',
       component: appliActivity
+    },{
+      path: '/student',
+      name: 'student',
+      component: student
+    },{
+      path: '/teacher',
+      name: 'teacher',
+      component: teacher
+    },{
+      path: '/addStudent',
+      name: 'addStudent',
+      component: addStudent
+    },{
+      path: '/addTeacher',
+      name: 'addTeacher',
+      component: addTeacher
     },
   ]
 })

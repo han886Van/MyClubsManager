@@ -186,3 +186,6 @@
 .myPagination  .el-pager li{
   font-size:16px;
 }
+.addStudent .el-input{
+  width: 274px !important;
+}

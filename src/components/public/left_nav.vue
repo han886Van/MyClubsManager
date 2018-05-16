@@ -49,20 +49,12 @@
         </el-menu-item>
       </el-submenu>
       <!--管理员-->
-      <el-submenu v-show="myRole==3"  index="society?myRouter=8">
-        <template slot="title">
-          <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
-          <span class="i_word">社团管理</span>
-        </template>
-        <el-menu-item index="society?myRouter=4" class="li_son">
-          <span slot="title" class="i_word">已加入社团</span>
-        </el-menu-item>
-        <el-menu-item index="society?myRouter=5" class="li_son">
-          <span slot="title" class="i_word">已加入社团</span>
-        </el-menu-item>
-      </el-submenu>
+      <el-menu-item v-show="myRole==3" index="society">
+        <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
+        <span slot="title" class="i_word">社团管理</span>
+      </el-menu-item>
       <!--成员管理-->
-      <el-submenu index="member">
+      <el-submenu index="member" v-show="myRole!=3">
         <template slot="title">
           <i class="iconfont icon-yuangongliebiao"></i>
           <span class="i_word">成员管理</span>
@@ -72,6 +64,18 @@
         </el-menu-item>
         <el-menu-item index="applicatMember" class="li_son" v-show="myRole==1" >
           <span slot="title" class="i_word">申请社员</span>
+        </el-menu-item>
+      </el-submenu>
+      <el-submenu index="student"  v-show="myRole==3">
+        <template slot="title">
+          <i class="iconfont icon-yuangongliebiao"></i>
+          <span class="i_word">成员管理</span>
+        </template>
+        <el-menu-item index="student?myRouter=1" class="li_son">
+          <span slot="title" class="i_word">学生</span>
+        </el-menu-item>
+        <el-menu-item index="teacher" class="li_son"  >
+          <span slot="title" class="i_word">教师</span>
         </el-menu-item>
       </el-submenu>
       <!--物资管理-->
@@ -115,7 +119,7 @@
           <span class="i_word">新闻管理</span>
         </template>
         <el-menu-item index="news?myRouter=1" class="li_son">
-          <span slot="title" class="i_word">社团新闻</span>
+          <span slot="title" class="i_word">发送记录</span>
         </el-menu-item>
         <el-menu-item index="allNews" class="li_son">
           <span slot="title" class="i_word">全部新闻</span>
@@ -199,6 +203,8 @@
     background-color: #233445
     border-radius: 0 0 8px 8px;
     display: inline-block;
+    min-height:600px;
+    box-sizing: border-box;
     .iconfont {
       font-size: 28px;
       margin-top: 6px;

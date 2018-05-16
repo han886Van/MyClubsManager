@@ -41,7 +41,7 @@
             placeholder="选择日期">
           </el-date-picker>
         </div>
-        <div class="searchBtn" v-show="userRole==1">
+        <div class="searchBtn" v-show="userRole!=2">
           <el-button @click="searchItem()" type="info" plain>&nbsp;&nbsp;&nbsp;搜索&nbsp;&nbsp;&nbsp;</el-button>
         </div>
         <div class="searchBtn" v-show="userRole==2">
@@ -58,17 +58,20 @@
           <span>发送社团</span>
           <span>发送人</span>
           <span>发送日期</span>
+          <span v-show="userRole==3">操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in newsArr" @click="toRouter('/detailNews',item.Numbering)">
-            <span >{{index+1}}</span>
-            <span >{{item.Numbering}}</span>
-            <span >{{item.name}}</span>
-            <span >{{item.content}}</span>
-            <span >{{item.society}}</span>
-            <span >{{item.applicant}}</span>
-            <span >{{item.starTime}}</span>
-
+          <li class="societyList" v-for="(item,index) in newsArr">
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{index+1}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.Numbering}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.name}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.content}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.society}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.applicant}}</span>
+            <span  @click="toRouter('/detailNews',item.Numbering)">{{item.starTime}}</span>
+            <div v-show="userRole==3">
+             <span class="refuseBtn" @click="delNew(index)">删除</span>
+            </div>
           </li>
         </ul>
       </div>
@@ -222,6 +225,23 @@
       /*退出社团*/
       toRouter(myRouter, societyId){
         this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      },
+      delNew(index) {
+        this.$confirm('是否删除该新闻?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
     },
     mounted(){

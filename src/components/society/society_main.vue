@@ -18,6 +18,9 @@
         <span v-show="showAll==3" class="blue">全部社团</span>
         <span v-show="showAll==2" class="blue">申请社团</span>
       </div>
+      <div class="top" v-show="userRole==3">
+        <span class="blue">社团管理</span>
+      </div>
       <div class="search_box">
         <div>
           <span>社团分类：</span>
@@ -137,7 +140,35 @@
       </div>
       <!--管理员-->
       <div class="manage_menber" v-show="userRole==3">
-        管理员
+        <div class="title">
+          <span>序号</span>
+          <span>编号</span>
+          <span>分类</span>
+          <span>名字</span>
+          <span>社长</span>
+          <span>地点</span>
+          <span>人数</span>
+          <span>操作</span>
+        </div>
+        <ul class="list">
+          <li class="societyList" v-for="(item,index) in hadArr">
+            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyId}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==1">专业学术类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==2">科技创新类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==3">艺术兴趣类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyManage}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
+            <div>
+              <span class="blue"  @click="editSociety(index)">编辑</span>
+              <span class="red_color">删除</span>
+            </div>
+          </li>
+        </ul>
       </div>
       <div  class="myPagination">
         <div>

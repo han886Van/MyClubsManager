@@ -43,6 +43,7 @@
           <p v-show="userRole==2"><span class="title_span">教师账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
+
           <div class="btn">
             <el-button type="primary" @click="addNews()" v-loading.fullscreen.lock="fullscreenLoading">发送新闻</el-button>
           </div>
