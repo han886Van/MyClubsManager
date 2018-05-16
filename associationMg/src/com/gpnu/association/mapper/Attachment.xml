@@ -35,7 +35,7 @@
 		</trim>
 	</delete>
 	
-	<select id="get" parameterType="Map" resultType="Map">
+	<select id="getFile" parameterType="Map" resultType="Map">
 		select * from attachment
 		<trim prefix="where" prefixOverrides="and">
 			<if test="id != null">

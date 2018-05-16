@@ -16,7 +16,22 @@
 	</delete>
 	
 	<select id="get" parameterType="Map" resultType="Map">
-		select * from news
+		SELECT
+			n.*, 
+		  a.name AS association_name,
+			u.user_name,
+			t.name AS type_name,
+			CASE
+		WHEN n.state = 0 THEN
+			'草稿箱'
+		WHEN n.state = 1 THEN
+			'已发布'
+		END AS state_name
+		FROM
+			news n
+		INNER JOIN association a ON n.association_id = a.association_id
+		LEFT JOIN user u ON n.user_id = u.user_id
+		LEFT JOIN type t ON n.type_id = t.id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="id != null">
 				id = #{id} and

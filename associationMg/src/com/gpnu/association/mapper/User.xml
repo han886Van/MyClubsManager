@@ -16,7 +16,18 @@
 	</delete>
 	
 	<select id="get" parameterType="Map" resultType="Map">
-		select * from user
+		SELECT
+			u.*, 
+		  CASE
+		WHEN u.sex = 1 THEN
+			'男'
+		WHEN u.sex = 0 THEN
+			'女'
+		END AS gender,
+		 t.name AS type_name
+		FROM
+			user u
+		LEFT JOIN type t ON u.type_id = t.id
 		<trim prefix="where" suffixOverrides="and">
 			<if test="userId != null">
 				user_id = #{userId} and
@@ -86,6 +97,6 @@
 	</update>
 	
 	<select id="findPasswordByAccount" parameterType="Map" resultType="Map">
-		select * from user where account = #{account} and password = #{password}
+		select * from user where account = #{account} and password = #{password} and user_type = #{userType}
 	</select>
 </mapper>

@@ -43,7 +43,7 @@ ajax请求
 function ajaxFileUpload() {
 	$.ajaxFileUpload({  
 	    type: "POST", 
-	    url: jsContextPath+"/internMg/importExcel/importExcel.do", //执行后台方法 
+	    url: jsContextPath+"/internMg/attachment/uploadFile.do", //执行后台方法 
 	    data:{  //传到后台的数据
 	    	userId : "上传人的userId",
 	    },  
@@ -72,9 +72,30 @@ function ajaxFileUpload() {
 --------------------------------------
 用户登录接口
 http://localhost:8080/associationMg/user/login
-接收数据类型  必须包含account(账号)、password(密码)
+接收数据类型  必须包含account(账号)、password(密码)、userType(用户角色：1为管理员、2为老师、3为学生)
 ---------------------------------------------
 
+<<<<<<< HEAD
+=======
+----------------------------------------------
+用户退出接口
+http://localhost:8080/associationMg/user/loginOut
+无需传数据
+---------------------------------------------
+
+----------------------------------------------
+用户个人中心接口
+http://localhost:8080/associationMg/user/personalCenter
+接收数据类型 userId(用户userId)
+---------------------------------------------
+
+
+----------------------------------------------
+用户修改密码接口
+http://localhost:8080/associationMg/user/modifyPassword
+接收数据:  userId(用户userID)、originalPassword(原始密码)、password(修改密码)
+---------------------------------------------
+>>>>>>> d6e1e5c233b641a8c5f8422943cc1828a8cbd923
 
 
 -------------------------------------------------------

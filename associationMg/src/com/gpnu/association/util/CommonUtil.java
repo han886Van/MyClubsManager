@@ -28,4 +28,7 @@ public class CommonUtil {
 	/*上传附件路径*/
 	public static String ASSOCIATION_ATTACHMENT_PATH = "association.attachment.path";
 	public static String ASSOCIATION_ATTACHMENT_PREVIEW = "association.attachment.preview";
+	
+	/*列表分页显示数量*/
+	public static int PAGESIEZ = 10;  //一页显示的数目
 }

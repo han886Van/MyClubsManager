@@ -1,34 +1,34 @@
 ------------------------------------------
 //用户登录接口demo
 function login(){
-	$.ajax({ //异步执行方法 
+	$.ajax({ //异步执行方法
 	    url: jsContextPath+"/associationMg/user/login", //执行后台方法   jsContextPath这个路径需要定义  不要写死
 	    data:{  //传到后台的数据
 	    	account : "1223",
 	    	password : "123123"
-	    },  
-	    type:'post',  
-		cache:false,  
-		dataType:'json',  
+	    },
+	    type:'post',
+		cache:false,
+		dataType:'json',
 	    success: function(data){ //这里的data是后台返回来的数据
 	    	if(data.msg =="666" ){
-	    		//请求成功  
-	        }else if(data.msg =="555" ){  
+	    		//请求成功
+	        }else if(data.msg =="555" ){
 	        	//请求失败
-	       }   
-	       
-	       
+	       }
+
+
 	       //或者是这样判断
 	       if(data.status == 200 ){
-	    		//请求成功  
-	        }else if(data.status =="500" ){  
+	    		//请求成功
+	        }else if(data.status =="500" ){
 	        	//请求失败
-	       }   
-	    },  
-	    error: function (data, status, e){  
+	       }
+	    },
+	    error: function (data, status, e){
 	        //服务器异常
-	    }  
-	}); 
+	    }
+	});
 }
 ----------------------------------------------------------------
 
@@ -41,29 +41,29 @@ function login(){
 <input type="file" class="myFileUpload" id="uploadPic" name="uploadPic" onchange="ajaxFileUpload()"/>
 ajax请求
 function ajaxFileUpload() {
-	$.ajaxFileUpload({  
-	    type: "POST", 
-	    url: jsContextPath+"/internMg/importExcel/importExcel.do", //执行后台方法 
+	$.ajaxFileUpload({
+	    type: "POST",
+	    url: jsContextPath+"/internMg/attachment/uploadFile.do", //执行后台方法
 	    data:{  //传到后台的数据
 	    	userId : "上传人的userId",
-	    },  
-	    secureuri : false,//是否启用安全提交，默认为false  
-	    fileElementId: 'uploadPic', //文件上传域的ID 注意和Input框的id对应  
+	    },
+	    secureuri : false,//是否启用安全提交，默认为false
+	    fileElementId: 'uploadPic', //文件上传域的ID 注意和Input框的id对应
 	    enctype:'multipart/form-data',//注意一定要有该参数
 	   dataType : 'json', //服务器返回的格式  (后台返回的数据的格式)
-	    async : false,  
+	    async : false,
 	    success: function(data){ //这里的data是后台返回来的数据
-	    	if(data.msg=='666'){  
+	    	if(data.msg=='666'){
 				//上传成功
-	        }else if(data.msg=='555'){  
+	        }else if(data.msg=='555'){
 	        	//上传失败
-	        }  
-	    },  
-	    error: function (data, status, e){  
+	        }
+	    },
+	    error: function (data, status, e){
 	    	//异常错误
-	    }  
-	});  
-}	
+	    }
+	});
+}
 -------------------------------------
 
 
@@ -72,7 +72,27 @@ function ajaxFileUpload() {
 --------------------------------------
 用户登录接口
 http://localhost:8080/associationMg/user/login
-接收数据类型  必须包含account(账号)、password(密码)
+接收数据类型  必须包含account(账号)、password(密码)、userType(用户角色：1为管理员、2为老师、3为学生)
+---------------------------------------------
+
+
+----------------------------------------------
+用户退出接口
+http://localhost:8080/associationMg/user/loginOut
+无需传数据
+---------------------------------------------
+
+----------------------------------------------
+用户个人中心接口
+http://localhost:8080/associationMg/user/personalCenter
+接收数据类型 userId(用户userId)
+---------------------------------------------
+
+
+----------------------------------------------
+用户修改密码接口
+http://localhost:8080/associationMg/user/modifyPassword
+接收数据:  userId(用户userID)、originalPassword(原始密码)、password(修改密码)
 ---------------------------------------------
 
 
