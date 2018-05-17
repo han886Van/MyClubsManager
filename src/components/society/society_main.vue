@@ -55,31 +55,34 @@
           <span>人数</span>
           <span>操作</span>
         </div>
+        <!---->
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in hadArr">
+          <li class="societyList" v-for="(item,index) in associationList">
             <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyId}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyManage}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.num}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.association_id}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.name}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.user_name}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.place}}</span>
+            <span @click="toRouter('/societyDetails',item.societyId)">{{item.person_num}}</span>
             <div v-show="showAll==1">
               <span @click="outSociety(index)" class="red_color">退出</span>
               <!--<el-button  type="danger">退出</el-button>-->
             </div>
+            <!--全部社团-->
             <div v-show="showAll==2">
-              <span @click="outSociety(index)" v-show="item.status==1" class="red_color">退出</span>
-              <span  @click="enterSociety(index)" v-show="item.status==2" class="blue">加入</span>
+              <span @click="outSociety(index)" v-show="item.user_state_num==1" class="red_color">退出</span>
+              <span  @click="enterSociety(index)" v-show="item.user_state_num==0" class="blue">加入</span>
             </div>
             <div v-show="showAll==5">
-              <span @click="outSociety(index)" v-show="item.status==1" class="red_color">退出</span>
-              <span  @click="enterSociety(index)" v-show="item.status==2" class="blue">加入</span>
+              <span @click="outSociety(index)" v-show="item.user_state_num==1" class="red_color">退出</span>
+              <span  @click="enterSociety(index)" v-show="item.user_state_num==0" class="blue">加入</span>
             </div>
+
             <div v-show="showAll==3">
               <span  @click="editSociety(index)" class="blue">编辑</span>
               <span  class="red_color">解散</span>
@@ -87,7 +90,6 @@
             <div v-show="showAll==4">
               <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
               <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
-              <!--<el-button  type="success" plain>取消退出</el-button>-->
             </div>
           </li>
         </ul>
@@ -196,6 +198,7 @@
         userRole: '',
         showAll: '1',
         /*已加入社团*/
+        associationList:'',
         hadArr: [
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -268,24 +271,31 @@
         idInput: '',
         nameInput: '',
         sortSociety: '',
-        currentPage:1
-
-
+        currentPage:1,
       }
     },
     methods: {
       createFunc(){
+        this.getList(this.currentPage)
+      },
+      getList(val){
+        var start = val;
         var userId = localStorage.getItem('userId');
         var url = this.localhost+'associationMg/association/getAllAssociation';
         var json ={
-          userId:userId
+          userId:userId,
+          start:start
         };
-        console.log(json);
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
             console.log(response);
-
+            if(response.msg==666){
+              this.associationList = response.associationList;
+              console.log(this.associationList);
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
           }, (error) => {
             this.$message.error('错误，请求数据失败');
           });
@@ -295,7 +305,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.getList(val)
       },
       searchItem(){
         var searchArr = [];

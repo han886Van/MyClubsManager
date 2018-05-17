@@ -13,6 +13,7 @@
       </div>
       <div class="info">
         <div class="edit_input">
+          <p><span >&nbsp;&nbsp;&nbsp;&nbsp;申请人：</span> <span>{{userId}}</span></p>
           <p>
             <span>社团分类：</span>
             <el-select v-model="sortSociety" placeholder="社团分类">
@@ -23,8 +24,8 @@
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
           </p>
-          <p><span >社团名称：</span> <el-input  placeholder="请输入内容"></el-input></p>
-          <p><span >&nbsp;&nbsp;&nbsp;申请人：</span> <el-input  placeholder="请输入内容"></el-input></p>
+          <p><span >社团名称：</span> <el-input v-model="societyName" placeholder="请输入内容"></el-input></p>
+          <p><span >专用场地：</span> <el-input v-model="societyPlace" placeholder="请输入内容"></el-input></p>
           <p><span class="title_span">社团简介：</span><el-input
             type="textarea"
             resize="none"
@@ -35,7 +36,7 @@
               type="textarea"
               resize="none"
               placeholder="请输入内容"
-              v-model="textarea">
+              v-model="applyCom">
             </el-input></p>
           <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
         </div>
@@ -50,54 +51,91 @@
     components: {},
     data () {
       return {
+        societyName:'',
         sortSociety:'',
         textarea:'',
         dialogVisible: false,
-        fullscreenLoading: false
+        fullscreenLoading: false,
+        userId:'',
+        societyPlace:'',
+        applyCom:''
       }
     },
     methods: {
-        goBack(){
+      goBack(){
           this.$router.back(-1)
         },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
       /*创建请求*/
-      addSociety() {
-          /*name(社团名称)、briefIntroduction(社团简介)、place(社团专用场地)、typeId(社团所属类
-           别)、
-           userId(申请人userId)、applyComments(申请理由)*/
-        var userId = localStorage.getItem('userId');
+      addSociety(){
+        var name = this.societyName;
+        var typeId = this.sortSociety;
+        var place = this.societyPlace;
+        var applyComments = this.applyCom;
+        if(typeId==''){
+          this.$message.error('请选择社团类型！');
+        }else if(name==""){
+          this.$message.error('请输入社团名称！');
+        }else if(place==""){
+          this.$message.error('请输入社团专用场地！');
+        }else if(applyComments==""){
+          this.$message.error('请输入申请社团理由！');
+        }else {
+            this.sendPost()
+        }
+      },
+      sendPost() {
+        var name = this.societyName;
+        var typeId = this.sortSociety;
+        var place = this.societyPlace;
+        var applyComments = this.applyCom;
         var url = this.localhost+'associationMg/association/saveOrUpdate';
         var json ={
-          userId:userId
+          userId:this.userId,
+          name:name,
+          typeId:typeId,
+          place:place,
+          applyComments:applyComments,
         };
         console.log(json);
-        this.$http.post(url,json).then(
-          (success) => {
-            var response = success.data;
-            console.log(response);
-
-          }, (error) => {
-            this.$message.error('错误，请求数据失败');
-          });
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        setTimeout(() => {
-          loading.close();
-          this.toRouter('/society?myRouter=5')
-        }, 500);
+        this.$http.post(url,json).then(
+          (success) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            var response = success.data;
+            if(response.msg==666){
+              this.$message({
+                type: 'success',
+                message: '创建社团请求发送成功！'
+              });
+              this.toRouter('/society?myRouter=5')
+            }else {
+              this.$message.error('错误，创建社团失败！');
+            }
+            console.log(response);
+
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+              this.toRouter('/society?myRouter=5')
+            }, 500);
+            this.$message.error('错误，创建社团失败！');
+          });
 
       },
     },
 
     mounted(){
-
+      this.userId = localStorage.getItem('userId');
     },
     watch: {
 
