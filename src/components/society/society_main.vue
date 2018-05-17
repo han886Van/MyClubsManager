@@ -274,6 +274,22 @@
       }
     },
     methods: {
+      createFunc(){
+        var userId = localStorage.getItem('userId');
+        var url = this.localhost+'associationMg/association/getAllAssociation';
+        var json ={
+          userId:userId
+        };
+        console.log(json);
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+
+          }, (error) => {
+            this.$message.error('错误，请求数据失败');
+          });
+      },
         /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -420,12 +436,16 @@
       /*社员 ：1 已加入社团 2 全部社团 3管理社团 4记录 管理员：  */
       this.showAll = this.$route.query.myRouter;
       this.userRole = localStorage.getItem('userRole');
+
     },
     watch: {
       $route(){
         this.sortSociety = '';
         this.showAll = this.$route.query.myRouter;
       }
+    },
+    created() {
+      this.createFunc()
     },
   }
 </script>

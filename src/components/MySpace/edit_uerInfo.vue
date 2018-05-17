@@ -4,7 +4,7 @@
       <div class="top">
         <span>编辑个人信息</span>
         <div>
-          <span class="editing" @click="toEdit()">保存</span>
+          <span class="editing" @click="goBack()">返回</span>
         </div>
       </div>
       <div class="info">
@@ -21,33 +21,36 @@
         </div>
         <div class="right_box">
           <div class="left_item">
-            <p><span>学号：</span><span>{{user.userId}}</span></p>
-            <p><span>名字：</span><span>{{user.name}}</span></p>
+            <p v-show="getUser.student_num"><span>学号：</span><span>{{getUser.student_num}}</span></p>
+            <p v-show="getUser.user_name"><span>名字：</span><span>{{getUser.user_name}}</span></p>
             <p><span>性别：</span>
-              <span v-show="user.sex==0">女</span>
-              <span v-show="user.sex==1">男</span>
+              <span v-show="getUser.sex==0">女</span>
+              <span v-show="getUser.sex==1">男</span>
             </p>
-            <p><span>出生日期：</span><span>{{user.birth}}</span></p>
-            <p><span>电话号码：</span>
-              <el-input v-model="user.phoneNum" placeholder="请输入内容" clearable></el-input>
-              <span class="tip"  v-show="!phoneRegex.test(user.phoneNum)">*请输入正确手机号码格式</span>
+            <p ><span>出生日期：</span>
+              <span v-show="getUser.birthday_time">{{getUser.birthday_time}}</span>
+              <span v-show="!getUser.birthday_time">暂无</span>
+            </p>
+            <p >
+              <span>电话号码：</span>
+              <el-input v-model="getUser.phone" placeholder="请输入内容" clearable></el-input>
+              <span  class="tip"  v-show="!phoneRegex.test(getUser.phone)">*请输入正确手机号码格式</span>
             </p>
           </div>
           <div class="right_item">
-            <p><span>年级：</span><span>{{user.grade}}</span></p>
-            <p><span>专业：</span><span>{{user.profession}}</span></p>
-            <p><span>专业：</span><span>{{user.College}}</span></p>
-            <p><span>邮箱：</span>
-              <el-input v-model="user.email" placeholder="请输入内容" clearable></el-input>
-              <span class="tip" v-show="!emailRegex.test(user.email)">*请输入正确邮箱格式</span>
+            <p v-show="getUser.type_name"><span>分类：</span><span>{{getUser.type_name}}</span></p>
+            <p v-show="getUser.grade"><span>年级：</span><span>{{getUser.grade}}</span></p>
+            <p v-show="getUser.major"><span>专业：</span><span>{{getUser.major}}</span></p>
+            <p v-show="getUser.college"><span>学院：</span><span>{{getUser.college}}</span></p>
+            <p v-show="getUser.email">
+              <span>邮箱：</span>
+              <el-input v-model="getUser.email" placeholder="请输入内容" clearable></el-input>
+              <span class="tip" v-show="!emailRegex.test(getUser.email)">*请输入正确邮箱格式</span>
             </p>
-          </div>
-          <div>
-
-
           </div>
         </div>
       </div>
+      <div class="bottom"><el-button type="primary" @click="toEdit()">确认修改</el-button></div>
     </div>
   </div>
 </template>
@@ -58,13 +61,38 @@
     components: {},
     data () {
       return {
-        user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'},
         imageUrl:require('../../assets/img/0.jpg'),
         phoneRegex : /^1[3|4|5|8][0-9]\d{4,8}$/,
-        emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+        emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
+        getUser:''
       }
     },
     methods:{
+      createFunc(){
+        var userId = localStorage.getItem('userId');
+        var url = this.localhost+'associationMg/user/personalCenter';
+        var json ={
+          userId:userId
+        };
+        console.log(json);
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          this.getUser=response.getUser;
+          if(this.getUser.sex==0){
+            this.imageUrl= require('../../assets/img/0.jpg')
+          }else {
+            this.imageUrl= require('../../assets/img/1.png')
+          }
+
+
+        }, (error) => {
+          this.$message.error('错误，请求数据失败');
+        });
+      },
+      goBack(){
+        this.$router.back(-1)
+      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
@@ -84,13 +112,45 @@
         return isJPG && isLt2M;
       },
       toEdit(){
+          if(!this.phoneRegex.test(this.getUser.phone)){
+            this.$message.error('错误，手机号码格式错误！');
+          }else if(!this.emailRegex.test(this.getUser.email)){
+            this.$message.error('错误，邮箱格式错误！');
+          }else{
+              var url = this.localhost +'associationMg/user/saveOrUpdateUser';
+            var userId = localStorage.getItem('userId');
+              var json={
+                userId:userId,
+                email:this.getUser.email,
+                phone:this.getUser.phone
+              }
+            this.$http.post(url,json).then(
+              (success) => {
+                var response = success.data;
+                console.log(response);
+                if (response.msg==666){
+                  this.$message({
+                    message: '修改个人信息成功',
+                    type: 'success'
+                  });
+                }else {
 
+                  this.$message.error('编辑信息失败哦！');
+                }
+              }, (error) => {
+
+                this.$message.error('错误，请求数据失败');
+              });
+          }
 
       }
     },
     mounted(){
 
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
@@ -163,5 +223,10 @@
         top: 36px;
         left: 94px;
       }
+        .bottom{
+          margin-top: 80px;
+          display: flex;
+          justify-content:center;
+        }
   }
 </style>

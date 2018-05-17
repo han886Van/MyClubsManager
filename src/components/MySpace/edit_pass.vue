@@ -33,6 +33,7 @@
         entenNew:'',
         isSame:true,
 
+
       }
     },
     methods:{
@@ -60,24 +61,26 @@
               originalPassword:originalPassword,
               password:password,
             };
-            console.log(json);
             this.$http.post(url,json).then(
               (success) => {
-                setTimeout(() => {
-                  var response = success.data;
-                  console.log(response);
-                  if (response.msg==666){
-                    this.$message({
-                      message: '更改密码成功',
-                      type: 'success'
-                    });
-                    this.toRouter('/mySpace')
-                  }else {
-                    this.$message.error('错误，原始密码错误！');
-                  }
-                  loading.close();
-                }, 1000);
+                var response = success.data;
+                console.log(response);
+                if (response.msg==666){
+                  this.$message({
+                    message: '更改密码成功',
+                    type: 'success'
+                  });
+                  setTimeout(() => {
+                    this.toRouter('/mySpace');
+                    loading.close();
+                  }, 1000);
 
+                }else {
+                  setTimeout(() => {
+                    loading.close();
+                  }, 1000);
+                  this.$message.error('错误，原始密码错误！');
+                }
               }, (error) => {
                 setTimeout(() => {
                   loading.close();

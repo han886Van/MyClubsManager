@@ -65,6 +65,23 @@
       },
       /*创建请求*/
       addSociety() {
+          /*name(社团名称)、briefIntroduction(社团简介)、place(社团专用场地)、typeId(社团所属类
+           别)、
+           userId(申请人userId)、applyComments(申请理由)*/
+        var userId = localStorage.getItem('userId');
+        var url = this.localhost+'associationMg/association/saveOrUpdate';
+        var json ={
+          userId:userId
+        };
+        console.log(json);
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+
+          }, (error) => {
+            this.$message.error('错误，请求数据失败');
+          });
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -74,7 +91,7 @@
         setTimeout(() => {
           loading.close();
           this.toRouter('/society?myRouter=5')
-        }, 2000);
+        }, 500);
 
       },
     },
