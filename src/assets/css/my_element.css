@@ -35,8 +35,8 @@
   margin-bottom: 10px;
 }
 /*首页*/
-.home .el-input__inner{
-  width: 40%;
+.home .el-input{
+  width: 330px;
 }
 .home .el-form{
   margin-left: 34%;

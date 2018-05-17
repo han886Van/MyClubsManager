@@ -11,6 +11,8 @@ import '../static/reset.css'
 import '@/assets/css/my_element.css'
 import '@/assets/css/public.css'
 import store from './store'
+// import '@/service'
+import './service/index'
 
 axios.defaults.withCredentials = true;
 Vue.config.productionTip = false

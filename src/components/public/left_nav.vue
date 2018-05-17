@@ -3,9 +3,10 @@
     <el-menu
       default-active="2"
       class="el-menu-vertical-demo"
+      @select="handleSelect"
       @open="handleOpen"
       @close="handleClose"
-      router=true
+      router:true
       background-color="#233445"
       text-color="#fff"
       active-text-color="#ffd04b">
@@ -175,6 +176,9 @@
       },
       goback(){
         window.history.go(-1);
+      },
+      handleSelect(key, keyPath){
+        this.toRouter(key)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})

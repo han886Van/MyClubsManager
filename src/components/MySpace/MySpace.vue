@@ -45,9 +45,28 @@
       }
     },
     methods:{
+      createFunc(){
+        var userId = localStorage.getItem('userId');
+        var url = this.localhost+'associationMg/user/personalCenter';
+        var json ={
+          userId:userId
+        };
+        console.log(json);
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+        console.log(response);
+
+      }, (error) => {
+            this.$message.error('错误，请求数据失败');
+        });
+      },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
+    },
+    created() {
+      this.createFunc()
     },
     mounted(){
 
