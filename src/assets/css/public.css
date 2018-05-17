@@ -12,7 +12,9 @@
 .orange_color{
   color: #d9a641
 }
-
+.list{
+  min-height:340px;
+}
 .list li {
   cursor: pointer;
   display: flex;

@@ -27,9 +27,10 @@
           <el-select v-model="sortSociety" placeholder="社团分类">
             <el-option label="专业学术类" value="1"></el-option>
             <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
+            <el-option label="艺术兴趣类" value="3"></el-option>
             <el-option label="体育健身类" value="4"></el-option>
             <el-option label="公益服务类" value="5"></el-option>
+            <el-option label="全部分类" value="6"></el-option>
           </el-select>
         </div>
         <div>
@@ -55,7 +56,6 @@
           <span>人数</span>
           <span>操作</span>
         </div>
-        <!---->
         <ul class="list">
           <li class="societyList" v-for="(item,index) in associationList">
             <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
@@ -92,6 +92,7 @@
               <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
             </div>
           </li>
+          <li v-show="showNo" class="nosocietyList">暂无社团</li>
         </ul>
       </div>
       <!--教师-->
@@ -198,7 +199,7 @@
         userRole: '',
         showAll: '1',
         /*已加入社团*/
-        associationList:'',
+        associationList:[],
         hadArr: [
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -272,87 +273,127 @@
         nameInput: '',
         sortSociety: '',
         currentPage:1,
+        url:'',
+        showNo:false
       }
     },
     methods: {
       createFunc(){
-        this.getList(this.currentPage)
+        this.showAll = this.$route.query.myRouter;
+        if(this.showAll==5||this.showAll==2){
+          this.url=this.localhost+'associationMg/association/getAllAssociation';
+          this. getList(this.currentPage,this.url)
+        }else if(this.showAll==1){
+          this.url=this.localhost+'associationMg/association/getOwnAssociation';
+          this. getList(this.currentPage,this.url)
+        }
       },
-      getList(val){
-        var start = val;
+      getList(val,url){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         var userId = localStorage.getItem('userId');
-        var url = this.localhost+'associationMg/association/getAllAssociation';
         var json ={
           userId:userId,
-          start:start
+          start:val
         };
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
-            console.log(response);
             if(response.msg==666){
-              this.associationList = response.associationList;
-              console.log(this.associationList);
+              for(var i =0; i<response.associationList.length;i++){
+                this.associationList.push(response.associationList[i])
+              }
+              if(this.associationList.length==0){
+                this.showNo=true
+              }else {
+                this.showNo=false
+              }
             }else {
               this.$message.error('错误，请求数据失败');
             }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
           }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
             this.$message.error('错误，请求数据失败');
           });
       },
         /*分页器*/
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.getList(val)
+          this.currentPage =val;
       },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
+          if(this.sortSociety==''&&this.idInput==''&&this.nameInput==''){
+            this.$message({
+              type: 'error',
+              message: '请输入或选择搜索条件!'
+            });
+          }else {
+              this.associationList=[];
+              var typeId =this.sortSociety;
+              var associationId =this.idInput;
+              var name =this.nameInput;
+              if(typeId ==6){
+                typeId= ''
+              }
+              /*学生*/
+            if(this.userRole==1){
+              this.sendSearch(this.currentPage,this.url,typeId,associationId,name)
+            }
           }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
+      },
+      sendSearch(val,url,typeId,associationId,name){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var userId = localStorage.getItem('userId');
+        var json ={
+          userId:userId,
+          start:val,
+          typeId:typeId,
+          associationId:associationId,
+          name:name,
+        };
+        console.log(json);
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+              for(var i =0; i<response.associationList.length;i++){
+                this.associationList.push(response.associationList[i])
+                console.log(this.associationList);
+                console.log(json);
+              }
+              if(this.associationList.length==0){
+                this.showNo=true
+              }else {
+                this.showNo=false
+              }
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
           });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
-
       },
       /*退出社团*/
       outSociety(index) {
@@ -452,7 +493,24 @@
       $route(){
         this.sortSociety = '';
         this.showAll = this.$route.query.myRouter;
-      }
+        /*学生*/
+        if(this.userRole==1){
+          /*全部社团*/
+          if(this.showAll==5||this.showAll==2){
+            this.associationList=[];
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
+            this. getList(this.currentPage,this.url);
+            /*已加入社团*/
+          }else if(this.showAll==1){
+            this.associationList=[];
+            this.url=this.localhost+'associationMg/association/getOwnAssociation';
+            this. getList(this.currentPage,this.url);
+          }
+        }
+
+
+
+      },
     },
     created() {
       this.createFunc()
@@ -483,15 +541,9 @@
         border-bottom :1px solid #ccc;
         margin-bottom:40px;
       }
-    /*.list {
-      border-radius: 8px;
-      padding: 20px 50px 40px;
-      box-sizing border-box;
-      width: 100%;
-      background-color: #fff;
-      min-height: 600px;
-
-    }*/
+   .nosocietyList{
+     justify-content :center;
+   }
     .search_box {
       margin-bottom: 20px;
       div {
