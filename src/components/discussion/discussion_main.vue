@@ -234,27 +234,13 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputErrorMessage: '评论不能为空',
-          inputValidator(value){
-            if (value == '') {
-              return false
-
-            } else {
-              return true
-            }
-          },
+          inputPattern: /\S/,
         }).then(({value}) => {
           var reg = /^\s*$/g;
-          if (reg.test(value)) {
-
-            this.$message({
-              type: 'success',
-              message: '已发表评论'
-            });
-          } else {
-
-          }
-          console.log(value);
-
+          this.$message({
+            type: 'success',
+            message: '已发表评论'
+          });
         }).catch(() => {
           this.$message({
             type: 'info',

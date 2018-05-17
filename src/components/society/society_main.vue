@@ -41,7 +41,7 @@
           <span>社团名字：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
-        <el-button @click="searchItem()" type="info" plain>搜索</el-button>
+        <el-button @click="searchItem(1)" type="info" plain>搜索</el-button>
         <el-button @click="toRouter('/addSociety')" type="primary">创建社团</el-button>
       </div>
       <!--学生-->
@@ -69,22 +69,30 @@
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.user_name}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.place}}</span>
             <span @click="toRouter('/societyDetails',item.societyId)">{{item.person_num}}</span>
-            <div v-show="showAll==1">
-              <span @click="outSociety(index)" class="red_color">退出</span>
+            <!--已进入社团-->
+            <div v-show="showAll==1&&item.role_name_num!=1">
+              <span @click="aboutSociety(3,item.association_id)" class="red_color">退出</span>
               <!--<el-button  type="danger">退出</el-button>-->
             </div>
+            <div v-show="item.role_name_num==1&&item.user_state_num==1&&showAll==1">
+              <span @click="editSociety(index)" class="blue">编辑</span>
+              <span  class="red_color">解散</span>
+            </div>
             <!--全部社团-->
-            <div v-show="showAll==2">
-              <span @click="outSociety(index)" v-show="item.user_state_num==1" class="red_color">退出</span>
-              <span  @click="enterSociety(index)" v-show="item.user_state_num==0" class="blue">加入</span>
+            <div v-show="showAll==2&&item.role_name_num!=1">
+              <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==1" class="red_color">退出</span>
+              <span  @click="aboutSociety(0,item.association_id)" v-show="item.user_state_num==0" class="blue">加入</span>
             </div>
-            <div v-show="showAll==5">
-              <span @click="outSociety(index)" v-show="item.user_state_num==1" class="red_color">退出</span>
-              <span  @click="enterSociety(index)" v-show="item.user_state_num==0" class="blue">加入</span>
+            <div v-show="showAll==5&&item.role_name_num!=1">
+              <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==1" class="red_color">退出</span>
+              <span  @click="aboutSociety(0,item.association_id)" v-show="item.user_state_num==0" class="blue">加入</span>
             </div>
-
-            <div v-show="showAll==3">
-              <span  @click="editSociety(index)" class="blue">编辑</span>
+            <div v-show="item.role_name_num==1&& item.user_state_num==1&&showAll==2">
+              <span @click="editSociety(index)" class="blue">编辑</span>
+              <span  class="red_color">解散</span>
+            </div>
+            <div v-show="item.role_name_num==1&& item.user_state_num==1&&showAll==5">
+              <span @click="editSociety(index)" class="blue">编辑</span>
               <span  class="red_color">解散</span>
             </div>
             <div v-show="showAll==4">
@@ -274,11 +282,13 @@
         sortSociety: '',
         currentPage:1,
         url:'',
-        showNo:false
+        showNo:false,
+        userId:''
       }
     },
     methods: {
       createFunc(){
+        this.userId =localStorage.getItem('userId');
         this.showAll = this.$route.query.myRouter;
         if(this.showAll==5||this.showAll==2){
           this.url=this.localhost+'associationMg/association/getAllAssociation';
@@ -289,13 +299,14 @@
         }
       },
       getList(val,url){
+          this.associationList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        var userId = localStorage.getItem('userId');
+        var userId = this.userId;
         var json ={
           userId:userId,
           start:val
@@ -303,9 +314,10 @@
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
+            console.log(response);
             if(response.msg==666){
               for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i])
+                this.associationList.push(response.associationList[i]);
               }
               if(this.associationList.length==0){
                 this.showNo=true
@@ -330,8 +342,14 @@
       },
       handleCurrentChange(val) {
           this.currentPage =val;
+          if(this.sortSociety==''&&this.idInput==''&&this.nameInput==''){
+            this.getList(val,this.url)
+          }else {
+            this.searchItem(val)
+          }
+
       },
-      searchItem(){
+      searchItem(val){
           if(this.sortSociety==''&&this.idInput==''&&this.nameInput==''){
             this.$message({
               type: 'error',
@@ -347,7 +365,7 @@
               }
               /*学生*/
             if(this.userRole==1){
-              this.sendSearch(this.currentPage,this.url,typeId,associationId,name)
+              this.sendSearch(val,this.url,typeId,associationId,name)
             }
           }
       },
@@ -358,24 +376,27 @@
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        var userId = localStorage.getItem('userId');
+        var userId = this.userId;
         var json ={
           userId:userId,
-          start:val,
-          typeId:typeId,
-          associationId:associationId,
-          name:name,
+          start:val
         };
-        console.log(json);
+        if(typeId){
+          json.typeId=typeId
+        }
+        if(associationId){
+          json.associationId=associationId
+        }
+        if(name){
+          json.name=name
+        }
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
-            console.log(response);
             if(response.msg==666){
               for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i])
+                this.associationList.push(response.associationList[i]);
                 console.log(this.associationList);
-                console.log(json);
               }
               if(this.associationList.length==0){
                 this.showNo=true
@@ -395,20 +416,22 @@
             this.$message.error('错误，请求数据失败');
           });
       },
-      /*退出社团*/
-      outSociety(index) {
-        this.$prompt('请输退出理由', '提示', {
+      /*退出社团*/  /*加入社团*/
+      aboutSociety(userState,associationId) {
+        var word = '';
+          if(userState){
+            word = '请输入退出社团理由';
+          }else {
+            word = '请输入加入社团理由';
+          }
+        this.$prompt(word, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          /*center: true,*/
-          /*          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,*/
-          inputErrorMessage: '邮箱格式不正确'
+          inputPattern: /\S/,
+          inputErrorMessage: '*理由不能为空',
         }).then(({ value }) => {
-          console.log(value);
-          this.$message({
-            type: 'success',
-            message: '已发送申请'
-          });
+              this.sendaAboutSociety(userState,associationId,value)
+
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -416,42 +439,40 @@
           });
         });
       },
-      /*加入社团*/
-      enterSociety(index){
-        this.$prompt('请输加入理由', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          center: true,
-/*          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,*/
-          inputErrorMessage: '邮箱格式不正确'
-        }).then(({ value }) => {
-          console.log(value);
-          this.$message({
-            type: 'success',
-            message: '已发送申请'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
+      sendaAboutSociety(userState,associationId,applyComments){
+        var url = this.localhost + 'associationMg/associationAndUser/applyAssociation';
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
         });
-        console.log('加入请求' + index);
-/*        this.$confirm('是否确定加入社团?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '请求发送成功!'
+        var userId = this.userId;
+        var url  =  this.url;
+        var json ={
+          associationId:associationId,
+          userId:userId,
+          applyComments:applyComments,
+          userState:userState,
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+
+            }else {
+              this.$message.error('错误，申请失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，申请失败');
           });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '请求发送失败'
-          });
-        });*/
       },
       /*编辑社团*/
       editSociety(index){
@@ -495,16 +516,19 @@
         this.showAll = this.$route.query.myRouter;
         /*学生*/
         if(this.userRole==1){
+          this.userId =localStorage.getItem('userId');
           /*全部社团*/
           if(this.showAll==5||this.showAll==2){
-            this.associationList=[];
             this.url=this.localhost+'associationMg/association/getAllAssociation';
-            this. getList(this.currentPage,this.url);
+            this. getList(1,this.url);
             /*已加入社团*/
           }else if(this.showAll==1){
-            this.associationList=[];
             this.url=this.localhost+'associationMg/association/getOwnAssociation';
-            this. getList(this.currentPage,this.url);
+            this. getList(1,this.url);
+            /*申请记录*/
+          }else if(this.showAll==4){
+            this.url=this.localhost+'associationMg/association/getApplyAssociation';
+            this. getList(1,this.url);
           }
         }
 

@@ -26,9 +26,9 @@
         <el-menu-item index="society?myRouter=1" class="li_son">
           <span slot="title" class="i_word">已进社团</span>
         </el-menu-item>
-        <el-menu-item  index="society?myRouter=3" class="li_son">
+       <!-- <el-menu-item  index="society?myRouter=3" class="li_son">
           <span slot="title" class="i_word">管理社团</span>
-        </el-menu-item>
+        </el-menu-item>-->
         <el-menu-item  index="society?myRouter=4" class="li_son">
           <span slot="title" class="i_word">申请记录</span>
         </el-menu-item>
