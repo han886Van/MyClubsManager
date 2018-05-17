@@ -51,8 +51,8 @@
           var passWord=this.formLabelAlign.passWord;
         if( userName ==''&& passWord==''){
           this.$message.error('错误，账号和密码不能为空');
-        }else if( userName ==''||isNaN(userName)){
-          this.$message.error('错误，请输入正确账号格式');
+        }else if( userName ==''){
+          this.$message.error('错误，账号不能为空 ');
         } else if(passWord==''){
           this.$message.error('错误，密码不能为空');
         }else {
@@ -84,6 +84,7 @@
               }
               localStorage.setItem("userRole", this.userRole);
               localStorage.setItem("userId", response.loginUser.user_id);
+              localStorage.setItem("account", response.loginUser.account);
               this.USER_ROULE(localStorage.getItem('userRole'));
               this.$router.push({path: '/manage'});
             }

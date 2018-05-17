@@ -4,7 +4,7 @@
       <div class="top">
         <span>编辑个人信息</span>
         <div>
-          <span class="editing" @click="toRouter('/mySpace')">保存</span>
+          <span class="editing" @click="toEdit()">保存</span>
         </div>
       </div>
       <div class="info">
@@ -20,29 +20,31 @@
           </el-upload>
         </div>
         <div class="right_box">
-          <div>
+          <div class="left_item">
             <p><span>学号：</span><span>{{user.userId}}</span></p>
-            <p><span>年级：</span><span>{{user.grade}}</span></p>
-          </div>
-          <div>
             <p><span>名字：</span><span>{{user.name}}</span></p>
-            <p><span>专业：</span><span>{{user.profession}}</span></p>
-          </div>
-          <div>
             <p><span>性别：</span>
               <span v-show="user.sex==0">女</span>
               <span v-show="user.sex==1">男</span>
             </p>
-            <p><span>专业：</span><span>{{user.College}}</span></p>
-          </div>
-          <div>
             <p><span>出生日期：</span><span>{{user.birth}}</span></p>
+            <p><span>电话号码：</span>
+              <el-input v-model="user.phoneNum" placeholder="请输入内容" clearable></el-input>
+              <span class="tip"  v-show="!phoneRegex.test(user.phoneNum)">*请输入正确手机号码格式</span>
+            </p>
+          </div>
+          <div class="right_item">
+            <p><span>年级：</span><span>{{user.grade}}</span></p>
+            <p><span>专业：</span><span>{{user.profession}}</span></p>
+            <p><span>专业：</span><span>{{user.College}}</span></p>
             <p><span>邮箱：</span>
-              <el-input v-model="user.email" placeholder="请输入内容"></el-input></p>
+              <el-input v-model="user.email" placeholder="请输入内容" clearable></el-input>
+              <span class="tip" v-show="!emailRegex.test(user.email)">*请输入正确邮箱格式</span>
+            </p>
           </div>
           <div>
-            <p><span>电话号码：</span>
-              <el-input v-model="user.phoneNum" placeholder="请输入内容"></el-input></p>
+
+
           </div>
         </div>
       </div>
@@ -58,6 +60,8 @@
       return {
         user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'},
         imageUrl:require('../../assets/img/0.jpg'),
+        phoneRegex : /^1[3|4|5|8][0-9]\d{4,8}$/,
+        emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
       }
     },
     methods:{
@@ -78,6 +82,10 @@
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
+      },
+      toEdit(){
+
+
       }
     },
     mounted(){
@@ -129,7 +137,8 @@
 
     }
     .right_box {
-      display: inline-block;
+      display: flex;
+      justify-content: flex-start;
       margin-left: 50px;
       p {
         display: inline-block;
@@ -137,11 +146,22 @@
         font-size: 18px;
         min-width: 408px;
         max-width: 408px;
+        position: relative;
+        span{
+          display: inline-block;
+          min-width:90px;
+        }
       }
     }
     .icon-bianji:hover {
       color: #d9a641
     }
-
+      .tip{
+        font-size: 12px;
+        color: red;
+        position: absolute;
+        top: 36px;
+        left: 94px;
+      }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="editPass">
+  <div class="editPass"  >
     <div class="bgc">
       <div class="top">
         <span>修改密码</span>
@@ -16,6 +16,7 @@
           </p>
           <div><el-button type="primary" @click="toEdit()">确认修改</el-button></div>
         </div>
+
       </div>
     </div>
   </div>
@@ -30,7 +31,8 @@
         olderPass:'',
         newPass:'',
         entenNew:'',
-        isSame:true
+        isSame:true,
+
       }
     },
     methods:{
@@ -38,7 +40,17 @@
         this.$router.push({path: myRouter})
       },
       toEdit(){
-          if(this.newPass==this.entenNew){
+        if(this.olderPass==''){
+          this.$message.error('请输入原始密码');
+        }else if(this.newPass==''&& this.entenNew==''){
+          this.$message.error('请输入两次新密码');
+        }else if(this.newPass==this.entenNew){
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
             var userId = localStorage.getItem('userId');
             var originalPassword = this.olderPass;
             var password = this.newPass;
@@ -51,14 +63,30 @@
             console.log(json);
             this.$http.post(url,json).then(
               (success) => {
-                var response = success.data;
-                console.log(response);
-                /*  this.toRouter('/mySpace')*/
+                setTimeout(() => {
+                  var response = success.data;
+                  console.log(response);
+                  if (response.msg==666){
+                    this.$message({
+                      message: '更改密码成功',
+                      type: 'success'
+                    });
+                    this.toRouter('/mySpace')
+                  }else {
+                    this.$message.error('错误，原始密码错误！');
+                  }
+                  loading.close();
+                }, 1000);
+
               }, (error) => {
+                setTimeout(() => {
+                  loading.close();
+                }, 1000);
                 this.$message.error('错误，请求数据失败');
               });
 
           }else {
+
             this.$message.error('两次密码输入不一致，请重新输入');
           }
       }

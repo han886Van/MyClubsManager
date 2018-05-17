@@ -11,7 +11,7 @@
       </div>
       <div class="info">
         <div class="left_box">
-          <img src="../../assets/img/home1.jpg" alt="">
+          <img src="../../assets/img/0.jpg" alt="">
         </div>
         <div class="right_box">
           <p v-for="(item,index) in user ">

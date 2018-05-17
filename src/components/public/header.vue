@@ -74,7 +74,8 @@
               var response = success.data;
               localStorage.removeItem('userRole');
               localStorage.removeItem('userId');
-              this.toRouter('/home')
+              localStorage.removeItem('account');
+              this.toRouter('/home');
               this.$message({
                 type: 'success',
                 message: '成功退出!'

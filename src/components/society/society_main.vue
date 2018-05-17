@@ -81,7 +81,8 @@
               <span  @click="enterSociety(index)" v-show="item.status==2" class="blue">加入</span>
             </div>
             <div v-show="showAll==3">
-              <span  @click="editSociety(index)" class="green_color">编辑</span>
+              <span  @click="editSociety(index)" class="blue">编辑</span>
+              <span  class="red_color">解散</span>
             </div>
             <div v-show="showAll==4">
               <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
