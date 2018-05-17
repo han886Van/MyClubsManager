@@ -9,7 +9,15 @@
       </div>
       <div class="info">
         <div class="left_box">
-          <img src="../../assets/img/home1.jpg" alt="">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </div>
         <div class="right_box">
           <div>
@@ -48,13 +56,29 @@
     components: {},
     data () {
       return {
-        user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'}
+        user:{userId:'2014035643001',grade:'大四',name:'陈小黄',profession:'电商软件',sex:0,College:'计算机科学学院',birth:'2018.01.01',email:'80456656665@qq.com',phoneNum:'12345678945'},
+        imageUrl:require('../../assets/img/0.jpg'),
       }
     },
     methods:{
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      }
     },
     mounted(){
 
@@ -102,6 +126,7 @@
         width: 140px;
         height: 140px;
       }
+
     }
     .right_box {
       display: inline-block;
@@ -117,5 +142,6 @@
     .icon-bianji:hover {
       color: #d9a641
     }
+
   }
 </style>

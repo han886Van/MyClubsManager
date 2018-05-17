@@ -9,9 +9,9 @@
       </div>
       <div class="info">
         <div class="edit_input">
-          <p><span>原始密码：</span> <el-input type="password" v-model="olderPass" placeholder="请输入内容"></el-input></p>
-          <p><span>更改密码：</span> <el-input type="password" v-model="newPass" placeholder="请输入内容"></el-input></p>
-          <p><span>确认密码：</span> <el-input type="password" v-model="entenNew" placeholder="请输入内容"></el-input>
+          <p><span>原始密码：</span> <el-input type="password" v-model="olderPass" placeholder="请输入内容" clearable></el-input></p>
+          <p><span>更改密码：</span> <el-input type="password" v-model="newPass" placeholder="请输入内容" clearable></el-input></p>
+          <p><span>确认密码：</span> <el-input type="password" v-model="entenNew" placeholder="请输入内容" clearable></el-input>
           <span style="font-size: 10px;color: red;" v-show="newPass!= entenNew">*两次密码输入不正确</span>
           </p>
           <div><el-button type="primary" @click="toEdit()">确认修改</el-button></div>
@@ -39,9 +39,27 @@
       },
       toEdit(){
           if(this.newPass==this.entenNew){
-            this.toRouter('/mySpace')
-          }else {
+            var userId = localStorage.getItem('userId');
+            var originalPassword = this.olderPass;
+            var password = this.newPass;
+            var url = this.localhost+'associationMg/user/modifyPassword';
+            var json ={
+              userId:userId,
+              originalPassword:originalPassword,
+              password:password,
+            };
+            console.log(json);
+            this.$http.post(url,json).then(
+              (success) => {
+                var response = success.data;
+                console.log(response);
+                /*  this.toRouter('/mySpace')*/
+              }, (error) => {
+                this.$message.error('错误，请求数据失败');
+              });
 
+          }else {
+            this.$message.error('两次密码输入不一致，请重新输入');
           }
       }
     },

@@ -82,7 +82,6 @@
               } else {
                 this.userRole = 1
               }
-              console.log(response);
               localStorage.setItem("userRole", this.userRole);
               localStorage.setItem("userId", response.loginUser.user_id);
               this.USER_ROULE(localStorage.getItem('userRole'));
