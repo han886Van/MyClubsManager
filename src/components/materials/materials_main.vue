@@ -47,7 +47,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物质</el-button>
+          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物资</el-button>
         </div>
       </div>
       <div>

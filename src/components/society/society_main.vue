@@ -54,6 +54,7 @@
           <span>社长</span>
           <span>地点</span>
           <span>人数</span>
+          <span v-show="showAll==4">申请</span>
           <span>操作</span>
         </div>
         <ul class="list">
@@ -70,6 +71,8 @@
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.person_num}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==0">创建中</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==3">解散中</span>
             <!--已进入社团-->
             <div v-show="showAll==1">
               <span @click="toRouter('/edtiSociety',item.association_id)" class="blue">编辑</span>
@@ -82,13 +85,13 @@
             </div>
             <!--申请记录-->
             <div v-show="showAll==4">
-              <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
-              <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
+              <span  @click="cancelOperating(1,index)" v-show="item.user_state_num==0"  class="red_color">取消创建</span>
+              <span @click="cancelOperating(2,index)" v-show="item.user_state_num==3" class="blue">取消解散</span>
             </div>
           </li>
           <!--社员-->
           <li class="societyList" v-for="(item,index) in associationList">
-            <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{lAssociationList.length+index+1}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==1">专业学术类</span>
             <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==2">科技创新类</span>
@@ -99,6 +102,8 @@
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.person_num}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==3">退出</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==0">加入</span>
             <!--已进入社团-->
             <div v-show="showAll==1">
               <span @click="aboutSociety(3,item.association_id)" class="red_color">退出</span>
@@ -111,8 +116,8 @@
             </div>
             <!--申请记录-->
             <div v-show="showAll==4">
-              <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
-              <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
+              <span  @click="cancelOperating(1,index)" v-show="item.user_state_num==0" class="red_color">取消加入</span>
+              <span @click="cancelOperating(2,index)" v-show="item.user_state_num==3" class="blue">取消退出</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无社团</li>

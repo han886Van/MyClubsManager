@@ -5,7 +5,7 @@
         <div>
           <span>社团详情</span>
           <span>	&gt;</span>
-          <span class="blue">跆拳道社团</span>
+          <span class="blue">{{detailAssociation.name}}</span>
         </div>
         <div>
           <span @click="goBack()" class="blue">返回</span>
@@ -17,38 +17,69 @@
         </div>
         <div class="right_box">
           <div class="left_item">
-            <p><span>社团名字：</span><span></span></p>
-            <p ><span>社团ID：</span><span></span></p>
-            <p><span>总人数：</span><span></span></p>
+            <!--apply_comments:"锻炼身体，休闲娱乐"
+                association_id:1
+                brief_introduction:"无兄弟，不篮球！"
+                check_comments:"有趣"
+                check_person_id:20
+                check_time:1526531519000
+                create_day:"2018-05-17"
+                create_person_id:4
+                create_time:1526530861000
+                name:"校篮球队"
+                place:"旧篮球场"
+                state:"1"
+                state_name:"同意创建"
+                state_num:"1"
+                total_person:1
+                type_id:4
+                type_name:"体育健身类"
+                user_name:"张三"-->
+            <p><span>社团名字：</span><span>{{detailAssociation.name}}</span></p>
+            <p ><span>社团ID：</span><span>{{detailAssociation.association_id}}</span></p>
+            <p><span>总人数：</span><span>{{detailAssociation.total_person}}</span></p>
           </div>
           <div class="right_item">
             <p><span>社长：</span>
-
+               <span>{{detailAssociation.user_name}}</span>
             </p>
             <p>
               <span>创立时间：</span>
+              <span>{{detailAssociation.create_day}}</span>
 
             </p>
-            <p><span>社团分类：</span>
+            <p>
+              <span>社团分类：</span>
+              <span>{{detailAssociation.type_name}}</span>
 
             </p>
-            <p><span>专用场地：</span>
+            <p>
+              <span>专用场地：</span>
+              <span>{{detailAssociation.place}}</span>
 
             </p>
           </div>
         </div>
       </div>
-      <div class="banner">
+      <!--<div class="banner">
         <el-carousel trigger="click" height="400px">
           <el-carousel-item v-for="(item,index) in societuItem.imgUrl" :key="index">
             <img :src=item.itemUrl alt="">
           </el-carousel-item>
         </el-carousel>
-      </div>
+      </div>-->
       <ul class="conten">
-        <li class="intro" v-for="(item,index) in societuItem.ortherInfo">
-          <span>{{item.name}}</span>
-          <p>{{item.value}}</p>
+        <li class="intro">
+          <span>社团简介：</span>
+          <p>{{detailAssociation.check_comments}}</p>
+        </li>
+        <li class="intro">
+          <span>社团口号：</span>
+          <p>{{detailAssociation.brief_introduction}}</p>
+        </li>
+        <li class="intro">
+          <span>社团职能：</span>
+          <p>{{detailAssociation.apply_comments}}</p>
         </li>
       </ul>
     </div>
@@ -95,7 +126,8 @@
         },
         userId: '',
         associationId: '',
-        url: ''
+        url: '',
+        detailAssociation:''
 
       }
     },
@@ -125,9 +157,9 @@
         this.$http.post(url, json).then(
           (success) => {
             var response = success.data;
-            console.log(response);
             if (response.msg == 666) {
-
+                this.detailAssociation=response.detailAssociation.detailAssociation;
+              console.log(this.detailAssociation);
             } else {
               this.$message.error('错误，社团详情请求数据失败');
 //              this.goBack()

@@ -82,7 +82,7 @@
       <!--物资管理-->
       <el-menu-item index="materials" v-show="myRole==1">
         <i class="iconfont icon-cailiaozhengli"></i>
-        <span slot="title" class="i_word">物质管理</span>
+        <span slot="title" class="i_word">物资管理</span>
       </el-menu-item>
       <el-submenu   index="materials?myRouter=1"  v-show="myRole==2">
         <template slot="title">
