@@ -13,9 +13,28 @@
       </div>
       <div class="info">
         <div class="edit_input">
+          <!--detailAssociation
+          apply_comments:"锻炼身体，休闲娱乐"
+               association_id:1
+               brief_introduction:"无兄弟，不篮球！"
+               check_comments:"有趣"
+               check_person_id:20
+               check_time:1526531519000
+               create_day:"2018-05-17"
+               create_person_id:4
+               create_time:1526530861000
+               name:"校篮球队"
+               place:"旧篮球场"
+               state:"1"
+               state_name:"同意创建"
+               state_num:"1"
+               total_person:1
+               type_id:4
+               type_name:"体育健身类"
+               user_name:"张三"-->
           <p>
             <span class="title_span">社团分类：</span>
-            <el-select v-model="sortSociety" placeholder="社团分类">
+            <el-select v-model="detailAssociation.type_id" placeholder="社团分类">
               <el-option label="专业学术类" value="1"></el-option>
               <el-option label="科技创新类" value="2"></el-option>
               <el-option label="艺术兴趣类" value="2"></el-option>
@@ -25,21 +44,21 @@
           </p>
           <p>
             <span class="title_span">社团名称：</span>
-            <el-input  placeholder="请输入内容" clearable></el-input></p>
+            <el-input v-model="detailAssociation.name" placeholder="请输入内容" clearable></el-input></p>
           <p><span class="title_span">社长账号：</span><el-input
             placeholder="请输入内容"
             v-model="memberId"
             :disabled="true">
           </el-input>
             <span class="changeMain" @click="toRouter('/changeMain',associationId)">更改社长</span></p>
-          <p><span >专用场地：</span> <el-input v-model="societyPlace" placeholder="请输入内容" clearable></el-input></p>
+          <p><span >专用场地：</span> <el-input v-model="detailAssociation.place" placeholder="请输入内容" clearable></el-input></p>
           <p>
             <span class="title_span">社团简介：</span>
             <el-input
             type="textarea"
             resize="none"
             placeholder="请输入内容"
-            v-model="textarea">
+            v-model="detailAssociation.check_comments">
           </el-input>
           </p>
           <p class="headImg"><span class="title_span">社团头像：</span>
@@ -91,14 +110,17 @@
         memberId:'',
         url:'',
         userId:'',
-        societyPlace:''
+        societyPlace:'',
+        detailAssociation:''
       }
     },
     methods: {
       createFunc(){
         this.userId = localStorage.getItem('userId');
+        this.memberId =this.userId
         this.associationId = this.$route.query.associationId;
-        this.url = this.localhost + 'associationMg/association/saveOrUpdate';
+        this.url = this.localhost + 'associationMg/association/getAssociationDetail';
+        this.getDetails(this.url, this.associationId)
       },
       goBack(){
         this.$router.back(-1)
@@ -166,6 +188,38 @@
           });
 
       },
+      getDetails(url, associationId){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          associationId: associationId,
+        };
+        this.$http.post(url, json).then(
+          (success) => {
+          var response = success.data;
+          if (response.msg == 666) {
+            this.detailAssociation=response.detailAssociation.detailAssociation;
+            console.log(this.detailAssociation);
+          } else {
+            this.$message.error('错误，社团详情请求数据失败');
+//              this.goBack()
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，社团详情请求数据失败');
+//            this.goBack()
+        });
+
+      }
     },
 
     mounted(){
