@@ -11,15 +11,25 @@
           <span class="editing" @click="goBack()">返回</span>
         </div>
       </div>
-      <div class="info">
+     <div class="info_deatil">
+       <h1 class="title_line">
+        IT协会招新活动
+      </h1>
+      <p class="time">
+        <span>IT协会</span>
+        <span>2018-05-12</span>
+      </p>
+       <p>
+         &nbsp;&nbsp;&nbsp;&nbsp;
+         asdjfhasfdhkjsdfhksdhfksdhfksdhfhasdfhkjasdhfkasjdhfksdhfj很快就到付款时间的核辐射的划分空间圣诞节疯狂就舒服点花露水的减肥了坚实的分解落实到附近死定了房间里上课的减肥了开始奋斗就流口水的房间里考试的时代峰峻拉克丝发动机流口水的房间里看书看到解放路口是两款发动机流口水的房间里时代峻峰
+       </p>
+       <p>
+         <img src="../../assets/img/home1.jpg" alt="">
+       </p>
+     </div>
+     <!-- <div class="info">
+
         <div class="left_box">
-          <!-- <span>编号</span>
-          <span>标题</span>
-          <span>发送社团</span>
-          <span>发送人</span>
-          <span>发送时间</span>
-          <span>状态</span>
-          <span>操作</span>-->
           <p>
             <span class="span_title">发送社团：</span>
             <span>IT协会</span>
@@ -51,7 +61,7 @@
             <span>我要的撒苦尽甘来卡萨丁华工科技安徽伟固化的空间那块地方规划局领款人开通为人体后</span>
           </p>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -146,6 +156,26 @@
       min-width :90px;
       text-align: right;
     }
+    .info_deatil{
+        font-size: 18px;
+        line-height:26px;
+        text-align: left;
+        img{
+          width: 1000px
+          height:400px;
+        }
+      }
+    .title_line{
+        text-align: center;
+        font-size:22px;
+        margin-bottom:10px;
+      }
+    .time{
+          text-align: center;
+          font-size:14px;
+
+        }
+
   }
 
 </style>

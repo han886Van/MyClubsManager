@@ -75,6 +75,7 @@
             }else if(response.msg==666){
               /*radio 1管理员 2教师 3学生*/
               /*userRole 1 学生 2教师 3管理员*/
+              console.log(response);
               if (this.formLabelAlign.radio == 1) {
                 this.userRole = 3
               } else if (this.formLabelAlign.radio == 2) {
@@ -85,6 +86,10 @@
               localStorage.setItem("userRole", this.userRole);
               localStorage.setItem("userId", response.loginUser.user_id);
               localStorage.setItem("account", response.loginUser.account);
+              if(this.userRole==2){
+                  /*老师分类*/
+                localStorage.setItem("userType", response.loginUser.user_type);
+              }
               this.USER_ROULE(localStorage.getItem('userRole'));
               this.$router.push({path: '/manage'});
             }

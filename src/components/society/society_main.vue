@@ -57,6 +57,36 @@
           <span>操作</span>
         </div>
         <ul class="list">
+          <!--社长-->
+          <li class="societyList" v-for="(item,index) in lAssociationList">
+            <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.name}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.person_num}}</span>
+            <!--已进入社团-->
+            <div v-show="showAll==1">
+              <span @click="toRouter('/edtiSociety',item.association_id)" class="blue">编辑</span>
+              <span  class="red_color" @click="dissolution(item.association_id,3)">解散</span>
+            </div>
+            <!--全部社团-->
+            <div v-show="showAll==2||showAll==5">
+              <span @click="toRouter('/edtiSociety',item.association_id)"  class="blue">编辑</span>
+              <span  class="red_color" @click="dissolution(item.association_id,3)">解散</span>
+            </div>
+            <!--申请记录-->
+            <div v-show="showAll==4">
+              <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
+              <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
+            </div>
+          </li>
+          <!--社员-->
           <li class="societyList" v-for="(item,index) in associationList">
             <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
@@ -70,31 +100,16 @@
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.person_num}}</span>
             <!--已进入社团-->
-            <div v-show="showAll==1&&item.role_name_num!=1">
+            <div v-show="showAll==1">
               <span @click="aboutSociety(3,item.association_id)" class="red_color">退出</span>
               <!--<el-button  type="danger">退出</el-button>-->
             </div>
-            <div v-show="item.role_name_num==1&&item.user_state_num==1&&showAll==1">
-              <span @click="editSociety(item.association_id)" class="blue">编辑</span>
-              <span  class="red_color">解散</span>
-            </div>
             <!--全部社团-->
-            <div v-show="showAll==2&&item.role_name_num!=1">
+            <div v-show="showAll==2||showAll==5">
               <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==1" class="red_color">退出</span>
-              <span  @click="aboutSociety(0,item.association_id)" v-show="item.user_state_num==0" class="blue">加入</span>
+              <span  @click="aboutSociety(0,item.association_id)" v-show="item.role_name_num==0" class="blue">加入</span>
             </div>
-            <div v-show="showAll==5&&item.role_name_num!=1">
-              <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==1" class="red_color">退出</span>
-              <span  @click="aboutSociety(0,item.association_id)" v-show="item.user_state_num==0" class="blue">加入</span>
-            </div>
-            <div v-show="item.role_name_num==1&& item.user_state_num==1&&showAll==2">
-              <span @click="editSociety(index)" class="blue">编辑</span>
-              <span  class="red_color">解散</span>
-            </div>
-            <div v-show="item.role_name_num==1&& item.user_state_num==1&&showAll==5">
-              <span @click="editSociety(index)" class="blue">编辑</span>
-              <span  class="red_color">解散</span>
-            </div>
+            <!--申请记录-->
             <div v-show="showAll==4">
               <span  @click="cancelOperating(1,index)" v-show="item.status==1">取消加入</span>
               <span @click="cancelOperating(2,index)" v-show="item.status==2" class="green_color">取消退出</span>
@@ -117,25 +132,22 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in hadArr">
-            <span @click="toRouter('/societyDetails',item.societyId)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyId}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyName}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.societyManage}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)">{{item.adress}}</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.changeName==0 && showAll!=3">编辑申请</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.changeName==1 && showAll!=3">创建申请</span>
-            <span @click="toRouter('/societyDetails',item.societyId)" v-show="showAll==3">{{item.num}}</span>
-            <div v-show="showAll==1">
-              <span class="blue"  @click="editSociety(index)">编辑</span>
-              <span class="red_color">删除</span>
-            </div>
-            <div class="red_color" v-show="showAll==3">
+          <li class="societyList" v-for="(item,index) in associationList">
+            <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.name}}</span>
+            <span v-show="item.user_name" @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
+            <span v-show="!item.user_name" @click="toRouter('/societyDetails',item.association_id)">匿名</span>
+            <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==0 && showAll!=3">编辑申请</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==1 && showAll!=3">创建申请</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==3">{{item.person_num}}</span>
+            <div v-show="showAll==1||showAll==3">
               <span class="blue"  @click="editSociety(index)">编辑</span>
               <span class="red_color">删除</span>
             </div>
@@ -148,6 +160,7 @@
               <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.status==2">拒绝</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无社团</li>
         </ul>
       </div>
       <!--管理员-->
@@ -206,8 +219,10 @@
       return {
         userRole: '',
         showAll: '1',
-        /*已加入社团*/
-        associationList:[],
+        /*社长*/
+        lAssociationList: [],
+        /*社员*/
+        associationList: [],
         hadArr: [
           {
             imgUrl: require('../../assets/img/home1.jpg'),
@@ -289,22 +304,35 @@
     },
     methods: {
       createFunc(){
+        this.showAll = this.$route.query.myRouter;
         this.userRole = localStorage.getItem('userRole');
         this.userId =localStorage.getItem('userId');
-        this.showAll = this.$route.query.myRouter;
-        if(this.showAll==5||this.showAll==2){
-          this.url=this.localhost+'associationMg/association/getAllAssociation';
-          this. getList(this.currentPage,this.url)
-        }else if(this.showAll==1){
-          this.url=this.localhost+'associationMg/association/getOwnAssociation';
-          this. getList(this.currentPage,this.url)
-        }else if(this.showAll==4){
-          this.url=this.localhost+'associationMg/association/getApplyAssociation';
-          this. getList(1,this.url);
+        if(this.userRole==1){
+          /*全部社团*/
+          if(this.showAll==5||this.showAll==2){
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
+            this. getList(1,this.url);
+            /*已加入社团*/
+          }else if(this.showAll==1){
+            this.url=this.localhost+'associationMg/association/getOwnAssociation';
+            this. getList(1,this.url);
+            /*申请记录*/
+          }else if(this.showAll==4){
+            this.url=this.localhost+'associationMg/association/getApplyAssociation';
+            this. getList(1,this.url);
+          }
+        }else if(this.userRole==2){
+          if(this.showAll==1||this.showAll==3){
+            /*全部社团*/
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
+            this. getList(1,this.url);
+            /*已加入社团*/
+          }
         }
       },
       getList(val,url){
           this.associationList=[];
+          this.lAssociationList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -322,13 +350,21 @@
             console.log(response);
             if(response.msg==666){
                 this.totalNum =parseInt(response.total_num);
-              for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i]);
-              }
-              if(this.associationList.length==0){
+              if(response.associationList.length==0){
                 this.showNo=true
               }else {
                 this.showNo=false
+              }
+              for(var i =0; i<response.associationList.length;i++){
+                  if(this.userRole==1){
+                    if(response.associationList[i].role_name_num){
+                      this.lAssociationList.push(response.associationList[i]);
+                    }else {
+                      this.associationList.push(response.associationList[i]);
+                    }
+                  }else{
+                    this.associationList.push(response.associationList[i]);
+                  }
               }
             }else {
               this.$message.error('错误，请求数据失败');
@@ -369,7 +405,8 @@
               message: '请输入或选择搜索条件!'
             });
           }else {
-              this.associationList=[];
+            this.associationList=[];
+            this.lAssociationList=[];
               var typeId =this.sortSociety;
               var associationId =this.idInput;
               var name =this.nameInput;
@@ -378,6 +415,8 @@
               }
               /*学生*/
             if(this.userRole==1){
+              this.sendSearch(val,this.url,typeId,associationId,name)
+            }else if(this.userRole==2){
               this.sendSearch(val,this.url,typeId,associationId,name)
             }
           }
@@ -409,8 +448,15 @@
             if(response.msg==666){
               this.totalNum =parseInt(response.total_num);
               for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i]);
-                console.log(this.associationList);
+                if(this.userRole==1){
+                  if(response.associationList[i].role_name_num){
+                    this.lAssociationList.push(response.associationList[i]);
+                  }else {
+                    this.associationList.push(response.associationList[i]);
+                  }
+                }else{
+                  this.associationList.push(response.associationList[i]);
+                }
               }
               if(this.associationList.length==0){
                 this.showNo=true
@@ -430,7 +476,7 @@
             this.$message.error('错误，请求数据失败');
           });
       },
-      /*退出社团*/  /*加入社团*/
+      /*退出社团 加入社团*/
       aboutSociety(userState,associationId) {
         var word = '';
           if(userState){
@@ -488,9 +534,56 @@
             this.$message.error('错误，申请失败');
           });
       },
-      /*编辑社团*/
-      editSociety(associationId){
-        this.$router.push({path: 'edtiSociety', query: {'associationId': associationId}});
+      /*解散社团*/
+      dissolution(associationId,state){
+         /*state(1为同意社团创建、拒绝社团创建或解散社团不传state、3为申请解散社团)*/
+        var url = this.localhost + 'associationMg/association/modifyAssociationStatus';
+        this.$prompt('请填写解散社团理由', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /\S/,
+          inputErrorMessage: '*理由不能为空',
+        }).then(({ value }) => {
+
+          const loading = this.$loading({
+            lock: true,
+            text: '正在发送请求',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          var json ={
+            associationId:associationId,
+            state:state,
+            applyComments:value,
+          };
+          this.$http.post(url,json).then(
+            (success) => {
+              var response = success.data;
+              console.log(response);
+              if(response.msg==666){
+                this.$message({
+                  message: '解散请求发送成功！',
+                  type: 'success'
+                });
+              }else {
+                this.$message.error('错误，申请失败');
+              }
+              setTimeout(() => {
+                loading.close();
+              }, 500);
+            }, (error) => {
+              setTimeout(() => {
+                loading.close();
+              }, 500);
+              this.$message.error('错误，申请失败');
+            });
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
       },
       /*取消操作*/
       /*operating 0 取消加入 1取消退出*/
@@ -518,8 +611,6 @@
     },
 
     mounted(){
-      /*社员 ：1 已加入社团 2 全部社团 3管理社团 4记录 管理员：  */
-      this.showAll = this.$route.query.myRouter;
 
     },
     watch: {
@@ -527,7 +618,6 @@
         this.sortSociety = '';
         this.showAll = this.$route.query.myRouter;
         this.userId =localStorage.getItem('userId');
-        console.log(this.showAll);
         /*学生*/
         if(this.userRole==1){
           /*全部社团*/
@@ -542,6 +632,13 @@
           }else if(this.showAll==4){
             this.url=this.localhost+'associationMg/association/getApplyAssociation';
             this. getList(1,this.url);
+          }
+        }else if(this.userRole==2){
+          if(this.showAll==1||this.showAll==3){
+            /*全部社团*/
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
+            this. getList(1,this.url);
+            /*已加入社团*/
           }
         }
 

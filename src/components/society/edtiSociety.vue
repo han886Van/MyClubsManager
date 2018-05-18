@@ -23,19 +23,25 @@
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
           </p>
-          <p><span class="title_span">社团名称：</span> <el-input  placeholder="请输入内容"></el-input></p>
+          <p>
+            <span class="title_span">社团名称：</span>
+            <el-input  placeholder="请输入内容" clearable></el-input></p>
           <p><span class="title_span">社长账号：</span><el-input
             placeholder="请输入内容"
             v-model="memberId"
             :disabled="true">
           </el-input>
-            <span class="changeMain" @click="toRouter('/changeMain','001')">更改社长</span></p>
-          <p><span class="title_span">社团简介：</span><el-input
+            <span class="changeMain" @click="toRouter('/changeMain',associationId)">更改社长</span></p>
+          <p><span >专用场地：</span> <el-input v-model="societyPlace" placeholder="请输入内容" clearable></el-input></p>
+          <p>
+            <span class="title_span">社团简介：</span>
+            <el-input
             type="textarea"
             resize="none"
             placeholder="请输入内容"
             v-model="textarea">
-          </el-input></p>
+          </el-input>
+          </p>
           <p class="headImg"><span class="title_span">社团头像：</span>
             <el-upload
               class="avatar-uploader"
@@ -81,10 +87,11 @@
         dialogVisible: false,
         fullscreenLoading: false,
         societyId:'12321654646',
-        associationId:'12321654646',
+        associationId:'',
         memberId:'',
         url:'',
         userId:'',
+        societyPlace:''
       }
     },
     methods: {
@@ -96,8 +103,8 @@
       goBack(){
         this.$router.back(-1)
       },
-      toRouter(myRouter,societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter,associationId){
+        this.$router.push({path: myRouter, query: {'associationId': associationId}})
       },
       /*头像*/
       handleAvatarSuccess(res, file) {
@@ -131,10 +138,13 @@
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        var userId = this.userId;
+       /* var userId = this.userId;
+        var name = this.societyName;
+        var typeId = this.sortSociety;
+        var place = this.societyPlace;
+        var applyComments = this.applyCom;*/
         var json ={
           userId:userId,
-
         };
         this.$http.post(url,json).then(
           (success) => {

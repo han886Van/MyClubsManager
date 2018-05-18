@@ -68,7 +68,6 @@
         var json ={
           userId:userId
         };
-        console.log(json);
         this.$http.post(url,json).then(
           (success) => {
           var response = success.data;

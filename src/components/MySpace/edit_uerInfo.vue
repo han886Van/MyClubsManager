@@ -98,9 +98,10 @@
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
+        console.log(file);
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
+        /*const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG) {
@@ -109,7 +110,7 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
-        return isJPG && isLt2M;
+        return isJPG && isLt2M;*/
       },
       toEdit(){
           if(!this.phoneRegex.test(this.getUser.phone)){

@@ -69,6 +69,7 @@
             <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==5">公益服务类</span>
             <span @click="toRouter('/detailMember',item.memberId)">社员</span>
           </li>
+          <li v-show="showNo" class="noList">暂无社团</li>
         </ul>
       </div>
     </div>
@@ -150,7 +151,8 @@
         idInput:'',
         radio2:'',
         assoUserList:[],
-        associationId:''
+        associationId:'',
+        showNo:false
       }
     },
     methods: {
@@ -178,6 +180,11 @@
               this.assoUserList.push(response.assoUserList[i])
             }
             console.log(this.assoUserList);
+            if(this.assoUserList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false
+            }
           }else {
               this.goBack();
             this.$message.error('错误，请求数据失败');

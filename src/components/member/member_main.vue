@@ -57,7 +57,7 @@
           <span>职位</span>
           <span>操作</span>
         </div>
-        <ul class="list">
+        <ul v-show="this.userRole == 1" class="list">
           <!--社长-->
           <li class="societyList" v-for="(item,index) in lAssociationList">
             <span @click="toRouter('/detailMember',item.user_id)">{{index+1}}</span>
@@ -94,6 +94,27 @@
               <span class="red_color" @click="delMember(index)">删除</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无成员</li>
+        </ul>
+        <ul v-show="this.userRole == 2" class="list">
+          <li class="societyList" v-for="(item,index) in lAssociationList">
+            <span @click="toRouter('/detailMember',item.user_id)">{{index+1}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.student_num}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.major}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
+            <div>
+              <span class="red_color" >删除</span>
+            </div>
+          </li>
+          <!--社员-->
           <li v-show="showNo" class="noList">暂无成员</li>
         </ul>
       </div>
@@ -197,6 +218,7 @@
         studentName:'',
         grade:'',
         idInput:'',
+        userType:''
       }
     },
     methods: {
@@ -208,17 +230,9 @@
           this.url = this.localhost + 'associationMg/associationAndUser/studentGetAssoUserList';
           this.getList(1, this.url);
         } else if (this.userRole == 2) {
-          this.userId = '';
           this.url = this.localhost + 'associationMg/associationAndUser/teacherGetUserList';
-          /*教师*/
-          /*老师查看社团成员及搜索、分页接口
-           http://localhost:8080/associationMg/associationAndUser/teacherGetUserList
-           查看社团成员时：
-           接收数据：typeId(老师所属分类type_id)、start(传1 页数 控制第一页数量为10)
-
-           搜索时：
-           typeId(老师所属分类type_id)、start(传1 页数 控制第一页数量为10)、name(社团名字 可模糊查询)、studentName(学生名字 可模糊查询)、
-           studentNum(学生学号 可模糊查询)、grade(年级)*/
+          this.userType = localStorage.getItem('userType');
+          this.getList(1, this.url);
         }
       },
       getList(val, url, name, studentName, grade,studentNum){
@@ -235,6 +249,9 @@
         };
         if ( this.userId) {
           json.userId = this.userId;
+        }
+        if ( this.userType) {
+          json.userType = this.userType;
         }
         if (name) {
           json.name = name;
@@ -255,6 +272,7 @@
               loading.close();
             }, 500);
             if (response.msg == 666) {
+              console.log(response);
               this.listCount = response.listCount;
               if (response.assoUserList.length == 0) {
                 this.showNo = true
@@ -262,15 +280,18 @@
                 this.showNo = false
               }
               for (var i = 0; i < response.assoUserList.length; i++) {
-                if (response.assoUserList[i].user_type == 1) {
-                  /*社长*/
-                  this.lAssociationList.push(response.assoUserList[i]);
-                } else {
-                  this.associationList.push(response.assoUserList[i]);
-                }
+                  if(this.userRole == 1){
+                    if (response.assoUserList[i].user_type == 1) {
+                      /*社长*/
+                      this.lAssociationList.push(response.assoUserList[i]);
+                    } else {
+                      this.associationList.push(response.assoUserList[i]);
+                    }
+                  }else {
+                    this.associationList.push(response.assoUserList[i]);
+                  }
+
               }
-              console.log(this.lAssociationList, '社长列表');
-              console.log(this.associationList, '社员列表');
             } else {
               this.$message.error('错误，请求数据失败');
             }
