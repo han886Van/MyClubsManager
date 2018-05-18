@@ -77,7 +77,7 @@
   width: 150px !important;
 }
 .society .el-select .el-input,.member .el-select .el-input{
-  width: 144px !important;
+  width: 150px !important;
 }
 .society .el-message-box>.el-message-box__content .el-input__inner{
   height: 78px !important;
@@ -211,4 +211,7 @@
   width: 178px;
   height: 178px;
   display: block;
+}
+.changeMain .el-radio__input {
+  width: 128px!important;
 }

@@ -57,6 +57,12 @@
     },
     methods:{
       createFunc(){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         var userId = localStorage.getItem('userId');
         var url = this.localhost+'associationMg/user/personalCenter';
         var json ={
@@ -66,11 +72,19 @@
         this.$http.post(url,json).then(
           (success) => {
           var response = success.data;
-            this.getUser=response.getUser;
-            console.log(this.getUser);
-            console.log(response);
+           if(response.msg==666){
+             this.getUser=response.getUser;
+           }else {
+             this.$message.error('错误，请求数据失败');
+           }
+        setTimeout(() => {
+          loading.close();
+      }, 500);
 
       }, (error) => {
+          setTimeout(() => {
+            loading.close();
+        }, 500);
             this.$message.error('错误，请求数据失败');
         });
       },

@@ -1,52 +1,48 @@
 <template>
   <div class="member applicatMember">
     <div class="bgc">
-      <div class="top" >
+      <div class="top">
         <span>成员管理</span>
         <span>	&gt;</span>
         <span class="blue">申请成员</span>
       </div>
       <div class="search_box">
         <div>
-          <span>申请分类：</span>
-          <el-select v-model="operating" placeholder="申请分类">
-            <el-option label="加入" value="1"></el-option>
-            <el-option label="退出" value="2"></el-option>
-          </el-select>
+          <div>
+            <span>社团分类：</span>
+            <el-select v-model="sortSociety" placeholder="社团分类">
+              <el-option label="专业学术类" value="1"></el-option>
+              <el-option label="科技创新类" value="2"></el-option>
+              <el-option label="艺术兴趣类" value="2"></el-option>
+              <el-option label="体育健身类" value="4"></el-option>
+              <el-option label="公益服务类" value="5"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>社团编号：</span>
+            <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
+          </div>
+          <div>
+            <span>社团名字：</span>
+            <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
+          </div>
+          <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>
         </div>
         <div>
-          <span>社团分类：</span>
-          <el-select v-model="sortSociety" placeholder="社团分类">
-            <el-option label="专业学术类" value="1"></el-option>
-            <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
-            <el-option label="体育健身类" value="4"></el-option>
-            <el-option label="公益服务类" value="5"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>社团编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>学生编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <span>学生学号：</span>
+          <el-input v-model="studentNum" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>学生名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="studentName" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>学生年级：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="grade" placeholder="请输入内容" clearable></el-input>
         </div>
         <div class="searchBtn">
-          <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addSociety')" type="primary">添加成员</el-button>
+          <el-button @click="clearSearchItem()" type="info" plain>清空搜索</el-button>
+          <el-button @click="searchItem()" type="primary">搜索</el-button>
         </div>
       </div>
       <div>
@@ -63,29 +59,30 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in hadArr">
-            <span @click="toRouter('/detailMember',item.memberId)">{{index+1}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberId}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberName}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.profession}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.societyName}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.position}}</span>
-            <span v-show="item.status==1" @click="toRouter('/detailMember',item.memberId)">加入</span>
-            <span v-show="item.status==2" @click="toRouter('/detailMember',item.memberId)">退出</span>
+          <li class="societyList" v-for="(item,index) in assoUserList">
+            <span @click="toRouter('/detailMember',item.user_id)">{{index+1}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.student_num}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.major}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
+            <span v-show="item.user_type==1" @click="toRouter('/detailMember',item.user_id)">加入</span>
+            <span v-show="item.user_type==2" @click="toRouter('/detailMember',item.user_id)">退出</span>
             <div>
-              <span class="editBtn">同意</span>
+              <span class="blue">同意</span>
               <span class="delBtn">拒绝</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无成员</li>
         </ul>
       </div>
-      <div  class="myPagination">
+      <div class="myPagination">
         <div>
           <el-pagination
             @size-change="handleSizeChange"
@@ -93,7 +90,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="listCount">
           </el-pagination>
         </div>
       </div>
@@ -104,9 +101,7 @@
 <script>
   export default {
     name: '',
-    components: {
-
-    },
+    components: {},
     data () {
       return {
         hadArr: [
@@ -115,143 +110,195 @@
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'社员',
-            grade:'大一',
+            position: '社员',
+            grade: '大一',
             sort: 1,
-            profession:'电子商务',
-            status:2
+            profession: '电子商务',
+            status: 2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'社员',
-            grade:'大一',
+            position: '社员',
+            grade: '大一',
             sort: 2,
-            profession:'电子商务',
-            status:1
+            profession: '电子商务',
+            status: 1
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'副社长',
-            grade:'大一',
+            position: '副社长',
+            grade: '大一',
             sort: 3,
-            profession:'电子商务',
-            status:2
+            profession: '电子商务',
+            status: 2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'社员',
-            grade:'大一',
+            position: '社员',
+            grade: '大一',
             sort: 1,
-            profession:'电子商务',
-           status:1
+            profession: '电子商务',
+            status: 1
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'社员',
-            grade:'大一',
+            position: '社员',
+            grade: '大一',
             sort: 1,
-            profession:'电子商务',
-            status:2
+            profession: '电子商务',
+            status: 2
           },
           {
             imgUrl: require('../../assets/img/home1.jpg'),
             memberId: '001',
             memberName: '小可爱',
             societyName: '摄影社团',
-            position:'社员',
-            grade:'大一',
+            position: '社员',
+            grade: '大一',
             sort: 1,
-            profession:'电子商务',
-            status:1
+            profession: '电子商务',
+            status: 1
           },
         ],
-        sortSociety:'',
-        nameInput:'',
-        idInput:'',
-        operating:'',
-        currentPage:1
+        sortSociety: '',
+        nameInput: '',
+        idInput: '',
+        operating: '',
+        currentPage: 1,
+        url: '',
+        userId: '',
+        listCount: 1,
+        assoUserList: [],
+        showNo: false,
+        studentName: '',
+        grade: '',
+        studentNum: '',
       }
     },
     methods: {
+      createFunc(){
+        /*学生*/
+        this.userId = localStorage.getItem('userId');
+        this.url = this.localhost + 'associationMg/associationAndUser/studentGeApplytAssoUserList';
+        this.getList(1, this.url);
+      },
+      getList(val, url, name, studentName, grade, studentNum){
+        this.assoUserList = [];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          start: val,
+        };
+        if (this.userId) {
+          json.userId = this.userId;
+        }
+        if (name) {
+          json.name = name;
+        }
+        if (studentName) {
+          json.studentName = studentName;
+        }
+        if (grade) {
+          json.grade = grade;
+        }
+        if (studentNum) {
+          json.studentNum = studentNum;
+        }
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            if (response.msg == 666) {
+              if (response.assoUserList.length == 0) {
+                this.showNo = true
+              } else {
+                this.showNo = false
+              }
+              this.listCount = response.listCount;
+              for (var i = 0; i < response.assoUserList.length; i++) {
+                this.assoUserList.push(response.assoUserList[i])
+              }
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
       /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        var name = this.nameInput;
+        var studentName = this.studentName;
+        var grade = this.grade;
+        var studentNum = this.studentNum;
+        if(this.sortSociety==''&&this.idInput==''&&this.nameInput==''){
+          this.getList(val,this.url)
+        }else {
+          this.getList(val,this.url, name, studentName, grade, studentNum)
+        }
       },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
+        var name = this.nameInput;
+        var studentName = this.studentName;
+        var grade = this.grade;
+        var studentNum = this.studentNum;
+        if (name && studentName && grade && studentNum) {
+          this.$message.error('错误，请输入或选择搜索条件');
         } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
+          var url = this.url;
+          this.getList(1, url, name, studentName, grade, studentNum)
         }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
-
       },
-      toRouter(myRouter,societyId){
+      toRouter(myRouter, societyId){
         this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      },
+      clearSearchItem(){
+        this.nameInput='';
+        this.studentName='';
+        this.grade='';
+        this.studentNum='';
+        var url = this.url;
+        this. getList(1, url)
       },
     },
     mounted(){
 
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  .applicatMember{
+  .applicatMember {
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;
@@ -264,11 +311,11 @@
       border-radius: 8px;
       background-color: #fff;
     }
-    .top{
-      line-height:50px;
-      font-size:16px;
-      border-bottom :1px solid #ccc;
-      margin-bottom:10px;
+    .top {
+      line-height: 50px;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 10px;
     }
     .search_box {
       margin-bottom: 20px;
@@ -278,7 +325,7 @@
         margin-right: 10px;
       }
     }
-    .searchBtn{
+    .searchBtn {
       /*float :right;*/
     }
     .title {
@@ -292,11 +339,11 @@
         width: 146px;
       }
     }
-    .editBtn{
-      color : #67c23a;
+    .editBtn {
+      color: #67c23a;
     }
-    .delBtn{
-      color : #f56c6c;
+    .delBtn {
+      color: #f56c6c;
     }
   }
 </style>

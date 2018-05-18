@@ -13,7 +13,11 @@
       </div>
       <div class="info">
         <div class="edit_input">
-          <p><span >&nbsp;&nbsp;&nbsp;&nbsp;申请人：</span> <span>{{userId}}</span></p>
+          <p><span >社长账号：</span><el-input
+            placeholder=""
+            v-model="userId"
+            :disabled="true">
+          </el-input></p>
           <p>
             <span>社团分类：</span>
             <el-select v-model="sortSociety" placeholder="社团分类">
@@ -24,8 +28,8 @@
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
           </p>
-          <p><span >社团名称：</span> <el-input v-model="societyName" placeholder="请输入内容"></el-input></p>
-          <p><span >专用场地：</span> <el-input v-model="societyPlace" placeholder="请输入内容"></el-input></p>
+          <p><span >社团名称：</span> <el-input v-model="societyName" placeholder="请输入内容" clearable></el-input></p>
+          <p><span >专用场地：</span> <el-input v-model="societyPlace" placeholder="请输入内容" clearable></el-input></p>
           <p><span class="title_span">社团简介：</span><el-input
             type="textarea"
             resize="none"
@@ -36,7 +40,7 @@
               type="textarea"
               resize="none"
               placeholder="请输入内容"
-              v-model="applyCom">
+              v-model="applyCom" >
             </el-input></p>
           <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
         </div>

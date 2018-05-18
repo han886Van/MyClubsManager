@@ -2,9 +2,12 @@
   <div class="changeMain">
     <div class="bgc">
       <div class="top" >
-        <span>成员管理</span>
+       <div>
+         <span>成员管理</span>
         <span>	&gt;</span>
         <span class="blue">社团成员</span>
+       </div>
+        <span class="blue" @click="goBack()">取消</span>
       </div>
       <div class="search_box">
         <div>
@@ -38,21 +41,33 @@
           <span>职位</span>
         </div>
         <ul class="list">
-          <li v-for="(item,index) in hadArr">
+          <li v-for="(item,index) in assoUserList">
            <div class="checkBox"> <el-radio-group v-model="radio2">
               <el-radio :label=index >{{index+1}}</el-radio>
             </el-radio-group></div>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberId}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.memberName}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.profession}}</span>
+            <!--association_id:1
+                grade:"大四"
+                major:"软件工程"
+                name:"计科女篮"
+                student_num:"2014034743019"
+                type_id:4
+                type_name:"体育健身类"
+                user_id:4
+                user_name:"哥哥"
+                user_type:"1"
+                user_type_name:"社长"
+                -->
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_id}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.major}}</span>
             <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.societyName}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==5">公益服务类</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.position}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{item.name}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.memberId)">社员</span>
           </li>
         </ul>
       </div>
@@ -133,56 +148,108 @@
         sortSociety:'',
         nameInput:'',
         idInput:'',
-        radio2:''
+        radio2:'',
+        assoUserList:[],
+        associationId:''
       }
     },
     methods: {
-      searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
+      createFunc(){
+        this.assoUserList=[];
+        this.associationId = this.$route.query.associationId;
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var userId = localStorage.getItem('userId');
+        var url = this.localhost+'associationMg/associationAndUser/studentGetAssoUserList';
+        var json ={
+          userId:userId,
+          associationId:this.associationId
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            for (var i = 0; i < response.assoUserList.length; i++) {
+              this.assoUserList.push(response.assoUserList[i])
+            }
+            console.log(this.assoUserList);
+          }else {
+              this.goBack();
+            this.$message.error('错误，请求数据失败');
           }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+            this.goBack();
+          this.$message.error('错误，请求数据失败');
+        });
+      },
+      goBack(){
+        this.$router.back(-1)
+      },
+      searchItem(){
+      },
+      getList(val, url, name, studentName, grade,studentNum){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          start: val,
+        };
+        if ( this.userId) {
+          json.userId = this.userId;
         }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
+        if (name) {
+          json.name = name;
         }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
-
+        if (studentName) {
+          json.studentName = studentName;
+        }
+        if (grade) {
+          json.grade = grade;
+        }
+        if (studentNum) {
+          json.studentNum = studentNum;
+        }
+        this.$http.post(url, json).then(
+          (success) => {
+          var response = success.data;
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+       /*   if (response.msg == 666) {
+            this.listCount = response.listCount;
+            if (response.assoUserList.length == 0) {
+              this.showNo = true
+            } else {
+              this.showNo = false
+            }
+            for (var i = 0; i < response.assoUserList.length; i++) {
+              this.associationList.push(response.assoUserList[i]);
+            }
+            console.log(this.associationList);
+          } else {
+            this.$message.error('错误，请求数据失败');
+          }*/
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
       },
       toRouter(myRouter,memberId){
         console.log(myRouter,memberId);
@@ -191,7 +258,10 @@
     },
     mounted(){
 
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
@@ -212,9 +282,14 @@
     }
     .top{
       line-height:50px;
-      font-size:16px;
+      display: flex;
+      justify-content:space-between;
       border-bottom :1px solid #ccc;
-      margin-bottom:10px;
+      margin-bottom:20px;
+      .editing{
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .search_box {
       margin-bottom: 20px;

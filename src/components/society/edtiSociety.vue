@@ -5,7 +5,7 @@
         <div>
           <span>社团管理</span>
           <span>	&gt;</span>
-          <span class="blue">创建社团</span>
+          <span class="blue">编辑社团</span>
         </div>
         <div>
           <span class="editing" @click="goBack()">取消</span>
@@ -81,10 +81,18 @@
         dialogVisible: false,
         fullscreenLoading: false,
         societyId:'12321654646',
-        memberId:''
+        associationId:'12321654646',
+        memberId:'',
+        url:'',
+        userId:'',
       }
     },
     methods: {
+      createFunc(){
+        this.userId = localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+        this.url = this.localhost + 'associationMg/association/saveOrUpdate';
+      },
       goBack(){
         this.$router.back(-1)
       },
@@ -116,27 +124,49 @@
         this.dialogVisible = true;
       },
       /*创建请求*/
-      edtiSociety() {
+      edtiSociety(url,) {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        setTimeout(() => {
-          loading.close();
-          this.toRouter('/society?myRouter=5')
-        }, 2000);
+        var userId = this.userId;
+        var json ={
+          userId:userId,
+
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
 
       },
     },
 
     mounted(){
-      this.societyId = this.$route.query.societyId;
-      this.memberId = this.$route.query.memberId;
+
+
     },
     watch: {
 
+    },
+    created() {
+      this.createFunc()
     },
   }
 </script>

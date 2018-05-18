@@ -9,14 +9,35 @@
       </div>
       <div class="info">
         <div class="left_box">
-          <img src="../../assets/img/home1.jpg" alt="">
+          <img v-show="getUser.sex==0" src="../../assets/img/0.jpg" alt="">
+          <img v-show="getUser.sex==1" src="../../assets/img/1.png" alt="">
         </div>
         <div class="right_box">
-          <p v-for="(item,index) in user ">
-            <span>{{item.name}}：</span>
-            <span>{{item.conten}}</span>
-          </p>
-          <span v-show="false"><i class="iconfont icon-bianji"></i></span>
+          <div class="left_item">
+            <p v-show="getUser.student_num"><span>学号：</span><span>{{getUser.student_num}}</span></p>
+            <p v-show="getUser.user_name"><span>名字：</span><span>{{getUser.user_name}}</span></p>
+            <p><span>性别：</span>
+              <span v-show="getUser.sex==0">女</span>
+              <span v-show="getUser.sex==1">男</span>
+            </p>
+            <p ><span>出生日期：</span>
+              <span v-show="getUser.birthday_time">{{getUser.birthday_time}}</span>
+              <span v-show="!getUser.birthday_time">暂无</span>
+            </p>
+            <p ><span>电话号码：</span>
+              <span v-show="getUser.phone">{{getUser.phone}}</span>
+              <span v-show="!getUser.phone">暂无</span>
+            </p>
+          </div>
+          <div class="right_item">
+            <p v-show="getUser.type_name"><span>分类：</span><span>{{getUser.type_name}}</span></p>
+            <p v-show="getUser.grade"><span>年级：</span><span>{{getUser.grade}}</span></p>
+            <p v-show="getUser.major"><span>专业：</span><span>{{getUser.major}}</span></p>
+            <p v-show="getUser.college"><span>学院：</span><span>{{getUser.college}}</span></p>
+            <p v-show="getUser.email"><span>邮箱：</span>
+              <span>{{getUser.email}}</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -29,21 +50,46 @@
     components: {},
     data () {
       return {
-        user: [
-          {name: '学号', conten: '2014035643001'},
-          {name: '年级', conten: '大四'},
-          {name: '名字', conten: '陈小黄'},
-          {name: '专业', conten: '电商软件'},
-          {name: '性别', conten: '女'},
-          {name: '学院', conten: '计算机科学学院'},
-          {name: '出生日期', conten: '2018.01.01'},
-          {name: '邮箱', conten: '80456656665@qq.com'},
-          {name: '手机号', conten: '12345678945'},
-        ],
-        memberId:''
+        memberId:'',
+        getUser:''
       }
     },
     methods:{
+      createFunc(){
+        var url = this.localhost+'associationMg/user/personalCenter';
+        var userId = this.$route.query.memberId;
+        var json ={
+          userId:userId
+        };
+        this.getInfo(url,json)
+      },
+      getInfo(url,json){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+              if(response.msg==666){
+                this.getUser=response.getUser;
+                console.log(this.getUser);
+              }else {
+                this.goBack()
+              }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            this.$message.error('错误，请求数据失败');
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.goBack()
+          });
+      },
       goBack(){
         this.$router.back(-1)
       },
@@ -52,8 +98,11 @@
       },
     },
     mounted(){
-      this.memberId = this.$route.query.memberId;
-    }
+
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
@@ -92,7 +141,8 @@
       }
     }
     .right_box {
-      display: inline-block;
+      display: flex;
+      justify-content: flex-start;
       margin-left: 50px;
       p {
         display: inline-block;
@@ -100,10 +150,12 @@
         font-size: 18px;
         min-width: 408px;
         max-width: 408px;
+        position: relative;
+        span{
+          display: inline-block;
+          min-width:90px;
+        }
       }
-    }
-    .icon-bianji:hover {
-      color: #d9a641
     }
   }
 </style>

@@ -2,19 +2,38 @@
   <div class="society">
     <div class="bgc">
       <div class="top">
-        <div class="title">社团详情</div>
-        <div class="title_show">
-          <img src="../../assets/img/bg6.jpg" alt="">
-          <div>
-            <p v-for="(item,index) in societuItem.basicInfo">
-              <span>{{item.name}}</span>
-              <span>{{item.value}}</span>
-            </p>
+        <div>
+          <span>社团详情</span>
+          <span>	&gt;</span>
+          <span class="blue">跆拳道社团</span>
+        </div>
+        <div>
+          <span @click="goBack()" class="blue">返回</span>
+        </div>
+      </div>
+      <div class="info">
+        <div class="left_box">
+          <img  src="../../assets/img/2.jpg" alt="">
+        </div>
+        <div class="right_box">
+          <div class="left_item">
+            <p><span>社团名字：</span><span></span></p>
+            <p ><span>社团ID：</span><span></span></p>
+            <p><span>总人数：</span><span></span></p>
           </div>
-          <div>
-            <p v-for="item in societuItem.member">
-              <span>{{item.name}}：</span>
-              <span>{{item.value}}</span>
+          <div class="right_item">
+            <p><span>社长：</span>
+
+            </p>
+            <p>
+              <span>创立时间：</span>
+
+            </p>
+            <p><span>社团分类：</span>
+
+            </p>
+            <p><span>专用场地：</span>
+
             </p>
           </div>
         </div>
@@ -28,8 +47,8 @@
       </div>
       <ul class="conten">
         <li class="intro" v-for="(item,index) in societuItem.ortherInfo">
-            <span>{{item.name}}</span>
-            <p>{{item.value}}</p>
+          <span>{{item.name}}</span>
+          <p>{{item.value}}</p>
         </li>
       </ul>
     </div>
@@ -42,58 +61,102 @@
     components: {},
     data () {
       return {
-        societyId: '',
         societuItem: {
-          basicInfo: [{name: '社团名字：', value: '跆拳道社团'},
-            {name: '社团ID：', value: '0001'},
-            {name: '社长：', value: '陈小黄'},
-            {name: '创立时间：', value: '2018-11-8'},
-            {name: '社团分类：', value: '体育健身类'},
-            {name: '专用场地：', value: '地下室'},
-            {name: '总人数：', value: '跆拳道社团'},
-          ],
-          ortherInfo:[
-              {name:'社团简介：',value:'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'},
-              {name:'社团职能：',value:'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'},
-            {name:'社团口号：',value:'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'},
-
-              ],
-          member:[
-            {name:'社长',value:'小可爱'},
-            {name:'副社长',value:'小可爱'},
-            {name:'外联部',value:'小可爱 小可爱'},
-            {name:'活动部',value:'小可爱 小可爱'},
-            {name:'组织部',value:'小可爱 小可爱'},
+          ortherInfo: [
+            {
+              name: '社团简介：',
+              value: 'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'
+            },
+            {
+              name: '社团职能：',
+              value: 'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'
+            },
+            {
+              name: '社团口号：',
+              value: 'UTALK 友谈协会，下方是一个笑脸，表明我们社团十分有爱，是一个很欢乐的大家庭，同时笑脸里面表明了社团名称和社团创建时间。最后是我们社团的口号，激励大家积极勇敢说英语。'
+            },
 
           ],
-          imgUrl:[
-            {itemUrl:require('../../assets/img/home1.jpg')},
-            {itemUrl:require('../../assets/img/home2.jpg')},
-            {itemUrl:require('../../assets/img/home3.jpg')},
-            {itemUrl:require('../../assets/img/home4.jpg')},
-            {itemUrl:require('../../assets/img/home3.jpg')},
+          member: [
+            {name: '社长', value: '小可爱'},
+            {name: '副社长', value: '小可爱'},
+            {name: '外联部', value: '小可爱 小可爱'},
+            {name: '活动部', value: '小可爱 小可爱'},
+            {name: '组织部', value: '小可爱 小可爱'},
+
+          ],
+          imgUrl: [
+            {itemUrl: require('../../assets/img/home1.jpg')},
+            {itemUrl: require('../../assets/img/home2.jpg')},
+            {itemUrl: require('../../assets/img/home3.jpg')},
+            {itemUrl: require('../../assets/img/home4.jpg')},
+            {itemUrl: require('../../assets/img/home3.jpg')},
           ]
         },
+        userId: '',
+        associationId: '',
+        url: ''
 
       }
     },
     methods: {
+      createFunc(){
+        this.userId = localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+        this.url = this.localhost + 'associationMg/association/getAssociationDetail';
+        this.getDetails(this.url, this.associationId)
+      },
       goBack(){
         this.$router.back(-1)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
+      getDetails(url, associationId){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          associationId: associationId,
+        };
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if (response.msg == 666) {
+
+            } else {
+              this.$message.error('错误，社团详情请求数据失败');
+//              this.goBack()
+          }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，社团详情请求数据失败');
+//            this.goBack()
+          });
+
+      }
     },
 
     mounted(){
-      this.societyId = this.$route.query.societyId;
+
 
     },
     watch: {
       $route(){
-        this.societyId = this.$route.query.societyId;
+        this.associationId = this.$route.query.associationId;
       }
+    },
+    created() {
+      this.createFunc()
     },
   }
 </script>
@@ -106,66 +169,75 @@
     margin-left: 80px;
     margin-top: 50px;
     overflow: hidden;
-    width: 1024px;
+    width: 988px;
     background: #fff;
     min-height: 600px;
     border-radius: 8px;
-    margin-bottom :50px;
-    /*padding: 40px;*/
+    margin-bottom: 50px;
+    padding:10px 40px 20px 40px;
     .bgc {
       border-radius: 8px;
       background-color: #fff;
     }
     .top {
-      padding: 40px;
-      background-color: #f2f5f4
+      line-height: 50px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+      .editing {
+        color: #409eff;
+        cursor: pointer;
+      }
     }
-    .title {
-      font-size: 24px;
-      margin-bottom: 40px;
-    }
-    .title_show {
+    .info {
       display: flex;
       justify-content: flex-start;
-      align-items: flex-start;
+    }
+    .left_box {
+      display: inline-block;
       img {
-        width: 200px;
-        height: 200px;
+        width: 140px;
+        height: 140px;
       }
-      div {
-        margin-left: 60px;
-        margin-top: 10px;
+    }
+    .right_box {
+      display: flex;
+      justify-content: flex-start;
+      margin-left: 50px;
+      p {
         display: inline-block;
+        line-height: 50px;
         font-size: 18px;
-        p {
-          margin-top: 10px;
-          span{
-            display: inline-block;
-            min-width :90px;
-          }
+        min-width: 408px;
+        max-width: 408px;
+        position: relative;
+        span {
+          display: inline-block;
+          min-width: 90px;
         }
       }
     }
-      .banner{
-        padding: 20px 50px;
-        width: 90%;
-        img{
-          width: 100%;
-          height: 100%;
-        }
+    .banner {
+      padding: 20px 50px;
+      width: 90%;
+      img {
+        width: 100%;
+        height: 100%;
       }
+    }
     .conten {
       padding: 40px;
     }
     .intro {
       p {
         margin-top: 20px;
-        margin-bottom :40px;
+        margin-bottom: 40px;
       }
     }
-    .intro_title{
-        margin-bottom:20px;
-      }
+    .intro_title {
+      margin-bottom: 20px;
+    }
   }
 
 </style>
