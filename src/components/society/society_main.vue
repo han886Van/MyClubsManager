@@ -106,7 +106,7 @@
             </div>
             <!--全部社团-->
             <div v-show="showAll==2||showAll==5">
-              <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==2" class="red_color">退出</span>
+              <span @click="aboutSociety(3,item.association_id)" v-show="item.role_name_num==2" class="red_color">退出</span>
               <span  @click="aboutSociety(0,item.association_id)" v-show="item.role_name_num==0" class="blue">加入</span>
             </div>
             <!--申请记录-->
