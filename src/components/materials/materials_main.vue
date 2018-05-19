@@ -59,7 +59,7 @@
           <span>归还时间</span>
           <span>申请社团</span>
           <span>申请人</span>
-          <span>申请教师</span>
+          <span>审核老师</span>
           <span>状态</span>
         </div>
         <ul class="list">

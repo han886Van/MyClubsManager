@@ -102,8 +102,8 @@
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.person_num}}</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==3">退出</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==0">加入</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==3">退出中</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==4&&item.user_state_num==0">加入中</span>
             <!--已进入社团-->
             <div v-show="showAll==1">
               <span @click="aboutSociety(3,item.association_id)" class="red_color">退出</span>
@@ -111,8 +111,8 @@
             </div>
             <!--全部社团-->
             <div v-show="showAll==2||showAll==5">
-              <span @click="aboutSociety(3,item.association_id)" v-show="item.role_name_num==2" class="red_color">退出</span>
-              <span  @click="aboutSociety(0,item.association_id)" v-show="item.role_name_num==0" class="blue">加入</span>
+              <span @click="aboutSociety(3,item.association_id)" v-show="item.user_state_num==3" class="red_color">退出</span>
+              <span  @click="aboutSociety(0,item.association_id)" v-show="item.role_name_num==0||item.role_name_num" class="blue">加入</span>
             </div>
             <!--申请记录-->
             <div v-show="showAll==4">
@@ -463,7 +463,7 @@
                   this.associationList.push(response.associationList[i]);
                 }
               }
-              if(this.associationList.length==0){
+              if(response.associationList.length==0){
                 this.showNo=true
               }else {
                 this.showNo=false
@@ -513,7 +513,6 @@
           background: 'rgba(0, 0, 0, 0.7)'
         });
         var userId = this.userId;
-        var url  =  this.url;
         var json ={
           associationId:associationId,
           userId:userId,

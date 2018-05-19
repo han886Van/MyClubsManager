@@ -78,7 +78,7 @@
           </li>
           <!--社员-->
           <li class="societyList" v-for="(item,index) in associationList">
-            <span @click="toRouter('/detailMember',item.memberId)">{{index+1}}</span>
+            <span @click="toRouter('/detailMember',item.memberId)">{{lAssociationList.length+index+1}}</span>
             <span @click="toRouter('/detailMember',item.memberId)">{{item.student_num}}</span>
             <span @click="toRouter('/detailMember',item.memberId)">{{item.user_name}}</span>
             <span @click="toRouter('/detailMember',item.memberId)">{{item.major}}</span>

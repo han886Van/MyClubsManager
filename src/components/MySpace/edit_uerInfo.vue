@@ -64,11 +64,18 @@
         imageUrl:require('../../assets/img/0.jpg'),
         phoneRegex : /^1[3|4|5|8][0-9]\d{4,8}$/,
         emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
-        getUser:''
+        getUser:'',
+        file:''
       }
     },
     methods:{
       createFunc(){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         var userId = localStorage.getItem('userId');
         var url = this.localhost+'associationMg/user/personalCenter';
         var json ={
@@ -77,6 +84,9 @@
         console.log(json);
         this.$http.post(url,json).then(
           (success) => {
+          setTimeout(() => {
+          loading.close();
+        }, 500);
           var response = success.data;
           this.getUser=response.getUser;
           if(this.getUser.sex==0){
@@ -85,8 +95,10 @@
             this.imageUrl= require('../../assets/img/1.png')
           }
 
-
         }, (error) => {
+          setTimeout(() => {
+            loading.close();
+        }, 500);
           this.$message.error('错误，请求数据失败');
         });
       },
@@ -101,30 +113,31 @@
         console.log(file);
       },
       beforeAvatarUpload(file) {
-        /*const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+          this.file=file;
+        /*       /!* const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;*!/
+        if (file.type != "image/png" || file.type != "image/jpeg" || file.type != "image/bmp" || file.type != "image/jpg") {
+          this.$message.error('上传正确头像图片!');
         }
-        if (!isLt2M) {
+        /!*if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
-        return isJPG && isLt2M;*/
+        return isJPG && isLt2M;*!/*/
       },
       toEdit(){
+        var userId = localStorage.getItem('userId');
+          this.postFile(this.file,'HEADPIC',userId,userId);
           if(!this.phoneRegex.test(this.getUser.phone)){
             this.$message.error('错误，手机号码格式错误！');
           }else if(!this.emailRegex.test(this.getUser.email)){
             this.$message.error('错误，邮箱格式错误！');
           }else{
               var url = this.localhost +'associationMg/user/saveOrUpdateUser';
-            var userId = localStorage.getItem('userId');
               var json={
                 userId:userId,
                 email:this.getUser.email,
                 phone:this.getUser.phone
-              }
+              };
             this.$http.post(url,json).then(
               (success) => {
                 var response = success.data;
@@ -143,6 +156,48 @@
                 this.$message.error('错误，请求数据失败');
               });
           }
+
+      },
+      postFile(file,state,attachmentType,attachmentId,userId){
+          /*attachmentType : "HEADPIC",  //上传文件类型，头像为HEADPIC,
+           attachmentId : "123214",    //文件附属id，如上传头像则附属id为userId，如上传评论图片，则附属id为评论id
+           associationId : "234234",   //社团id，如上传文件是所属社团的文件，则传社团id；如上传个人头像等与社团无关的个人行为，则无需传值。
+           userId : "423423",          //上传文件所属人的userId,
+           state : "1"                 //上传文件所属状态，需要审核的文件为0,无需审核的为1.*/
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url =this.localhost+'associationMg/attachment/uploadFile';
+        var json={
+          file:file,
+          state:state,
+          attachmentType:attachmentType,
+          attachmentId:attachmentId,
+          userId:userId,
+        };
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('state', state);
+        formData.append('attachmentType', attachmentType);
+        formData.append('attachmentId', attachmentId);
+        formData.append('userId', userId);
+        console.log(formData);
+        this.$http.post(url,formData).then(
+          (success) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            var response = success.data;
+            console.log(response);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，上传头像错误');
+          });
 
       }
     },

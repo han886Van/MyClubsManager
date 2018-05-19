@@ -60,8 +60,7 @@
           <span>开始时间</span>
           <span>结束时间</span>
           <span>地点</span>
-          <span>借用物资</span>
-          <span>申请教师</span>
+          <span>审核老师</span>
           <span>状态</span>
         </div>
         <ul class="list">
@@ -74,8 +73,6 @@
             <span >{{item.starTime}}</span>
             <span >{{item.starTime}}</span>
             <span >{{item.adress}}</span>
-            <span v-show="item.isMaterials==1" >有</span>
-            <span v-show="item.isMaterials==2" >无</span>
             <span>{{item.teacher}}</span>
             <div>
               <span class="delBtn"     v-show="item.status==1">举办中</span>
