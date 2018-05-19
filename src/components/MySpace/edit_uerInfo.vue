@@ -62,7 +62,7 @@
     data () {
       return {
         imageUrl:require('../../assets/img/0.jpg'),
-        phoneRegex : /^1[3|4|5|8][0-9]\d{4,8}$/,
+        phoneRegex :/^[1][3,4,5,7,8][0-9]{9}$/,
         emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
         getUser:'',
         file:''

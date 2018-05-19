@@ -26,7 +26,7 @@
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
         </div>
         <div class="searchBtn">
-          <el-button @click="toRouter('/edtiSociety',hadArr[radio2].memberId)" type="primary">确认选择</el-button>
+          <el-button @click="toCheck('/edtiSociety',assoUserList[radio2].user_id,assoUserList[radio2].user_name,assoUserList[radio2].association_id)" type="primary">确认选择</el-button>
         </div>
       </div>
       <div>
@@ -45,31 +45,19 @@
            <div class="checkBox"> <el-radio-group v-model="radio2">
               <el-radio :label=index >{{index+1}}</el-radio>
             </el-radio-group></div>
-            <!--association_id:1
-                grade:"大四"
-                major:"软件工程"
-                name:"计科女篮"
-                student_num:"2014034743019"
-                type_id:4
-                type_name:"体育健身类"
-                user_id:4
-                user_name:"哥哥"
-                user_type:"1"
-                user_type_name:"社长"
-                -->
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_id}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_name}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.major}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.name}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==1">专业学术类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==2">科技创新类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==3">艺术兴趣类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==4">体育健身类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.user_type==5">公益服务类</span>
-            <span @click="toRouter('/detailMember',item.memberId)">社员</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_id}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.major}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.user_type==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.user_type==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.user_type==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.user_type==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.user_type==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.user_id)">社员</span>
           </li>
-          <li v-show="showNo" class="noList">暂无社团</li>
+          <li v-show="showNo" class="noList">暂无成员</li>
         </ul>
       </div>
     </div>
@@ -180,7 +168,7 @@
               this.assoUserList.push(response.assoUserList[i])
             }
             console.log(this.assoUserList);
-            if(this.assoUserList.length==0){
+            if(response.assoUserList.length==0){
               this.showNo=true
             }else {
               this.showNo=false
@@ -262,6 +250,9 @@
         console.log(myRouter,memberId);
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
+      toCheck(myRouter,userId,userName,associationId){
+        this.$router.push({path: myRouter, query: {'changeUserId': userId,'userName':userName,'associationId':associationId}})
+      }
     },
     mounted(){
 

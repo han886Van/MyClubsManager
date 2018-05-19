@@ -13,41 +13,22 @@
       </div>
       <div class="info">
         <div class="edit_input">
-          <!--detailAssociation
-          apply_comments:"锻炼身体，休闲娱乐"
-               association_id:1
-               brief_introduction:"无兄弟，不篮球！"
-               check_comments:"有趣"
-               check_person_id:20
-               check_time:1526531519000
-               create_day:"2018-05-17"
-               create_person_id:4
-               create_time:1526530861000
-               name:"校篮球队"
-               place:"旧篮球场"
-               state:"1"
-               state_name:"同意创建"
-               state_num:"1"
-               total_person:1
-               type_id:4
-               type_name:"体育健身类"
-               user_name:"张三"-->
           <p>
             <span class="title_span">社团分类：</span>
             <el-select v-model="detailAssociation.type_id" placeholder="社团分类">
-              <el-option label="专业学术类" value="1"></el-option>
-              <el-option label="科技创新类" value="2"></el-option>
-              <el-option label="艺术兴趣类" value="2"></el-option>
-              <el-option label="体育健身类" value="4"></el-option>
-              <el-option label="公益服务类" value="5"></el-option>
+              <el-option label="专业学术类" value='1'></el-option>
+              <el-option label="科技创新类" value='2'></el-option>
+              <el-option label="艺术兴趣类" value='3'></el-option>
+              <el-option label="体育健身类" value='4'></el-option>
+              <el-option label="公益服务类" value='5'></el-option>
             </el-select>
           </p>
           <p>
             <span class="title_span">社团名称：</span>
             <el-input v-model="detailAssociation.name" placeholder="请输入内容" clearable></el-input></p>
-          <p><span class="title_span">社长账号：</span><el-input
+          <p><span class="title_span">社长名字：</span><el-input
             placeholder="请输入内容"
-            v-model="memberId"
+            v-model="userName"
             :disabled="true">
           </el-input>
             <span class="changeMain" @click="toRouter('/changeMain',associationId)">更改社长</span></p>
@@ -111,16 +92,19 @@
         url:'',
         userId:'',
         societyPlace:'',
-        detailAssociation:''
+        detailAssociation:{},
+        changeUserId:'',
+        userName:''
       }
     },
     methods: {
       createFunc(){
         this.userId = localStorage.getItem('userId');
-        this.memberId =this.userId
+        this.memberId =this.userId;
         this.associationId = this.$route.query.associationId;
         this.url = this.localhost + 'associationMg/association/getAssociationDetail';
-        this.getDetails(this.url, this.associationId)
+        console.log(this.associationId);
+        this.getDetails(this.url, this.associationId);
       },
       goBack(){
         this.$router.back(-1)
@@ -153,20 +137,34 @@
         this.dialogVisible = true;
       },
       /*创建请求*/
-      edtiSociety(url,) {
+      edtiSociety() {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-       /* var userId = this.userId;
-        var name = this.societyName;
-        var typeId = this.sortSociety;
-        var place = this.societyPlace;
-        var applyComments = this.applyCom;*/
+        /*ssociationId(社团id)、
+          name(社团名称)、
+          briefIntroduction(社团简介)、
+          place(社团专用场地)、
+          typeId(社团所属类别)、
+          userId(更换社长userId)、
+          applyComments(申请理由)*/
+        var url = this.localhost+'associationMg/association/saveOrUpdate';
+        var userId ='';
+        if(this.$route.query.userName){
+          userId =this.changeUserId
+        }else {
+          userId = this.userId
+        }
         var json ={
-          userId:userId,
+            associationId:this.associationId,
+            userId:userId,
+            typeId:this.detailAssociation.type_id,
+            briefIntroduction:this.detailAssociation.check_comments,
+            place:this.detailAssociation.place,
+            applyComments:this.detailAssociation.place,
         };
         this.$http.post(url,json).then(
           (success) => {
@@ -202,7 +200,13 @@
           (success) => {
           var response = success.data;
           if (response.msg == 666) {
-            this.detailAssociation=response.detailAssociation.detailAssociation;
+            this.detailAssociation=response.detailAssociation;
+            this.detailAssociation.type_id=this.detailAssociation.type_id+'';
+            this.userName=response.detailAssociation.user_name;
+            if(this.$route.query.userName){
+              this.userName = this.$route.query.userName;
+              this.changeUserId = this.$route.query.changeUserId;
+            }
             console.log(this.detailAssociation);
           } else {
             this.$message.error('错误，社团详情请求数据失败');
@@ -223,7 +227,6 @@
     },
 
     mounted(){
-
 
     },
     watch: {

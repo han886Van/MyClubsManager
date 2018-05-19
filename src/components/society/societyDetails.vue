@@ -17,6 +17,24 @@
         </div>
         <div class="right_box">
           <div class="left_item">
+            <!--apply_comments:"锻炼身体，休闲娱乐"
+                association_id:1
+                brief_introduction:"无兄弟，不篮球！"
+                check_comments:"有趣"
+                check_person_id:20
+                check_time:1526531519000
+                create_day:"2018-05-17"
+                create_person_id:4
+                create_time:1526530861000
+                name:"校篮球队"
+                place:"旧篮球场"
+                state:"1"
+                state_name:"同意创建"
+                state_num:"1"
+                total_person:1
+                type_id:4
+                type_name:"体育健身类"
+                user_name:"张三"-->
             <p><span>社团名字：</span><span>{{detailAssociation.name}}</span></p>
             <p ><span>社团ID：</span><span>{{detailAssociation.association_id}}</span></p>
             <p><span>总人数：</span><span>{{detailAssociation.total_person}}</span></p>
@@ -140,7 +158,7 @@
           (success) => {
             var response = success.data;
             if (response.msg == 666) {
-                this.detailAssociation=response.detailAssociation.detailAssociation;
+                this.detailAssociation=response.detailAssociation;
               console.log(this.detailAssociation);
             } else {
               this.$message.error('错误，社团详情请求数据失败');
