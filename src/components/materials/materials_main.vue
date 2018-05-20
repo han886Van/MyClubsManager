@@ -62,26 +62,38 @@
           <span>内容</span>
           <span>借用时间</span>
           <span>归还时间</span>
-          <span>申请社团</span>
+          <span>社团名称</span>
           <span>申请人</span>
           <span>审核老师</span>
           <span>状态</span>
         </div>
         <ul class="list">
-          <li  v-show="!showNo" class="societyList" v-for="(item,index) in assoMaterielList" @click="toRouter('/detailMaterials',item.Numbering)">
+          <!--association_id:1
+              association_name:"校篮球队"
+              content:"测试测试测试"
+              create_time:1526821274000
+              id:1
+              state:"0"
+              state_name:"待审核"
+              state_num:"0"
+              title:"测试"
+              user_id:4
+              user_name:"张三"
+-->
+          <li  v-show="!showNo" class="societyList" v-for="(item,index) in assoMaterielList" @click="toRouter('/detailMaterials',0,0,item.id)">
             <span >{{index+1}}</span>
-            <span>{{item.Numbering}}</span>
+            <span>{{item.id}}</span>
             <span>{{item.content}}</span>
-            <span>{{item.starTime}}</span>
-            <span>{{item.starTime}}</span>
-            <span>{{item.society}}</span>
-            <span>{{item.teacher}}</span>
+            <span>{{item.create_time}}</span>
+            <span>{{item.create_time}}</span>
+            <span>{{item.association_name}}</span>
+            <span>{{item.user_name}}</span>
             <span>{{item.applicant}}</span>
             <div>
-              <span class="delBtn"  v-show="item.status==1">使用中</span>
-              <span class="editBtn" v-show="item.status==2">已归还</span>
+              <span class="delBtn"  v-show="item.state_num==0">待审核</span>
+              <!--<span class="editBtn" v-show="item.status==2">已归还</span>
               <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
-              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
+              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>-->
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无物资</li>
@@ -309,14 +321,14 @@
          });*/
 
       },
-      toRouter(myRouter, materiId,associationId){
-        this.$router.replace({path: myRouter, query: {'materiId': materiId,'associationId':associationId}})
+      toRouter(myRouter, materiId,associationId,id){
+        this.$router.replace({path: myRouter, query: {'materiId': materiId,'associationId':associationId,'id':id}})
       },
     },
-    mounted(){
+     mounted(){
       this.userRole = localStorage.getItem('userRole');
     },
-    created() {
+     created() {
       this.createFunc()
     },
   }

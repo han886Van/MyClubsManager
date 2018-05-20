@@ -13,33 +13,42 @@
       </div>
       <div class="info">
         <div class="edit_input">
+          <p><span class="title_span">申请时间：</span>
+            <el-date-picker
+              v-model="value4"
+              type="daterange"
+              :picker-options="pickerOptions"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+          </p>
           <p><span class="title_span">申请标题：</span>
-            <el-input placeholder="请输入内容"></el-input>
+            <el-input placeholder="请输入内容" v-model="title"></el-input>
           </p>
           <p><span class="title_span">申请内容：</span>
             <el-input
               type="textarea"
               resize="none"
               placeholder="请输入内容"
-              v-model="textarea">
+              v-model="content">
+            </el-input>
+          </p>
+          <p><span class="title_span">申请理由：</span>
+            <el-input
+              type="textarea"
+              resize="none"
+              placeholder="请输入内容"
+              v-model="applyComments">
             </el-input>
           </p>
           <p><span class="title_span">社团账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
+            <el-input placeholder="请输入内容" :disabled="true" v-model="associationId"></el-input>
           </p>
           <p><span class="title_span">社长账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
-          </p>
-          <p><span class="title_span">申请时间：</span>
-            <el-date-picker
-              v-model="value4"
-              :disabledDate="disabledDate"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期">
-            </el-date-picker>
+            <el-input placeholder="请输入内容" :disabled="true" v-model="userId"></el-input>
           </p>
           <div>
             <el-button type="primary" @click="addMaterials()" v-loading.fullscreen.lock="fullscreenLoading">发送申请</el-button>
@@ -65,22 +74,25 @@
             return  time.getTime() < Date.now()-(24*60*60*1000)
           }
         },
-
+        associationId:'',
+        userRole:'',
+        userId:'',
+        title:'',
+        content:'',
+        applyComments:'',
       }
     },
     methods: {
+      createFunc(){
+        this.userRole = localStorage.getItem('userRole');
+        this.userId = localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+      },
       goBack(){
         this.$router.back(-1)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
       },
       /*创建请求*/
       addMaterials() {
@@ -90,22 +102,50 @@
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        setTimeout(() => {
-          loading.close();
-          this.toRouter('/materials')
-        }, 2000);
-
+        var url = this.localhost+'associationMg/materiel/saveOrUpdate';
+        var userId = this.userId;
+        var associationId = this.associationId;
+        var json={
+          userId:userId,
+          associationId:associationId,
+          title:this.title,
+          content:this.content,
+          apply_comments:this.applyComments,
+          begin_time:this.value4[0],
+          end_time:this.value4[1],
+          state:0,
+        };
+         this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                message: '恭喜你，已成功申请物资！',
+                type: 'success'
+              });
+              this.goBack();
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
       },
-      disabledDate(date){
-        console.log(date);
-      }
+
     },
 
     mounted(){
 
     },
-    created(){
-
+    created() {
+      this.createFunc()
     },
     watch: {},
   }

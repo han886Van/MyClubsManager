@@ -32,6 +32,7 @@ import appliMaterials from '@/components/materials/appliMaterials'
 import discussion from '@/components/discussion/discussion_main'
 import owerDis from '@/components/discussion/owerDis'
 import activity from '@/components/activity/activity_main'
+import inActivity from '@/components/activity/inActivity'
 import addActivity from '@/components/activity/addActivity'
 import appliActivity from '@/components/activity/appliActivity'
 import detaileActivity from '@/components/activity/detaileActivity'
@@ -185,6 +186,10 @@ export default new Router({
       path: '/addTeacher',
       name: 'addTeacher',
       component: addTeacher
+    },{
+      path: '/inActivity',
+      name: 'inActivity',
+      component: inActivity
     },
   ]
 })

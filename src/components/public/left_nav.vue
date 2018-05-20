@@ -97,7 +97,7 @@
         </el-menu-item>
       </el-submenu>
       <!--活动管理-->
-      <el-menu-item index="activity" v-show="myRole==1">
+      <el-menu-item index="inActivity" v-show="myRole==1">
         <i class="iconfont icon-huodong"></i>
         <span slot="title" class="i_word">活动管理</span>
       </el-menu-item>

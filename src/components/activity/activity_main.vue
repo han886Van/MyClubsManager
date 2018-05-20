@@ -64,7 +64,17 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in activityArr"  @click="toRouter('/detaileActivity',item.actNum)">
+          <li class="societyList" v-for="(item,index) in assoEventList"  @click="toRouter('/detaileActivity',item.actNum)">
+           <!-- association_id:1
+            association_name:"校篮球队"
+            content:"计科院各班级比赛，决出名次并可领取相应奖励"
+            id:3
+            state:"1"
+            state_name:"同意申请"
+            state_num:"1"
+            title:"计科篮球赛活动申请111"
+            user_id:4
+            user_name:"张三"-->
             <span>{{index+1}}</span>
             <span >{{item.actNum}}</span>
             <span >{{item.name}}</span>
@@ -91,7 +101,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="totalNum">
           </el-pagination>
         </div>
       </div>
@@ -155,10 +165,25 @@
         nameInput: '',
         sortSociety: '',
         currentPage:1,
-        userRole:''
+        userRole:'',
+        associationId:'',
+        totalNum:1,
+        url:'',
+        assoEventList:[],
       }
     },
     methods: {
+      createFunc(){
+        this.userRole = localStorage.getItem('userRole');
+        this.userId =localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+        if(this.userRole==1){
+          this.url=this.localhost+'/associationMg/event/getAssoEventList';
+          this.getList(1)
+        }else if(this.userRole==2){
+
+        }
+      },
       searchItem(){
         var searchArr = [];
         var lastArr = [];
@@ -206,6 +231,49 @@
          });*/
 
       },
+      getList(val){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          associationId:this.associationId,
+          start:val
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.totalNum =parseInt(response.listCount);
+           if(response.assoEventList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false
+             for(var i =0; i<response.assoEventList.length;i++){
+               if(this.userRole==1){
+                 this.assoEventList.push(response.assoEventList[i]);
+               }else{
+                 this.assoEventList.push(response.assoEventList[i]);
+               }
+             }
+            }
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      },
       toRouter(myRouter,actNum){
         this.$router.push({path: myRouter, query: {'actNum': actNum}})
       },
@@ -216,6 +284,9 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
+    },
+    created() {
+      this.createFunc()
     },
     mounted(){
       this.userRole = localStorage.getItem('userRole');

@@ -57,20 +57,15 @@
     components: {},
     data () {
       return {
-        materiId:'',
-        Numbering:''
+        Numbering:'',
+        url:''
       }
     },
     methods: {
       createFunc(){
-        this.materiId = this.$route.query.materiId;
-        if(this.userRole==1){
-          this.url=this.localhost+'/associationMg/materiel/getMateriDetail';
-          console.log(this.associationId);
-          this.getList(1)
-        }else if(this.userRole==2){
-
-        }
+        this.materiId = this.$route.query.id;
+        this.url=this.localhost+'associationMg/materiel/getMateriDetail';
+        this.getList();
       },
       getList(){
         const loading = this.$loading({
@@ -80,14 +75,13 @@
           background: 'rgba(0, 0, 0, 0.7)'
         });
         var json ={
-          materiId:this.materiId,
+          id:this.materiId,
         };
         this.$http.post(this.url,json).then(
           (success) => {
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-
 
 
             }else {
@@ -112,7 +106,6 @@
     },
 
     mounted(){
-      this.Numbering = this.$route.query.Numbering;
     },
     created(){
       this.createFunc()
