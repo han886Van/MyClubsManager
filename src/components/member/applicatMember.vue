@@ -26,7 +26,7 @@
             <span>社团名字：</span>
             <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
           </div>
-          <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>
+       <!--   <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>-->
         </div>
         <div>
           <span>学生学号：</span>

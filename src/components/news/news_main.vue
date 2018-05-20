@@ -2,9 +2,12 @@
   <div class="news">
     <div class="bgc">
       <div class="top" >
-        <span>新闻管理</span>
-        <span>	&gt;</span>
-        <span class="blue">社团新闻</span>
+        <div>
+          <span>新闻管理</span>
+          <span>	&gt;</span>
+          <span class="blue">社团新闻</span>
+        </div>
+        <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
         <div>
@@ -58,15 +61,15 @@
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in newsArr">
-            <span @click="toRouter('/detailNews',item.Numbering)">{{index+1}}</span>
-            <span @click="toRouter('/detailNews',item.Numbering)">{{item.Numbering}}</span>
-            <span @click="toRouter('/detailNews',item.Numbering)">{{item.name}}</span>
-            <span @click="toRouter('/detailNews',item.Numbering)">{{item.society}}</span>
-            <span @click="toRouter('/detailNews',item.Numbering)">{{item.applicant}}</span>
-            <span @click="toRouter('/detailNews',item.Numbering)">{{item.starTime}}</span>
-            <span class="agreetBtn" @click="toRouter('/detailNews',item.Numbering)"
+            <span @click="toRouter('/detailNews',item.id)">{{index+1}}</span>
+            <span @click="toRouter('/detailNews',item.id)">{{item.Numbering}}</span>
+            <span @click="toRouter('/detailNews',item.id)">{{item.name}}</span>
+            <span @click="toRouter('/detailNews',item.id)">{{item.society}}</span>
+            <span @click="toRouter('/detailNews',item.id)">{{item.applicant}}</span>
+            <span @click="toRouter('/detailNews',item.id)">{{item.starTime}}</span>
+            <span class="agreetBtn" @click="toRouter('/detailNews',item.id)"
                   v-show="item.status==1">已发送</span>
-            <span class="refuseBtn" @click="toRouter('/detailNews',item.Numbering)"
+            <span class="refuseBtn" @click="toRouter('/detailNews',item.id)"
                   v-show="item.status==2">草稿箱</span>
             <div>
              <span class="refuseBtn" @click="delNew(index)"
@@ -170,10 +173,68 @@
         idInput: '',
         nameInput: '',
         sortSociety: '',
-        currentPage:1
+        currentPage:1,
+        associationList:[]
       }
     },
     methods: {
+      createFunc(){
+        this.userRole = localStorage.getItem('userRole');
+        this.userId =localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+        if(this.userRole==1){
+          this.url=this.localhost+'associationMg/news/getAssociationNews';
+          this.getList(1)
+        }else if(this.userRole==2){
+
+        }
+      },
+      goBack(){
+        this.$router.back(-1)
+      },
+      getList(val){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          associationId:this.associationId,
+          start:val
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.totalNum =parseInt(response.listCount);
+            if(response.assoEventList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false;
+              for(var i =0; i<response.assoEventList.length;i++){
+                if(this.userRole==1){
+                  this.assoEventList.push(response.assoEventList[i]);
+                }else{
+                  this.assoEventList.push(response.assoEventList[i]);
+                }
+              }
+            }
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      },
       /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -182,55 +243,12 @@
         console.log(`当前页: ${val}`);
       },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
+
 
       },
       /*退出社团*/
-      toRouter(myRouter, Numbering){
-        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
+      toRouter(myRouter, id){
+        this.$router.push({path: myRouter, query: {'id': id}})
       },
       delNew(index) {
         this.$confirm('是否删除该新闻?', '提示', {
@@ -266,7 +284,10 @@
     },
     mounted(){
 
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
@@ -283,9 +304,14 @@
     padding: 10px 40px 20px 40px;
     .top{
       line-height:50px;
-      font-size:16px;
+      display: flex;
+      justify-content:space-between;
       border-bottom :1px solid #ccc;
-      margin-bottom:10px;
+      margin-bottom:20px;
+      .editing{
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .bgc {
       border-radius: 8px;

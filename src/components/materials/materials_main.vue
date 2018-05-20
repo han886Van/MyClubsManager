@@ -68,18 +68,6 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <!--association_id:1
-              association_name:"校篮球队"
-              content:"测试测试测试"
-              create_time:1526821274000
-              id:1
-              state:"0"
-              state_name:"待审核"
-              state_num:"0"
-              title:"测试"
-              user_id:4
-              user_name:"张三"
--->
           <li  v-show="!showNo" class="societyList" v-for="(item,index) in assoMaterielList" @click="toRouter('/detailMaterials',0,0,item.id)">
             <span >{{index+1}}</span>
             <span>{{item.id}}</span>
@@ -107,7 +95,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="totalNum">
           </el-pagination>
         </div>
       </div>
@@ -205,7 +193,8 @@
         userId:'',
         associationId:'',
         assoMaterielList:[],
-        showNo:false
+        showNo:false,
+        totalNum:1
 
       }
     },
@@ -275,50 +264,7 @@
         console.log(`当前页: ${val}`);
       },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
+
 
       },
       toRouter(myRouter, materiId,associationId,id){

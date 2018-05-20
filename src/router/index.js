@@ -7,6 +7,7 @@ import MySpace from '@/components/MySpace/MySpace'
 import editUerInfo from '@/components/MySpace/edit_uerInfo'
 import editPass from '@/components/MySpace/edit_pass'
 import news from '@/components/news/news_main'
+import inNew from '@/components/news/inNew'
 import addNews from '@/components/news/addNews'
 import allNews from '@/components/news/allNews'
 import detailNews from '@/components/news/detailNews'
@@ -19,7 +20,7 @@ import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
 import addMember from '@/components/member/addMember'
 import inSociety from '@/components/member/inSociety'
-import detailMember from '@/components/member/inSociety'
+import detailMember from '@/components/member/detailMember'
 import student from '@/components/member/student'
 import addStudent from '@/components/member/addStudent'
 import teacher from '@/components/member/teacher'
@@ -190,6 +191,10 @@ export default new Router({
       path: '/inActivity',
       name: 'inActivity',
       component: inActivity
+    },{
+      path: '/inNew',
+      name: 'inNew',
+      component: inNew
     },
   ]
 })

@@ -70,24 +70,59 @@
     components: {},
     data () {
       return {
-        actNum:''
-
+        id:'',
+        detailEvent:''
       }
     },
     methods: {
+      createFunc(){
+        this.id = this.$route.query.id;
+        this.url=this.localhost+'associationMg/event/getEventDetail';
+        this.getList()
+      },
       goBack(){
         this.$router.back(-1)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
+      getList(){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          id:this.id,
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+                this.detailEvent = response.detailEvent
+
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
     },
 
     mounted(){
-      this.actNum = this.$route.query.actNum;
+
     },
     created(){
-
+      this.createFunc()
     },
     watch: {},
   }

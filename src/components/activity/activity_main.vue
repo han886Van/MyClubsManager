@@ -3,14 +3,16 @@
     <div class="bgc">
       <div class="top" v-show="userRole==1" >
         <span class="blue">活动管理</span>
+        <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="top" v-show="userRole==2" >
-        <span>活动管理</span>
+        <div><span>活动管理</span>
         <span>	&gt;</span>
-        <span  class="blue">申请记录</span>
+        <span  class="blue">申请记录</span></div>
+        <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
-        <div>
+       <!-- <div>
           <span>社团分类：</span>
           <el-select v-model="sortSociety" placeholder="社团分类">
             <el-option label="专业学术类" value="1"></el-option>
@@ -21,21 +23,22 @@
           </el-select>
         </div>
         <div>
-          <span>活动编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <span>社团编号：</span>
+          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
           <span>社团名字：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+        </div>-->
+        <div>
+          <span>活动编号：</span>
+          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
           <span>活动名称：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
-        <div>
-          <span>社团编号：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
+
         <div>
           <span>申请状态：</span>
           <el-select v-model="actiStatus" placeholder="申请状态">
@@ -64,7 +67,7 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in assoEventList"  @click="toRouter('/detaileActivity',item.actNum)">
+          <li class="societyList" v-for="(item,index) in assoEventList"  @click="toRouter('/detaileActivity',item.id)">
            <!-- association_id:1
             association_name:"校篮球队"
             content:"计科院各班级比赛，决出名次并可领取相应奖励"
@@ -76,12 +79,12 @@
             user_id:4
             user_name:"张三"-->
             <span>{{index+1}}</span>
-            <span >{{item.actNum}}</span>
-            <span >{{item.name}}</span>
-            <span >{{item.societyName}}</span>
-            <span >{{item.applicant}}</span>
-            <span >{{item.starTime}}</span>
-            <span >{{item.starTime}}</span>
+            <span >{{item.id}}</span>
+            <span >{{item.title}}</span>
+            <span >{{item.association_name}}</span>
+            <span >{{item.user_name}}</span>
+            <span >{{item.begin_time}}</span>
+            <span >{{item.end_time}}</span>
             <span >{{item.adress}}</span>
             <span>{{item.teacher}}</span>
             <div>
@@ -91,6 +94,7 @@
               <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无活动</li>
         </ul>
       </div>
       <div  class="myPagination">
@@ -170,6 +174,7 @@
         totalNum:1,
         url:'',
         assoEventList:[],
+        showNo:false,
       }
     },
     methods: {
@@ -184,51 +189,11 @@
 
         }
       },
+      goBack(){
+        this.$router.back(-1)
+      },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
+
 
       },
       getList(val){
@@ -274,8 +239,8 @@
           this.$message.error('错误，请求数据失败');
         });
       },
-      toRouter(myRouter,actNum){
-        this.$router.push({path: myRouter, query: {'actNum': actNum}})
+      toRouter(myRouter,id){
+        this.$router.push({path: myRouter, query: {'id': id}})
       },
       /*分页器*/
       handleSizeChange(val) {
@@ -307,9 +272,14 @@
     padding: 10px 40px 20px 40px;
     .top{
       line-height:50px;
-      font-size:16px;
+      display: flex;
+      justify-content:space-between;
       border-bottom :1px solid #ccc;
-      margin-bottom:10px;
+      margin-bottom:20px;
+      .editing{
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .bgc {
       border-radius: 8px;
@@ -318,14 +288,8 @@
     .search_box {
       margin-bottom: 20px;
       div {
-        margin-top: 10px;
         display: inline-block;
         margin-right: 10px;
-        min-width: 280px;
-      }
-      .searchBtn {
-        min-width: 200px;
-        text-align: right;
       }
     }
     .title {

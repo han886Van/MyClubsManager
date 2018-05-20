@@ -114,12 +114,12 @@
         </el-menu-item>
       </el-submenu>
       <!--新闻-->
-      <el-submenu  index="news">
+      <el-submenu  index="inNew">
         <template slot="title">
           <i class="iconfont icon-shangwutubiao-"></i>
           <span class="i_word">新闻管理</span>
         </template>
-        <el-menu-item index="news?myRouter=1" class="li_son">
+        <el-menu-item index="inNew?myRouter=1" class="li_son">
           <span slot="title" class="i_word">发送记录</span>
         </el-menu-item>
         <el-menu-item index="allNews" class="li_son">
