@@ -18,12 +18,14 @@ import changeMain from '@/components/society/changeMain'
 import member from '@/components/member/member_main'
 import applicatMember from '@/components/member/applicatMember'
 import addMember from '@/components/member/addMember'
-import detailMember from '@/components/member/detailMember'
+import inSociety from '@/components/member/inSociety'
+import detailMember from '@/components/member/inSociety'
 import student from '@/components/member/student'
 import addStudent from '@/components/member/addStudent'
 import teacher from '@/components/member/teacher'
 import addTeacher from '@/components/member/addTeacher'
 import materials from '@/components/materials/materials_main'
+import mSociety from '@/components/materials/mSociety'
 import addMaterials from '@/components/materials/addMaterials'
 import detailMaterials from '@/components/materials/detailMaterials'
 import appliMaterials from '@/components/materials/appliMaterials'
@@ -171,6 +173,14 @@ export default new Router({
       path: '/addStudent',
       name: 'addStudent',
       component: addStudent
+    },{
+      path: '/inSociety',
+      name: 'inSociety',
+      component: inSociety
+    },{
+      path: '/mSociety',
+      name: 'mSociety',
+      component: mSociety
     },{
       path: '/addTeacher',
       name: 'addTeacher',

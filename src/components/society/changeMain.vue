@@ -251,7 +251,7 @@
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
       toCheck(myRouter,userId,userName,associationId){
-        this.$router.push({path: myRouter, query: {'changeUserId': userId,'userName':userName,'associationId':associationId}})
+        this.$router.replace({path: myRouter, query: {'changeUserId': userId,'userName':userName,'associationId':associationId}})
       }
     },
     mounted(){

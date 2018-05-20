@@ -2,7 +2,12 @@
   <div class="materials">
     <div class="bgc">
       <div class="top" v-show="userRole==1" >
-        <span class="blue">物资管理</span>
+        <div>
+          <span>物资管理</span>
+        <span>	&gt;</span>
+        <span class="blue">社团物资</span>
+        </div>
+        <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="top" v-show="userRole==2" >
         <span>物资管理</span>
@@ -10,7 +15,7 @@
         <span  class="blue">申请记录</span>
       </div>
       <div class="search_box">
-        <div>
+        <!--  <div>
           <span>社团分类：</span>
           <el-select v-model="sortSociety" placeholder="社团分类">
             <el-option label="专业学术类" value="1"></el-option>
@@ -19,23 +24,15 @@
             <el-option label="体育健身类" value="4"></el-option>
             <el-option label="公益服务类" value="5"></el-option>
           </el-select>
-        </div>
-        <div>
-          <span>借用编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>物资名称：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
+        </div>-->
+        <!--  <div>
+         <span>社团名字：</span>
+         <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+       </div>-->
+        <!--<div>
           <span>社团编号：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
+        </div>-->
         <div>
           <span>申请状态：</span>
           <el-select v-model="materialsStatus" placeholder="申请状态">
@@ -45,9 +42,17 @@
             <el-option label="同意申请" value="4"></el-option>
           </el-select>
         </div>
+        <div>
+          <span>物资编号：</span>
+          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+        </div>
+        <div>
+          <span>物资名称：</span>
+          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+        </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物资</el-button>
+          <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1">申请物资</el-button>
         </div>
       </div>
       <div>
@@ -63,7 +68,7 @@
           <span>状态</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in materialsArr" @click="toRouter('/detailMaterials',item.Numbering)">
+          <li  v-show="!showNo" class="societyList" v-for="(item,index) in assoMaterielList" @click="toRouter('/detailMaterials',item.Numbering)">
             <span >{{index+1}}</span>
             <span>{{item.Numbering}}</span>
             <span>{{item.content}}</span>
@@ -79,6 +84,7 @@
               <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无物资</li>
         </ul>
       </div>
       <div  class="myPagination">
@@ -182,10 +188,73 @@
           },
         ],
         currentPage:1,
-        userRole:''
+        userRole:'',
+        url:'',
+        userId:'',
+        associationId:'',
+        assoMaterielList:[],
+        showNo:false
+
       }
     },
     methods: {
+      createFunc(){
+        this.userRole = localStorage.getItem('userRole');
+        this.userId =localStorage.getItem('userId');
+        this.associationId = this.$route.query.associationId;
+        if(this.userRole==1){
+          this.url=this.localhost+'/associationMg/materiel/getAssoMaterielList';
+          this.getList(1)
+        }else if(this.userRole==2){
+
+        }
+      },
+      getList(val){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          associationId:this.associationId,
+          start:val
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.totalNum =parseInt(response.listCount);
+            if(response.assoMaterielList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false
+            }
+            for(var i =0; i<response.assoMaterielList.length;i++){
+              if(this.userRole==1){
+                this.assoMaterielList.push(response.assoMaterielList[i]);
+              }else{
+                this.assoMaterielList.push(response.assoMaterielList[i]);
+              }
+            }
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      },
+      goBack(){
+        this.$router.back(-1)
+      },
         /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -240,14 +309,16 @@
          });*/
 
       },
-      /*退出社团*/
-      toRouter(myRouter, Numbering){
-        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
+      toRouter(myRouter, materiId,associationId){
+        this.$router.replace({path: myRouter, query: {'materiId': materiId,'associationId':associationId}})
       },
     },
     mounted(){
       this.userRole = localStorage.getItem('userRole');
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 
@@ -264,9 +335,14 @@
     padding: 10px 40px 20px 40px;
     .top{
       line-height:50px;
-      font-size:16px;
+      display: flex;
+      justify-content:space-between;
       border-bottom :1px solid #ccc;
-      margin-bottom:10px;
+      margin-bottom:20px;
+      .editing{
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .bgc {
       border-radius: 8px;
@@ -275,14 +351,8 @@
     .search_box {
       margin-bottom: 20px;
       div {
-        margin-top: 10px;
         display: inline-block;
         margin-right: 10px;
-        min-width: 280px;
-      }
-      .searchBtn {
-        min-width: 200px;
-        text-align: right;
       }
     }
     .title {

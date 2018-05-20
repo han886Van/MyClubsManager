@@ -136,7 +136,7 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      /*创建 编辑社团*/
+      /* 编辑社团*/
       edtiSociety() {
         const loading = this.$loading({
           lock: true,
@@ -163,9 +163,10 @@
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-
+                this.goBack()
             }else {
               this.$message.error('错误，请求数据失败');
+              this.goBack()
             }
             setTimeout(() => {
               loading.close();

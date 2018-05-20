@@ -55,12 +55,12 @@
         <span slot="title" class="i_word">社团管理</span>
       </el-menu-item>
       <!--成员管理-->
-      <el-submenu index="member" v-show="myRole!=3">
+      <el-submenu index="inSociety" v-show="myRole!=3">
         <template slot="title">
           <i class="iconfont icon-yuangongliebiao"></i>
           <span class="i_word">成员管理</span>
         </template>
-        <el-menu-item index="member?myRouter=1" class="li_son">
+        <el-menu-item index="inSociety?myRouter=1" class="li_son">
           <span slot="title" class="i_word">社团成员</span>
         </el-menu-item>
         <el-menu-item index="applicatMember" class="li_son" v-show="myRole==1" >
@@ -80,7 +80,7 @@
         </el-menu-item>
       </el-submenu>
       <!--物资管理-->
-      <el-menu-item index="materials" v-show="myRole==1">
+      <el-menu-item index="mSociety" v-show="myRole==1">
         <i class="iconfont icon-cailiaozhengli"></i>
         <span slot="title" class="i_word">物资管理</span>
       </el-menu-item>

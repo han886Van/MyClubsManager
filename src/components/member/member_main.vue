@@ -2,12 +2,15 @@
   <div class="member">
     <div class="bgc">
       <div class="top">
-        <span>成员管理</span>
+       <div>
+         <span>成员管理</span>
         <span>	&gt;</span>
         <span class="blue">社团成员</span>
+       </div>
+        <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
-        <div>
+      <!--  <div>
           <div>
             <span>社团分类：</span>
             <el-select v-model="sortSociety" placeholder="社团分类">
@@ -27,7 +30,7 @@
             <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
           </div>
           <el-button @click="toRouter('/addMember')" type="primary">添加成员</el-button>
-        </div>
+        </div>-->
         <div>
           <span>学生学号：</span>
           <el-input v-model="studentNum" placeholder="请输入内容" clearable></el-input>
@@ -140,69 +143,7 @@
     components: {},
     data () {
       return {
-        hadArr: [
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '社员',
-            grade: '大一',
-            sort: 1,
-            profession: '电子商务'
-          },
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '社员',
-            grade: '大一',
-            sort: 2,
-            profession: '电子商务'
-          },
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '副社长',
-            grade: '大一',
-            sort: 3,
-            profession: '电子商务'
-          },
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '社员',
-            grade: '大一',
-            sort: 1,
-            profession: '电子商务'
-          },
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '社员',
-            grade: '大一',
-            sort: 1,
-            profession: '电子商务'
-          },
-          {
-            imgUrl: require('../../assets/img/home1.jpg'),
-            memberId: '001',
-            memberName: '小可爱',
-            societyName: '摄影社团',
-            position: '社员',
-            grade: '大一',
-            sort: 1,
-            profession: '电子商务'
-          },
-        ],
-        sortSociety: '',
+        associationId: '',
         nameInput: '',
         studentNum: '',
         currentPage: 1,
@@ -228,12 +169,16 @@
           /*学生*/
           this.userId = localStorage.getItem('userId');
           this.url = this.localhost + 'associationMg/associationAndUser/studentGetAssoUserList';
+          this.associationId = this.$route.query.associationId;
           this.getList(1, this.url);
         } else if (this.userRole == 2) {
           this.url = this.localhost + 'associationMg/associationAndUser/teacherGetUserList';
           this.userType = localStorage.getItem('userType');
           this.getList(1, this.url);
         }
+      },
+      goBack(){
+        this.$router.back(-1)
       },
       getList(val, url, name, studentName, grade,studentNum){
         this.lAssociationList=[];
@@ -246,6 +191,7 @@
         });
         var json = {
           start: val,
+          associationId: this.associationId,
         };
         if ( this.userId) {
           json.userId = this.userId;
@@ -365,7 +311,7 @@
         });
       },
       changeMember(myRouter,associationId){
-        this.$router.push({path: myRouter, query: {'associationId': associationId}})
+        this.$router.replace({path: myRouter, query: {'associationId': associationId}})
       }
     },
     mounted(){
@@ -391,11 +337,16 @@
       border-radius: 8px;
       background-color: #fff;
     }
-    .top {
-      line-height: 50px;
-      font-size: 16px;
-      border-bottom: 1px solid #ccc;
-      margin-bottom: 10px;
+    .top{
+      line-height:50px;
+      display: flex;
+      justify-content:space-between;
+      border-bottom :1px solid #ccc;
+      margin-bottom:20px;
+      .editing{
+        color: #409eff;
+        cursor :pointer;
+      }
     }
     .search_box {
       margin-bottom: 20px;

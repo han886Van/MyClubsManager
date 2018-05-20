@@ -57,11 +57,52 @@
     components: {},
     data () {
       return {
+        materiId:'',
         Numbering:''
-
       }
     },
     methods: {
+      createFunc(){
+        this.materiId = this.$route.query.materiId;
+        if(this.userRole==1){
+          this.url=this.localhost+'/associationMg/materiel/getMateriDetail';
+          console.log(this.associationId);
+          this.getList(1)
+        }else if(this.userRole==2){
+
+        }
+      },
+      getList(){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          materiId:this.materiId,
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+
+
+
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
       goBack(){
         this.$router.back(-1)
       },
@@ -74,7 +115,7 @@
       this.Numbering = this.$route.query.Numbering;
     },
     created(){
-
+      this.createFunc()
     },
     watch: {},
   }
