@@ -50,7 +50,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addActivity')" type="primary"  v-show="userRole==1">申请活动</el-button>
+          <el-button @click="toRouter('/addActivity',0,associationId)" type="primary"  v-show="userRole==1">申请活动</el-button>
         </div>
       </div>
       <div>
@@ -239,8 +239,8 @@
           this.$message.error('错误，请求数据失败');
         });
       },
-      toRouter(myRouter,id){
-        this.$router.push({path: myRouter, query: {'id': id}})
+      toRouter(myRouter,id,associationId){
+        this.$router.push({path: myRouter, query: {'id': id,'associationId':associationId}})
       },
       /*分页器*/
       handleSizeChange(val) {

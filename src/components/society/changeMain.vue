@@ -156,8 +156,8 @@
         var userId = localStorage.getItem('userId');
         var url = this.localhost+'associationMg/associationAndUser/studentGetAssoUserList';
         var json ={
-          userId:userId,
-          associationId:this.associationId
+          associationId:this.associationId,
+          changePresident:1
         };
         this.$http.post(url,json).then(
           (success) => {

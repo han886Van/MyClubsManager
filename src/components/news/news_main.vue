@@ -10,7 +10,7 @@
         <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
-        <div>
+      <!--  <div>
           <span>社团分类：</span>
           <el-select v-model="sortSociety" placeholder="社团分类">
             <el-option label="专业学术类" value="1"></el-option>
@@ -21,20 +21,20 @@
           </el-select>
         </div>
         <div>
-          <span>新闻编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
           <span>社团名字：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>新闻标题：</span>
+          <span>社团编号：</span>
+          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+        </div>-->
+        <div>
+          <span>新闻编号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
-          <span>社团编号：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          <span>新闻标题：</span>
+          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
           <span>发布状态：</span>
@@ -323,11 +323,6 @@
         margin-top: 10px;
         display: inline-block;
         margin-right: 10px;
-        min-width: 280px;
-      }
-      .searchBtn {
-        min-width: 200px;
-        text-align: right;
       }
     }
     .title {

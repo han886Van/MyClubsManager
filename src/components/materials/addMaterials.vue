@@ -51,7 +51,7 @@
             <el-input placeholder="请输入内容" :disabled="true" v-model="userId"></el-input>
           </p>
           <div>
-            <el-button type="primary" @click="addMaterials()" v-loading.fullscreen.lock="fullscreenLoading">发送申请</el-button>
+            <el-button type="primary" @click="toAdd()" >发送申请</el-button>
           </div>
         </div>
       </div>
@@ -95,6 +95,20 @@
         this.$router.push({path: myRouter})
       },
       /*创建请求*/
+      toAdd(){
+        if(!this.title){
+          this.$message.error('错误，请输入标题');
+          console.log(this.title);
+        }else if(!this.content){
+          this.$message.error('错误，请求输入内容');
+        }else if(!this.value4){
+          this.$message.error('错误，请选择时间');
+        }else if(!this.applyComments){
+          this.$message.error('错误，请输入申请理由');
+        }else {
+          this.addMaterials()
+        }
+      },
       addMaterials() {
         const loading = this.$loading({
           lock: true,

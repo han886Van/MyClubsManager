@@ -34,7 +34,7 @@
             type="textarea"
             resize="none"
             placeholder="请输入内容"
-            v-model="textarea">
+            v-model="briefIntroduction">
           </el-input></p>
           <p><span class="title_span">申请理由：</span><el-input
               type="textarea"
@@ -62,7 +62,8 @@
         fullscreenLoading: false,
         userId:'',
         societyPlace:'',
-        applyCom:''
+        applyCom:'',
+        briefIntroduction:''
       }
     },
     methods: {
@@ -78,12 +79,15 @@
         var typeId = this.sortSociety;
         var place = this.societyPlace;
         var applyComments = this.applyCom;
+        var briefIntroduction = this.briefIntroduction;
         if(typeId==''){
           this.$message.error('请选择社团类型！');
         }else if(name==""){
           this.$message.error('请输入社团名称！');
         }else if(place==""){
           this.$message.error('请输入社团专用场地！');
+        }else if(briefIntroduction==""){
+          this.$message.error('请输入社团简介！');
         }else if(applyComments==""){
           this.$message.error('请输入申请社团理由！');
         }else {
@@ -95,6 +99,7 @@
         var typeId = this.sortSociety;
         var place = this.societyPlace;
         var applyComments = this.applyCom;
+        var briefIntroduction = this.briefIntroduction;
         var url = this.localhost+'associationMg/association/saveOrUpdate';
         var json ={
           userId:this.userId,
@@ -102,6 +107,7 @@
           typeId:typeId,
           place:place,
           applyComments:applyComments,
+          briefIntroduction:briefIntroduction,
         };
         const loading = this.$loading({
           lock: true,

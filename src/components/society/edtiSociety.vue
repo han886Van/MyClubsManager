@@ -66,7 +66,7 @@
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
           </p>
-          <div><el-button type="primary" @click="edtiSociety()" v-loading.fullscreen.lock="fullscreenLoading">发送修改</el-button></div>
+          <div><el-button type="primary" @click="toEdti()" v-loading.fullscreen.lock="fullscreenLoading">发送修改</el-button></div>
         </div>
       </div>
     </div>
@@ -137,6 +137,23 @@
         this.dialogVisible = true;
       },
       /* 编辑社团*/
+      toEdti(){
+        var name = this.detailAssociation.name;
+        var typeId = this.detailAssociation.type_id;
+        var place = this.detailAssociation.place;
+        var briefIntroduction = this.detailAssociation.check_comments;
+        if(!typeId){
+          this.$message.error('请选择社团类型！');
+        }else if(!name){
+          this.$message.error('请输入社团名称！');
+        }else if(!place){
+          this.$message.error('请输入社团专用场地！');
+        }else if(!briefIntroduction){
+          this.$message.error('请输入社团简介！');
+        }else {
+          this.edtiSociety()
+        }
+      },
       edtiSociety() {
         const loading = this.$loading({
           lock: true,
@@ -154,6 +171,7 @@
         var json ={
             associationId:this.associationId,
             userId:userId,
+            name: this.detailAssociation.name,
             typeId:this.detailAssociation.type_id,
             briefIntroduction:this.detailAssociation.check_comments,
             place:this.detailAssociation.place,
