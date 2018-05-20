@@ -110,7 +110,7 @@
         this.$router.back(-1)
       },
       toRouter(myRouter,associationId){
-        this.$router.push({path: myRouter, query: {'associationId': associationId}})
+        this.$router.replace({path: myRouter, query: {'associationId': associationId}})
       },
       /*头像*/
       handleAvatarSuccess(res, file) {
@@ -136,7 +136,7 @@
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
-      /*创建请求*/
+      /*创建 编辑社团*/
       edtiSociety() {
         const loading = this.$loading({
           lock: true,
@@ -144,13 +144,6 @@
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        /*ssociationId(社团id)、
-          name(社团名称)、
-          briefIntroduction(社团简介)、
-          place(社团专用场地)、
-          typeId(社团所属类别)、
-          userId(更换社长userId)、
-          applyComments(申请理由)*/
         var url = this.localhost+'associationMg/association/saveOrUpdate';
         var userId ='';
         if(this.$route.query.userName){
@@ -164,7 +157,6 @@
             typeId:this.detailAssociation.type_id,
             briefIntroduction:this.detailAssociation.check_comments,
             place:this.detailAssociation.place,
-            applyComments:this.detailAssociation.place,
         };
         this.$http.post(url,json).then(
           (success) => {
@@ -223,7 +215,7 @@
 //            this.goBack()
         });
 
-      }
+      },
     },
 
     mounted(){

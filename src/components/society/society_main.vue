@@ -116,8 +116,8 @@
             </div>
             <!--申请记录-->
             <div v-show="showAll==4">
-              <span  @click="cancelOperating(1,index)" v-show="item.user_state_num==0" class="red_color">取消加入</span>
-              <span @click="cancelOperating(2,index)" v-show="item.user_state_num==3" class="blue">取消退出</span>
+              <span  @click="cancelSocity(item.association_id)" v-show="item.user_state_num==0" class="red_color">取消加入</span>
+              <span @click="cancelSocity(item.association_id,1)" v-show="item.user_state_num==3" class="blue">取消退出</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无社团</li>
@@ -538,9 +538,8 @@
             this.$message.error('错误，申请失败');
           });
       },
-      /*解散社团*/
+      /*解散社团 state(1为同意社团创建、拒绝社团创建或解散社团不传state、3为申请解散社团)*/
       dissolution(associationId,state){
-         /*state(1为同意社团创建、拒绝社团创建或解散社团不传state、3为申请解散社团)*/
         var url = this.localhost + 'associationMg/association/modifyAssociationStatus';
         this.$prompt('请填写解散社团理由', '提示', {
           confirmButtonText: '确定',
@@ -589,28 +588,50 @@
           });
         });
       },
-      /*取消操作*/
-      /*operating 0 取消加入 1取消退出*/
-      cancelOperating(operating, index){
-        console.log(operating, index);
-        this.$confirm('是否取消操作?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '请求发送成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '请求发送失败'
-          });
-        });
-      },
       toRouter(myRouter,associationId){
         this.$router.push({path: myRouter, query: {'associationId': associationId}})
+      },
+      /*取消申请*/
+      cancelSocity(associationId,userState){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+          var userId = this.userId;
+          var url = this.localhost+'associationMg/associationAndUser/modifyApplyAssociationStatu';
+          var json={
+            userI:userId,
+            associationId:associationId,
+          };
+          if(userState){
+            json.userState=userState
+          };
+          /*用户取消申请加入社团、取消申请退出社团、同意申请加入社团、拒绝申请加入社团、同意申请退出社团接口
+           http://localhost:8080/associationMg/associationAndUser/modifyApplyAssociationStatus
+           接收数据：
+           id(社团及用户关系id)、
+           userState(取消申请加入社团时不传userState、取消申请退出社团时为1、同意申请加入社团为1、
+           拒绝申请加入社团为2、同意申请退出社团不传userState)*/
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
       },
     },
 

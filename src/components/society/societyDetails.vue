@@ -162,7 +162,7 @@
               console.log(this.detailAssociation);
             } else {
               this.$message.error('错误，社团详情请求数据失败');
-//              this.goBack()
+              this.goBack()
           }
             setTimeout(() => {
               loading.close();
@@ -172,7 +172,7 @@
               loading.close();
             }, 500);
             this.$message.error('错误，社团详情请求数据失败');
-//            this.goBack()
+            this.goBack()
           });
 
       }

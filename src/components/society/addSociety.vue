@@ -103,7 +103,6 @@
           place:place,
           applyComments:applyComments,
         };
-        console.log(json);
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
