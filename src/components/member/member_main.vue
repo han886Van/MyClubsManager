@@ -44,8 +44,8 @@
           <el-input v-model="grade" placeholder="请输入内容" clearable></el-input>
         </div>
         <div class="searchBtn">
-          <el-button @click="clearSearchItem()" type="info" plain>清空搜索</el-button>
           <el-button @click="searchItem()" type="primary" >搜索</el-button>
+          <el-button @click="clearSearchItem()" type="info" plain>清空搜索</el-button>
         </div>
       </div>
       <div>
@@ -178,7 +178,7 @@
       goBack(){
         this.$router.back(-1)
       },
-      getList(val, url, name, studentName, grade,studentNum){
+      getList(val, url, studentName, grade,studentNum){
         this.lAssociationList=[];
         this.associationList=[];
         const loading = this.$loading({
@@ -188,14 +188,12 @@
           background: 'rgba(0, 0, 0, 0.7)'
         });
         var json = {
+          userId:this.userId,
           start: val,
           associationId: this.associationId,
         };
         if ( this.userType) {
           json.userType = this.userType;
-        }
-        if (name) {
-          json.name = name;
         }
         if (studentName) {
           json.studentName = studentName;
@@ -273,9 +271,14 @@
         this. getList(1, url)
       },
       searchItem(){
-/*studentName(学生名字 可模糊查询)、
- studentNum(学生学号 可模糊查询)、
- grade(年级)*/
+       var studentName = this.studentName;
+       var studentNum = this.studentNum;
+       var grade = this.grade;
+       if(!studentName && !studentNum && !grade){
+         this.$message.error('错误，请输入搜索内容');
+       }else {
+         this.getList(1, this.url, studentName, grade,studentNum)
+       }
       },
       toRouter(myRouter, memberId){
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
@@ -296,6 +299,9 @@
             message: '已取消删除'
           });
         });
+      },
+      delPost(){
+
       },
       changeMember(myRouter,associationId){
         this.$router.replace({path: myRouter, query: {'associationId': associationId}})

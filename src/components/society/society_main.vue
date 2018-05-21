@@ -684,18 +684,6 @@
        申请解散社团*/
       dissolution(associationId,state){
         var url = this.localhost + 'associationMg/association/modifyAssociationStatus';
-       /* this.$prompt('请填写解散社团理由', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /\S/,
-          inputErrorMessage: '*理由不能为空',
-        }).then(({ value }) => {
-        }).catch(() => {
-        this.$message({
-        type: 'info',
-        message: '取消输入'
-        });
-        });*/
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -717,6 +705,7 @@
                 message: '请求发送成功！',
                 type: 'success'
               });
+              this.createFunc()
             }else {
               this.$message.error('错误，申请失败');
             }
@@ -729,40 +718,39 @@
             }, 500);
             this.$message.error('错误，申请失败');
           });
-
-      },
-      toRouter(myRouter,associationId){
-        this.$router.push({path: myRouter, query: {'associationId': associationId}})
       },
       /**
-       *
+       *取消加入退出社团
        * @param associationId
-       * @param userState
+       * @param userState 1 取消申请退出社团  取消申请加入社团不传
        */
       cancelSocity(associationId,userState){
+        var url = this.localhost + 'associationMg/association/modifyAssociationStatus';
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-          var userId = this.userId;
-          var url = this.localhost+'associationMg/associationAndUser/modifyApplyAssociationStatus';
-          var json={
-            userI:userId,
-            associationId:associationId,
-          };
-          if(userState){
-            json.userState=userState
-          };
+        var json ={
+          userId:this.userId,
+          associationId:associationId,
+        };
+        if(userState){
+          json.userState =userState
+        }
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-
+              this.$message({
+                message: '请求发送成功！',
+                type: 'success'
+              });
+              this.createFunc()
             }else {
-              this.$message.error('错误，请求数据失败');
+              this.$message.error('错误，申请失败');
             }
             setTimeout(() => {
               loading.close();
@@ -771,8 +759,11 @@
             setTimeout(() => {
               loading.close();
             }, 500);
-            this.$message.error('错误，请求数据失败');
+            this.$message.error('错误，申请失败');
           });
+      },
+      toRouter(myRouter,associationId){
+        this.$router.push({path: myRouter, query: {'associationId': associationId}})
       },
     },
 

@@ -197,7 +197,8 @@
         associationId:'',
         assoMaterielList:[],
         showNo:false,
-        totalNum:1
+        totalNum:1,
+        isPresident:''
 
       }
     },
@@ -231,6 +232,7 @@
           var response = success.data;
           console.log(response);
           if(response.msg==666){
+              this.isPresident = response.isPresident;
             this.totalNum =parseInt(response.listCount);
             if(response.assoMaterielList.length==0){
               this.showNo=true
