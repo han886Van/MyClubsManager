@@ -97,7 +97,7 @@
             <!--申请记录-->
             <div v-show="showAll==4">
               <span  v-show="item.user_state_num==0"  class="red_color" @click="dissolution(item.association_id)">取消创建</span>
-              <span @click="cancelOperating(2,index)" v-show="item.user_state_num==3" class="blue">取消解散</span>
+              <span @click="dissolution(item.association_id,1)" v-show="item.user_state_num==3" class="blue">取消解散</span>
             </div>
           </li>
           <!--社员-->
