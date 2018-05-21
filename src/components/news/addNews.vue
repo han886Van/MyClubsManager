@@ -45,7 +45,8 @@
           </p>
 
           <div class="btn">
-            <el-button type="primary" @click="addNews()" v-loading.fullscreen.lock="fullscreenLoading">发送新闻</el-button>
+            <el-button type="primary" @click="addNews()" >发送新闻</el-button>
+            <el-button @click="addNews()" >存为草稿</el-button>
           </div>
         </div>
       </div>

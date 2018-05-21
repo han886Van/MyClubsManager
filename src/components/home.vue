@@ -88,7 +88,7 @@
               localStorage.setItem("account", response.loginUser.account);
               if(this.userRole==2){
                   /*老师分类*/
-                localStorage.setItem("userType", response.loginUser.user_type);
+                localStorage.setItem("TypeId", response.loginUser.type_id);
               }
               this.USER_ROULE(localStorage.getItem('userRole'));
               this.$router.push({path: '/manage'});

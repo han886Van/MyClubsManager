@@ -75,6 +75,7 @@
               localStorage.removeItem('userRole');
               localStorage.removeItem('userId');
               localStorage.removeItem('account');
+              localStorage.removeItem('TypeId');
               this.toRouter('/home');
               this.$message({
                 type: 'success',

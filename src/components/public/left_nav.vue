@@ -45,9 +45,9 @@
         <el-menu-item index="society?myRouter=2" class="li_son">
           <span slot="title" class="i_word">社团申请</span>
         </el-menu-item>
-        <el-menu-item index="society?myRouter=4" class="li_son">
+       <!-- <el-menu-item index="society?myRouter=4" class="li_son">
           <span slot="title" class="i_word">申请记录</span>
-        </el-menu-item>
+        </el-menu-item>-->
       </el-submenu>
       <!--管理员-->
       <el-menu-item v-show="myRole==3" index="society">
