@@ -187,7 +187,7 @@
         formData.append('state', '1');
         formData.append('attachmentType', 'HEADPIC');
 //        formData.append('attachmentId', attachmentId);
-        formData.append('userId', this.userId);
+        formData.append('userId', localStorage.getItem('userId'));
         this.$http.post(url,formData).then(
           (success) => {
             setTimeout(() => {

@@ -167,10 +167,10 @@
         if(!state && !id&& !title){
           this.$message.error('错误，请输入或者选择搜索内容');
         }else {
-          if(state==4){
+          if(state==4 && !id&& !title){
             this.getList(1)
-          }else {
-            this.getList(1,id,state,title)
+          }else if(state==4) {
+            this.getList(1,id,'',title)
           }
         }
 
