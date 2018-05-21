@@ -62,7 +62,6 @@
           <span>申请人</span>
           <span>开始时间</span>
           <span>结束时间</span>
-          <span>地点</span>
           <span>审核老师</span>
           <span>状态</span>
         </div>
@@ -85,7 +84,6 @@
             <span >{{item.user_name}}</span>
             <span >{{item.begin_day}}</span>
             <span >{{item.end_day}}</span>
-            <span >{{item.adress}}</span>
             <span>{{item.teacher}}</span>
             <div>
               <span class="delBtn"     v-show="item.status==1">举办中</span>

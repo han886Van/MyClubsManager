@@ -36,7 +36,8 @@
           passWord: '',
           radio: 3,
         },
-        userRole: ''
+        userRole: '',
+        typeId:''
       }
     },
     methods: {
@@ -86,10 +87,8 @@
               localStorage.setItem("userRole", this.userRole);
               localStorage.setItem("userId", response.loginUser.user_id);
               localStorage.setItem("account", response.loginUser.account);
-              if(this.userRole==2){
-                  /*老师分类*/
-                localStorage.setItem("TypeId", response.loginUser.type_id);
-              }
+              /*老师分类*/
+              localStorage.setItem("typeId", response.loginUser.type_id);
               this.USER_ROULE(localStorage.getItem('userRole'));
               this.$router.push({path: '/manage'});
             }
