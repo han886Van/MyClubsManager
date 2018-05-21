@@ -160,7 +160,6 @@
         this.$router.back(-1)
       },
       searchItem(){
-        console.log(1);
         var state = this.actiStatus;
         var id = this.idInput;
         var title = this.titleName;
@@ -171,12 +170,14 @@
             this.getList(1)
           }else if(state==4) {
             this.getList(1,id,'',title)
+          }else {
+            this.getList(1,id,state,title)
           }
         }
 
       },
       getList(val,id,state,title){
-        this.associationList=[];
+        this.assoEventList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -237,7 +238,10 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        var state = this.actiStatus;
+        var id = this.idInput;
+        var title = this.titleName;
+        this.getList(val,id,state,title)
       },
     },
     created() {

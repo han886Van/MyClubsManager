@@ -125,8 +125,8 @@
           title:this.title,
           content:this.content,
           apply_comments:this.applyComments,
-          begin_time:this.value4[0],
-          end_time:this.value4[1],
+          beginTime:this.value4[0],
+          endTime:this.value4[1],
           state:0,
         };
          this.$http.post(url, json).then(

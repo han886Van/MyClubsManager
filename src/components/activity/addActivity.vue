@@ -8,7 +8,7 @@
           <span class="blue">申请活动</span>
         </div>
         <div>
-          <span class="editing" @click="toRouter('/activity')">取消</span>
+          <span class="editing" @click="goBack()">取消</span>
         </div>
       </div>
       <div class="info">
@@ -125,8 +125,8 @@
           title:this.title,
           content:this.content,
           apply_comments:this.applyComments,
-          begin_time:this.value4[0],
-          end_time:this.value4[1],
+          beginTime:this.value4[0],
+          endTime:this.value4[1],
           state:0,
         };
         this.$http.post(url, json).then(
@@ -152,9 +152,6 @@
             this.$message.error('错误，请求数据失败');
           });
       },
-      disabledDate(date){
-        console.log(date);
-      }
     },
 
     mounted(){

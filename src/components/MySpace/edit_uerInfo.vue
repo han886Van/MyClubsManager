@@ -166,11 +166,6 @@
 
       },
       postFile(e){
-          /*attachmentType : "HEADPIC",  //上传文件类型，头像为HEADPIC,
-           attachmentId : "123214",    //文件附属id，如上传头像则附属id为userId，如上传评论图片，则附属id为评论id
-           associationId : "234234",   //社团id，如上传文件是所属社团的文件，则传社团id；如上传个人头像等与社团无关的个人行为，则无需传值。
-           userId : "423423",          //上传文件所属人的userId,
-           state : "1"                 //上传文件所属状态，需要审核的文件为0,无需审核的为1.*/
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         var file = files[0];
@@ -184,11 +179,15 @@
         var url =this.localhost+'associationMg/attachment/uploadFile';
         var formData = new FormData();
         formData.append('file', file);
-        formData.append('state', '1');
-        formData.append('attachmentType', 'HEADPIC');
+       /* formData.append('state', '1');
+        formData.append('attachmentType', 'HEADPIC');*/
+        var json={
+          state:1 ,
+          attachmentType:'HEADPIC',
+        };
 //        formData.append('attachmentId', attachmentId);
         formData.append('userId', localStorage.getItem('userId'));
-        this.$http.post(url,formData).then(
+        this.$http.post(url,formData,json).then(
           (success) => {
             setTimeout(() => {
               loading.close();
