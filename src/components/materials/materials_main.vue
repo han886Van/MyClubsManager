@@ -36,20 +36,20 @@
         <div>
           <span>申请状态：</span>
           <el-select v-model="materialsStatus" placeholder="申请状态">
-            <el-option label="使用中" value="1"></el-option>
-            <el-option label="已归还" value="2"></el-option>
-            <el-option label="拒绝申请" value="2"></el-option>
-            <el-option label="同意申请" value="4"></el-option>
+            <el-option label="待审核" value="0"></el-option>
+            <el-option label="通过审核" value="1"></el-option>
+            <el-option label="未通过审核" value="2"></el-option>
+            <el-option label="全部状态" value="4"></el-option>
           </el-select>
         </div>
         <div>
           <span>物资编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
         </div>
-        <div>
+      <!--  <div>
           <span>物资名称：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
+        </div>-->
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
           <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1||isPresident==1">申请物资</el-button>
@@ -76,8 +76,8 @@
             <span>{{item.end_day}}</span>
             <span>{{item.association_name}}</span>
             <span>{{item.user_name}}</span>
-            <span v-show="item.check_person">{{item.check_person}}</span>
-            <span v-show="!item.check_person">暂无</span>
+            <span v-show="item.check_person!='0'">{{item.check_person}}</span>
+            <span v-show="item.check_person=='0'">暂无</span>
             <div>
               <span class="delBtn"  v-show="item.state_num==0">待审核</span>
               <span class="delBtn"  v-show="item.state_num==1">通过审核</span>
@@ -214,8 +214,8 @@
 
         }
       },
-      getList(val){
-        this.associationList=[];
+      getList(val,id,state){
+        this.assoMaterielList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -227,6 +227,12 @@
           start:val,
           userId:this.userId
         };
+        if(id){
+          json.id = id
+        }
+        if(state){
+          json.state = state
+        }
         this.$http.post(this.url,json).then(
           (success) => {
           var response = success.data;
@@ -270,11 +276,21 @@
         console.log(`当前页: ${val}`);
       },
       searchItem(){
-
+        var state = this.materialsStatus;
+        var id = this.idInput;
+        if(!state && !id){
+          this.$message.error('错误，请输入或者选择搜索内容');
+        }else {
+            if(state==4){
+              this.getList(1)
+            }else {
+              this.getList(1,id,state)
+            }
+        }
 
       },
       toRouter(myRouter, materiId,associationId,id){
-        this.$router.replace({path: myRouter, query: {'materiId': materiId,'associationId':associationId,'id':id}})
+        this.$router.push({path: myRouter, query: {'materiId': materiId,'associationId':associationId,'id':id}})
       },
     },
      mounted(){

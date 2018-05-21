@@ -15,35 +15,42 @@
         <div class="left_box">
           <p>
             <span>申请社团：</span>
-            <span>IT协会</span>
+            <span>{{detailMateriel.association_name}}</span>
           </p>
           <p>
             <span>社长账号：</span>
-            <span>12354648525</span>
+            <span>{{detailMateriel.association_id}}</span>
           </p>
           <p>
-            <span>申请教师：</span>
-            <span>孟山支</span>
+            <span>审核教师：</span>
+            <span v-show="detailMateriel.check_person!='0'">{{detailMateriel.check_person}}</span>
+            <span v-show="detailMateriel.check_person=='0'">暂无</span>
           </p>
           <p>
             <span>申请状态：</span>
-            <span>使用中</span>
+            <span class="delBtn"  v-show="detailMateriel.state_num==0">待审核</span>
+            <span class="delBtn"  v-show="detailMateriel.state_num==1">通过审核</span>
+            <span class="delBtn"  v-show="detailMateriel.state_num==2">未通过审核</span>
           </p>
         </div>
         <div class="right_box">
           <p>
             <span>申请时间：</span>
-            <span>2018-05-12</span>
+            <span>{{detailMateriel.begin_day}}</span>
             <span>至</span>
-            <span>2018-05-22</span>
+            <span>{{detailMateriel.end_day}}</span>
           </p>
           <p>
             <span>申请标题：</span>
-            <span>IT协会招新活动物资</span>
+            <span>{{detailMateriel.title}}</span>
           </p>
           <p>
             <span>申请内容：</span>
-            <span>我要的撒苦尽甘来卡萨丁华工科技安徽伟固化的空间那块地方规划局领款人开通为人体后</span>
+            <span>{{detailMateriel.apply_comments}}</span>
+          </p>
+          <p>
+            <span>申请理由：</span>
+            <span>{{detailMateriel.content}}</span>
           </p>
         </div>
       </div>
@@ -58,7 +65,8 @@
     data () {
       return {
         Numbering:'',
-        url:''
+        url:'',
+        detailMateriel:''
       }
     },
     methods: {
@@ -82,7 +90,7 @@
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-
+                this.detailMateriel = response.detailMateriel
 
             }else {
               this.$message.error('错误，请求数据失败');
@@ -140,6 +148,7 @@
       }
     }
     .info {
+      padding-left: 140px;
       display: flex;
       justify-content: flex-start;
       flex-wrap: wrap;

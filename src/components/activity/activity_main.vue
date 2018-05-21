@@ -31,26 +31,25 @@
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
         </div>-->
         <div>
+          <span>申请状态：</span>
+          <el-select v-model="actiStatus" placeholder="申请状态">
+            <el-option label="待审核" value="0"></el-option>
+            <el-option label="通过审核" value="1"></el-option>
+            <el-option label="未通过审核" value="2"></el-option>
+            <el-option label="全部状态" value="4"></el-option>
+          </el-select>
+        </div>
+        <div>
           <span>活动编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>活动名称：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-
-        <div>
-          <span>申请状态：</span>
-          <el-select v-model="actiStatus" placeholder="申请状态">
-            <el-option label="举办中" value="1"></el-option>
-            <el-option label="已结束" value="2"></el-option>
-            <el-option label="拒绝申请" value="2"></el-option>
-            <el-option label="同意申请" value="4"></el-option>
-          </el-select>
+          <el-input v-model="titleName" placeholder="请输入内容" clearable></el-input>
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addActivity',0,associationId)" type="primary"  v-show="userRole==1">申请活动</el-button>
+          <el-button @click="toRouter('/addActivity',0,associationId)" type="primary"  v-show="userRole==1&&isPresident==1">申请活动</el-button>
         </div>
       </div>
       <div>
@@ -67,16 +66,27 @@
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in assoEventList"  @click="toRouter('/detaileActivity',item.id)">
-           <!-- association_id:1
-            association_name:"校篮球队"
-            content:"计科院各班级比赛，决出名次并可领取相应奖励"
-            id:3
-            state:"1"
-            state_name:"同意申请"
-            state_num:"1"
-            title:"计科篮球赛活动申请111"
-            user_id:4
-            user_name:"张三"-->
+           <!--apply_comments:"123123"
+                association_id:1
+                association_name:"校篮球队"
+                begin_day:"2018-05-15"
+                begin_time:1526363414000
+                check_person:"季磊"
+                check_person_id:7
+                content:"计科院各班级比赛，决出名次并可领取相应奖励"
+                create_time:1526889643000
+                end_day:"2018-05-15"
+                end_time:1526363420000
+                id:2
+                role_name:"社长"
+                role_name_num:"1"
+                state:"1"
+                state_name:"同意申请"
+                state_num:"1"
+                title:"计科篮球赛活动申请1"
+                user_id:4
+                user_name:"张三
+                -->
             <span>{{index+1}}</span>
             <span >{{item.id}}</span>
             <span >{{item.title}}</span>
@@ -84,12 +94,12 @@
             <span >{{item.user_name}}</span>
             <span >{{item.begin_day}}</span>
             <span >{{item.end_day}}</span>
-            <span>{{item.teacher}}</span>
+            <span v-show="item.check_person!='0'">{{item.check_person}}</span>
+            <span v-show="item.check_person=='0'">暂无</span>
             <div>
-              <span class="delBtn"     v-show="item.status==1">举办中</span>
-              <span class="editBtn"    v-show="item.status==2">已结束</span>
-              <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
-              <span class="agreetBtn"  v-show="item.status==4">同意申请</span>
+              <span class="delBtn"  v-show="item.state_num==0">待审核</span>
+              <span class="delBtn"  v-show="item.state_num==1">通过审核</span>
+              <span class="delBtn"  v-show="item.state_num==2">未通过审核</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无活动</li>
@@ -130,6 +140,8 @@
         url:'',
         assoEventList:[],
         showNo:false,
+        isPresident:'',
+        titleName:'',
       }
     },
     methods: {
@@ -148,10 +160,22 @@
         this.$router.back(-1)
       },
       searchItem(){
-
+        console.log(1);
+        var state = this.actiStatus;
+        var id = this.idInput;
+        var title = this.titleName;
+        if(!state && !id&& !title){
+          this.$message.error('错误，请输入或者选择搜索内容');
+        }else {
+          if(state==4){
+            this.getList(1)
+          }else {
+            this.getList(1,id,state,title)
+          }
+        }
 
       },
-      getList(val){
+      getList(val,id,state,title){
         this.associationList=[];
         const loading = this.$loading({
           lock: true,
@@ -162,8 +186,17 @@
         var json ={
           associationId:this.associationId,
           start:val,
-          userId:this.userId
+          userId:this.userId,
         };
+        if(id){
+          json.id =id
+        }
+        if(state){
+          json.state =state
+        }
+        if(title){
+          json.title =title
+        }
         this.$http.post(this.url,json).then(
           (success) => {
           var response = success.data;
@@ -173,10 +206,11 @@
            if(response.assoEventList.length==0){
               this.showNo=true
             }else {
-              this.showNo=false
+              this.showNo=false;
              for(var i =0; i<response.assoEventList.length;i++){
                if(this.userRole==1){
                  this.assoEventList.push(response.assoEventList[i]);
+                 this.isPresident = response.isPresident
                }else{
                  this.assoEventList.push(response.assoEventList[i]);
                }
