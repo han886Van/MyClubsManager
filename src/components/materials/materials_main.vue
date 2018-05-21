@@ -72,13 +72,16 @@
             <span >{{index+1}}</span>
             <span>{{item.id}}</span>
             <span>{{item.content}}</span>
-            <span>{{item.create_time}}</span>
-            <span>{{item.create_time}}</span>
+            <span>{{item.begin_day}}</span>
+            <span>{{item.end_day}}</span>
             <span>{{item.association_name}}</span>
             <span>{{item.user_name}}</span>
-            <span>{{item.applicant}}</span>
+            <span v-show="item.applicant">{{item.applicant}}</span>
+            <span v-show="!item.applicant">暂无</span>
             <div>
               <span class="delBtn"  v-show="item.state_num==0">待审核</span>
+              <span class="delBtn"  v-show="item.state_num==1">通过审核</span>
+              <span class="delBtn"  v-show="item.state_num==2">未通过审核</span>
               <!--<span class="editBtn" v-show="item.status==2">已归还</span>
               <span class="refuseBtn"  v-show="item.status==3">拒绝申请</span>
               <span class="agreetBtn"  v-show="item.status==4">同意申请</span>-->
@@ -220,7 +223,8 @@
         });
         var json ={
           associationId:this.associationId,
-          start:val
+          start:val,
+          userId:this.userId
         };
         this.$http.post(this.url,json).then(
           (success) => {

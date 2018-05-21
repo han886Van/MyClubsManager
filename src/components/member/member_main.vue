@@ -144,8 +144,6 @@
     data () {
       return {
         associationId: '',
-        nameInput: '',
-        studentNum: '',
         currentPage: 1,
         showNo: false,
         userId: '',
@@ -158,7 +156,7 @@
         listCount: 1,
         studentName:'',
         grade:'',
-        idInput:'',
+        studentNum: '',
         userType:''
       }
     },
@@ -193,9 +191,6 @@
           start: val,
           associationId: this.associationId,
         };
-        if ( this.userId) {
-          json.userId = this.userId;
-        }
         if ( this.userType) {
           json.userType = this.userType;
         }
@@ -278,17 +273,9 @@
         this. getList(1, url)
       },
       searchItem(){
-        var name= this.nameInput;
-        var studentName= this.studentName;
-        var grade= this.grade;
-        var studentNum= this.studentNum;
-        if(name && studentName && grade && studentNum){
-          this.$message.error('错误，请输入或选择搜索条件');
-        }else {
-            var url = this.url;
-          this.getList(1, url,name,studentName,grade,studentNum)
-        }
-
+/*studentName(学生名字 可模糊查询)、
+ studentNum(学生学号 可模糊查询)、
+ grade(年级)*/
       },
       toRouter(myRouter, memberId){
         this.$router.push({path: myRouter, query: {'memberId': memberId}})

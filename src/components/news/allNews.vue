@@ -176,50 +176,6 @@
         console.log(`当前页: ${val}`);
       },
       searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
 
       },
       /*退出社团*/

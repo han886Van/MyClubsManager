@@ -1,7 +1,7 @@
 <template>
   <div class="news">
     <div class="bgc">
-      <div class="top" >
+      <div class="top">
         <div>
           <span>新闻管理</span>
           <span>	&gt;</span>
@@ -10,24 +10,24 @@
         <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
-      <!--  <div>
-          <span>社团分类：</span>
-          <el-select v-model="sortSociety" placeholder="社团分类">
-            <el-option label="专业学术类" value="1"></el-option>
-            <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
-            <el-option label="体育健身类" value="4"></el-option>
-            <el-option label="公益服务类" value="5"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>社团编号：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>-->
+        <!--  <div>
+            <span>社团分类：</span>
+            <el-select v-model="sortSociety" placeholder="社团分类">
+              <el-option label="专业学术类" value="1"></el-option>
+              <el-option label="科技创新类" value="2"></el-option>
+              <el-option label="艺术兴趣类" value="2"></el-option>
+              <el-option label="体育健身类" value="4"></el-option>
+              <el-option label="公益服务类" value="5"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>社团名字：</span>
+            <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          </div>
+          <div>
+            <span>社团编号：</span>
+            <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          </div>-->
         <div>
           <span>新闻编号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
@@ -80,7 +80,7 @@
           </li>
         </ul>
       </div>
-      <div  class="myPagination">
+      <div class="myPagination">
         <div>
           <el-pagination
             @size-change="handleSizeChange"
@@ -102,7 +102,7 @@
     components: {},
     data () {
       return {
-        sendStatus:"",
+        sendStatus: "",
         newsArr: [
           {
             Numbering: 1254688,
@@ -173,67 +173,71 @@
         idInput: '',
         nameInput: '',
         sortSociety: '',
-        currentPage:1,
-        associationList:[]
+        currentPage: 1,
+        associationList: []
       }
     },
     methods: {
       createFunc(){
         this.userRole = localStorage.getItem('userRole');
-        this.userId =localStorage.getItem('userId');
+        this.userId = localStorage.getItem('userId');
         this.associationId = this.$route.query.associationId;
-        if(this.userRole==1){
-          this.url=this.localhost+'associationMg/news/getAssociationNews';
-          this.getList(1)
-        }else if(this.userRole==2){
+        if (this.userRole == 1) {
+          this.url = this.localhost + 'associationMg/news/getAssociationNews';
+          this.getList(1, this.userId)
+        } else if (this.userRole == 2) {
 
         }
       },
       goBack(){
         this.$router.back(-1)
       },
-      getList(val){
-        this.associationList=[];
+      getList(val, userId){
+        this.associationList = [];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        var json ={
-          associationId:this.associationId,
-          start:val
+        var json = {
+          associationId: this.associationId,
+          start: val,
+          userId: userId
         };
-        this.$http.post(this.url,json).then(
+        this.$http.post(this.url, json).then(
           (success) => {
-          var response = success.data;
-          console.log(response);
-          if(response.msg==666){
-            this.totalNum =parseInt(response.listCount);
-            if(response.assoEventList.length==0){
-              this.showNo=true
-            }else {
-              this.showNo=false;
-              for(var i =0; i<response.assoEventList.length;i++){
-                if(this.userRole==1){
-                  this.assoEventList.push(response.assoEventList[i]);
-                }else{
-                  this.assoEventList.push(response.assoEventList[i]);
-                }
+            var response = success.data;
+           console.log(response);
+        if (response.msg == 666) {
+          this.totalNum = parseInt(response.listCount);
+          if (response.assoEventList.length == 0) {
+            this.showNo = true
+          } else {
+            this.showNo = false;
+            for (var i = 0; i < response.assoEventList.length; i++) {
+              if (this.userRole == 1) {
+                this.assoEventList.push(response.assoEventList[i]);
+              } else {
+                this.assoEventList.push(response.assoEventList[i]);
               }
             }
-          }else {
-            this.$message.error('错误，请求数据失败');
           }
-          setTimeout(() => {
-            loading.close();
-          }, 500);
-        }, (error) => {
-          setTimeout(() => {
-            loading.close();
-          }, 500);
+        } else {
           this.$message.error('错误，请求数据失败');
-        });
+        }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+      },
+        (error) => {
+          setTimeout(()=> {
+            loading.close();
+        },500);
+          this.$message.error('错误，请求数据失败');
+        }
+      )
+        ;
       },
       /*分页器*/
       handleSizeChange(val) {
@@ -302,15 +306,15 @@
     min-height: 600px;
     border-radius: 8px;
     padding: 10px 40px 20px 40px;
-    .top{
-      line-height:50px;
+    .top {
+      line-height: 50px;
       display: flex;
-      justify-content:space-between;
-      border-bottom :1px solid #ccc;
-      margin-bottom:20px;
-      .editing{
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+      .editing {
         color: #409eff;
-        cursor :pointer;
+        cursor: pointer;
       }
     }
     .bgc {

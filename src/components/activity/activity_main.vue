@@ -83,8 +83,8 @@
             <span >{{item.title}}</span>
             <span >{{item.association_name}}</span>
             <span >{{item.user_name}}</span>
-            <span >{{item.begin_time}}</span>
-            <span >{{item.end_time}}</span>
+            <span >{{item.begin_day}}</span>
+            <span >{{item.end_day}}</span>
             <span >{{item.adress}}</span>
             <span>{{item.teacher}}</span>
             <div>
@@ -121,49 +121,6 @@
     },
     data () {
       return {
-        activityArr:[
-            {actNum:'145662',
-              name:'招新活动',
-              societyName:'跆拳道协会',
-              starTime: '2018.5.12',
-              endTime: '2018.06.16',
-              teacher: '孟山支',
-              applicant: '陈小黄',
-              adress:'综合馆',
-              isMaterials:1,
-              status: 1},
-            {actNum:'145662',
-              name:'招新活动',
-              societyName:'跆拳道协会',
-              starTime: '2018.5.12',
-              endTime: '2018.06.16',
-              teacher: '孟山支',
-              applicant: '陈小黄',
-              adress:'综合馆',
-              isMaterials:2,
-              status: 2},
-            {actNum:'145662',
-              name:'招新活动',
-              societyName:'跆拳道协会',
-              starTime: '2018.5.12',
-              endTime: '2018.06.16',
-              teacher: '孟山支',
-              applicant: '陈小黄',
-              adress:'综合馆',
-              isMaterials:1,
-              status: 3},
-            {actNum:'145662',
-              name:'招新活动',
-              societyName:'跆拳道协会',
-              starTime: '2018.5.12',
-              endTime: '2018.06.16',
-              teacher: '孟山支',
-              applicant: '陈小黄',
-              adress:'综合馆',
-              isMaterials:1,
-              status: 4},
-
-          ],
         actiStatus:'',
         idInput: '',
         nameInput: '',
@@ -183,7 +140,7 @@
         this.userId =localStorage.getItem('userId');
         this.associationId = this.$route.query.associationId;
         if(this.userRole==1){
-          this.url=this.localhost+'/associationMg/event/getAssoEventList';
+          this.url=this.localhost+'associationMg/event/getAssoEventList';
           this.getList(1)
         }else if(this.userRole==2){
 
@@ -206,7 +163,8 @@
         });
         var json ={
           associationId:this.associationId,
-          start:val
+          start:val,
+          userId:this.userId
         };
         this.$http.post(this.url,json).then(
           (success) => {
