@@ -72,11 +72,17 @@
             <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==4">体育健身类</span>
             <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
             <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
-            <span v-show="item.user_type==1" @click="toRouter('/detailMember',item.user_id)">加入</span>
-            <span v-show="item.user_type==2" @click="toRouter('/detailMember',item.user_id)">退出</span>
-            <div>
-              <span class="blue">同意</span>
-              <span class="delBtn">拒绝</span>
+            <span v-show="item.user_state_num==0" @click="toRouter('/detailMember',item.user_id)">加入</span>
+            <span v-show="item.user_state_num==3" @click="toRouter('/detailMember',item.user_id)">退出</span>
+            <!--加入-->
+            <div v-show="item.user_state_num==0">
+              <span class="blue" @click="deilMember(item.id,1)">同意</span>
+              <span class="delBtn" @click="deilMember(item.id)">拒绝</span>
+            </div>
+            <!--退出-->
+            <div v-show="item.user_state_num==3">
+              <span class="blue"  @click="deilMember(item.id)">同意</span>
+              <span class="delBtn"  @click="deilMember(item.id,1)">拒绝</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无成员</li>
@@ -275,8 +281,8 @@
           this.getList(1, url, name, studentName, grade, studentNum)
         }
       },
-      toRouter(myRouter, societyId){
-        this.$router.push({path: myRouter, query: {'societyId': societyId}})
+      toRouter(myRouter, memberId){
+        this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
       clearSearchItem(){
         this.nameInput='';
@@ -286,6 +292,45 @@
         var url = this.url;
         this. getList(1, url)
       },
+      /**
+       * 同意申请加入社团、拒绝申请加入社团、同意申请退出社团、拒绝申请退出
+       * id(社团及用户关系id)
+       * 不传userState  拒绝申请加入社团     同意申请退出社团
+       *  userState 1 同意申请加入社团    拒绝申请退出社团为1
+       */
+      deilMember(id,userState){
+          var url = this.localhost +'associationMg/associationAndUser/modifyApplyAssociationStatus';
+          var json ={
+            id:id
+          }
+          if(userState){
+            json.userState=userState
+          }
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            if (response.msg == 666) {
+                this.createFunc()
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      }
     },
     mounted(){
 

@@ -179,15 +179,15 @@
         var url =this.localhost+'associationMg/attachment/uploadFile';
         var formData = new FormData();
         formData.append('file', file);
-       /* formData.append('state', '1');
-        formData.append('attachmentType', 'HEADPIC');*/
+        formData.append('state', '1');
+        formData.append('attachmentType', 'HEADPIC');
         var data={
           state:1 ,
           attachmentType:'HEADPIC',
         };
 //        formData.append('attachmentId', attachmentId);
         formData.append('userId', localStorage.getItem('userId'));
-        this.$http.post(url,formData,data).then(
+        this.$http.post(url,formData).then(
           (success) => {
             setTimeout(() => {
               loading.close();

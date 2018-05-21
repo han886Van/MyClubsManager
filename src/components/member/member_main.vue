@@ -76,25 +76,27 @@
             <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
             <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
             <div>
-              <span class="blue" @click="changeMember('/changeMain',item.association_id)">更换</span>
+              <span class="blue" v-show="isPresident==1" @click="changeMember('/changeMain',item.association_id)">更换</span>
+              <span class="blue" v-show="isPresident!=1">查看</span>
             </div>
           </li>
           <!--社员-->
           <li class="societyList" v-for="(item,index) in associationList">
-            <span @click="toRouter('/detailMember',item.memberId)">{{lAssociationList.length+index+1}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.student_num}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_name}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.major}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.name}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.type_id==1">专业学术类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.type_id==2">科技创新类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.type_id==3">艺术兴趣类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.type_id==4">体育健身类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.type_id==5">公益服务类</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.user_type_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{lAssociationList.length+index+1}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.student_num}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.major}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==1">专业学术类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==2">科技创新类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==3">艺术兴趣类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==4">体育健身类</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
             <div>
-              <span class="red_color" @click="delMember(index)">删除</span>
+              <span class="blue" v-show="isPresident!=1">查看</span>
+              <span class="red_color" v-show="isPresident==1" @click="delMember(item.id)">删除</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无成员</li>
@@ -157,7 +159,8 @@
         studentName:'',
         grade:'',
         studentNum: '',
-        userType:''
+        userType:'',
+        isPresident:''
       }
     },
     methods: {
@@ -220,6 +223,7 @@
               }
               for (var i = 0; i < response.assoUserList.length; i++) {
                   if(this.userRole == 1){
+                    this.isPresident =response.isPresident;
                     if (response.assoUserList[i].user_type == 1) {
                       /*社长*/
                       this.lAssociationList.push(response.assoUserList[i]);
@@ -283,16 +287,13 @@
       toRouter(myRouter, memberId){
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
-      delMember(index) {
+      delMember(id) {
         this.$confirm('是否删除该成员?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+            this.delPost(id);
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -300,8 +301,33 @@
           });
         });
       },
-      delPost(){
-
+      delPost(id){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          id:id
+        };
+          var url  = this.localhost +'associationMg/associationAndUser/modifyApplyAssociationStatu';
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            if (response.msg == 666) {
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
       },
       changeMember(myRouter,associationId){
         this.$router.replace({path: myRouter, query: {'associationId': associationId}})
