@@ -9,15 +9,19 @@
       </div>
       <div class="info">
         <div class="left_box">
-          <el-upload
+          <div class="avatar-uploader">
+            <img :src="imageUrl" class="avatar">
+            <input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="postFile">
+          </div>
+        <!--  <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:8080/associationMg/attachment/uploadFile"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+          </el-upload>-->
         </div>
         <div class="right_box">
           <div class="left_item">
@@ -114,6 +118,9 @@
       },
       beforeAvatarUpload(file) {
           this.file=file;
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        return isJPG && isLt2M;
         /*       /!* const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;*!/
         if (file.type != "image/png" || file.type != "image/jpeg" || file.type != "image/bmp" || file.type != "image/jpg") {

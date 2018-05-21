@@ -52,7 +52,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1">申请物资</el-button>
+          <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1||isPresident==1">申请物资</el-button>
         </div>
       </div>
       <div>
@@ -76,8 +76,8 @@
             <span>{{item.end_day}}</span>
             <span>{{item.association_name}}</span>
             <span>{{item.user_name}}</span>
-            <span v-show="item.applicant">{{item.applicant}}</span>
-            <span v-show="!item.applicant">暂无</span>
+            <span v-show="item.check_person">{{item.check_person}}</span>
+            <span v-show="!item.check_person">暂无</span>
             <div>
               <span class="delBtn"  v-show="item.state_num==0">待审核</span>
               <span class="delBtn"  v-show="item.state_num==1">通过审核</span>

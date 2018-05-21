@@ -215,3 +215,15 @@
 .changeMain .el-radio__input {
   width: 128px!important;
 }
+.avatar-uploader {
+  width: 140px;
+  height: 140px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader:hover {
+  border-color: #20a0ff;
+}
