@@ -71,7 +71,8 @@
         this.$http.post(url,json).then(
           (success) => {
           var response = success.data;
-           if(response.msg==666){
+         console.log(response);
+        if(response.msg==666){
              this.getUser=response.getUser;
            }else {
              this.$message.error('错误，请求数据失败');

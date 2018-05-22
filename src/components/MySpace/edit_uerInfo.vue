@@ -13,15 +13,6 @@
             <img :src="imageUrl" class="avatar">
             <input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="postFile">
           </div>
-        <!--  <el-upload
-            class="avatar-uploader"
-            action="http://localhost:8080/associationMg/attachment/uploadFile"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>-->
         </div>
         <div class="right_box">
           <div class="left_item">
@@ -194,6 +185,7 @@
             }, 500);
             var response = success.data;
             console.log(response);
+         this.imageUrl = response.headImg
           }, (error) => {
             setTimeout(() => {
               loading.close();
