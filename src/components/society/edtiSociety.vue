@@ -45,30 +45,30 @@
           <p class="headImg"><span class="title_span">社团头像：</span>
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="http://localhost:8080/associationMg/attachment/uploadFile"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
+              :on-success="handleAvatarSuccess">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-
           </p>
           <p><span class="title_span">社团图片：</span>
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="http://localhost:8080/associationMg/attachment/uploadFile"
               list-type="picture-card"
+              :limit="6"
               :on-preview="handlePictureCardPreview"
+              :on-success="handlSuccess"
               :on-remove="handleRemove">
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
           </p>
           <div><el-button type="primary" @click="toEdti()" v-loading.fullscreen.lock="fullscreenLoading">发送修改</el-button></div>
         </div>
       </div>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -94,7 +94,10 @@
         societyPlace:'',
         detailAssociation:{},
         changeUserId:'',
-        userName:''
+        userName:'',
+        headImg:'',
+        headImgArr:[],
+        images:''
       }
     },
     methods: {
@@ -112,32 +115,29 @@
       toRouter(myRouter,associationId){
         this.$router.replace({path: myRouter, query: {'associationId': associationId}})
       },
-      /*头像*/
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
+        this.headImg = file.response.headImg;
       },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-      /*照片墙*/
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+        }
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
+      handlSuccess(response, file, fileList){
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+        }
+      },
       /* 编辑社团*/
       toEdti(){
+        this.images = this.headImgArr.join(",");
         var name = this.detailAssociation.name;
         var typeId = this.detailAssociation.type_id;
         var place = this.detailAssociation.place;
@@ -176,6 +176,12 @@
             briefIntroduction:this.detailAssociation.check_comments,
             place:this.detailAssociation.place,
         };
+        if(this.headImg){
+          json.headImg= this.headImg
+        }
+        if(this.images){
+          json.images= this.images
+        }
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;

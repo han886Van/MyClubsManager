@@ -148,16 +148,26 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <!--apply_comments:"测试测试测试"
-              association_id:13
-              create_person_id:4
-              create_time:1526784764000
-              name:"测试创建社团"
-              place:"214"
-              state:"0"
+          <!--apply_comments:"熏陶文学氛围"
+              association_id:4
+              brief_introduction:"书中自有黄金屋"
+              check_comments:"有趣"
+              check_person_id:17
+              check_time:1526531528000
+              create_person_id:6
+              create_time:1526531378000
+              name:"文学社"
+              person_num:0
+              place:"一教206"
+              role_name:"未加入"
+              role_name_num:"0"
+              state:"1"
+              state_name:"同意创建"
               type_id:1
               type_name:"专业学术类"
-              user_name:"张三"-->
+              user_name:"黄宏兴"
+              user_state:"未加入"
+              user_state_num:"0"-->
           <li class="societyList" v-for="(item,index) in associationList">
             <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
@@ -354,7 +364,7 @@
             /*全部社团*/
             this.url=this.localhost+'associationMg/association/getAllAssociation';
             this. getTList(1,this.url);
-          }else {
+          }else if(this.showAll==2){
             this.url=this.localhost+'associationMg/association/getAssociationApply';
             this. getTList(1,this.url);
           }
@@ -792,10 +802,12 @@
           }
         }else if(this.userRole==2){
           if(this.showAll==1||this.showAll==3){
+            /*全部社团*/
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
+            this. getTList(1,this.url);
+          }else if(this.showAll==2){
             this.url=this.localhost+'associationMg/association/getAssociationApply';
             this. getTList(1,this.url);
-          }else {
-
           }
         }
 
