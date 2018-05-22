@@ -84,7 +84,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="listCount">
           </el-pagination>
         </div>
       </div>
@@ -181,14 +181,16 @@
         userRole:'',
         typeId:'',
         url:'',
-        showNo:false
+        showNo:false,
+        assoMaterielList:[],
+        listCount:1
       }
     },
     methods: {
       createFunc(){
         this.userRole = localStorage.getItem('userRole');
         if (this.userRole == 2) {
-          this.url = this.localhost + 'associationMg/materiel/getAssoMaterielList';
+          this.url = this.localhost + 'associationMg/materiel/teacherGetMateriel';
           this.typeId  =localStorage.getItem('typeId');
           this.getTList(1, this.url);
         }
@@ -201,7 +203,7 @@
         console.log(`当前页: ${val}`);
       },
       getTList(val,url,associationId,name){
-        this.associationList=[];
+        this.assoMaterielList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -211,7 +213,6 @@
         var typeId = this.typeId;
         var json ={
           typeId:typeId,
-          teacherCheck:1,
           start:val
         };
         if(associationId){
@@ -225,14 +226,14 @@
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-              this.totalNum =parseInt(response.total_num);
-              if(response.associationList.length==0){
+              this.listCount =parseInt(response.listCount);
+              if(response.assoMaterielList.length==0){
                 this.showNo=true
               }else {
                 this.showNo=false
               }
-              for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i]);
+              for(var i =0; i<response.assoMaterielList.length;i++){
+                this.assoMaterielList.push(response.assoMaterielList[i]);
               }
             }else {
               this.$message.error('错误，请求数据失败');
