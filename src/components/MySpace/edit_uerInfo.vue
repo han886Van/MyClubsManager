@@ -96,7 +96,8 @@
           </div>
         </div>
       </div>
-      <div class="bottom"><el-button type="primary" @click="toEdit()">确认修改</el-button></div>
+      <div class="bottom" v-show="userRole!=3"><el-button type="primary" @click="toEdit()">确认修改</el-button></div>
+      <div class="bottom" v-show="userRole==3"><el-button type="primary" @click="allEdit()">确认修改</el-button></div>
     </div>
   </div>
 </template>
@@ -212,6 +213,55 @@
                 this.$message.error('错误，请求数据失败');
               });
           }
+
+      },
+      allEdit(){
+        var userId = localStorage.getItem('userId');
+        var headImg = this.imageUrl;
+        var userName = this.getUser.user_name;
+        var sex =this.getUser.sex;
+        var birthday =this.getUser.birthday_time;
+        var phone = this.getUser.phone;
+        var email = this.getUser.email;
+        if(!userName){
+          this.$message.error('用户姓名不能为空！');
+        }else if(!userName) {
+          this.$message.error('用户姓名不能为空！');
+        }else if(!this.phoneRegex.test(this.getUser.phone)){
+          this.$message.error('错误，手机号码格式错误！');
+        }else if(!this.emailRegex.test(this.getUser.email)){
+          this.$message.error('错误，邮箱格式错误！');
+        }else {
+          var url = this.localhost +'associationMg/user/saveOrUpdateUser';
+          var json={
+            userId:userId,
+            headImg :this.imageUrl,
+            userName: this.getUser.user_name,
+            sex :this.getUser.sex,
+            birthday :this.getUser.birthday_time,
+            phone :this.getUser.phone,
+            email : this.getUser.email,
+          };
+          this.$http.post(url,json).then(
+            (success) => {
+            var response = success.data;
+          console.log(response);
+          if (response.msg==666){
+            this.$message({
+              message: '修改个人信息成功',
+              type: 'success'
+            });
+            this.goBack()
+          }else {
+
+            this.$message.error('编辑信息失败哦！');
+          }
+        }, (error) => {
+
+            this.$message.error('错误，请求数据失败');
+          });
+
+      }
 
       },
       postFile(e){
