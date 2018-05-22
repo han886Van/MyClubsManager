@@ -56,7 +56,7 @@
     components: {},
     data () {
       return {
-        imageUrl:require('../../assets/img/0.jpg'),
+        imageUrl:'',
         phoneRegex :/^[1][3,4,5,7,8][0-9]{9}$/,
         emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
         getUser:'',
@@ -282,5 +282,23 @@
           display: flex;
           justify-content:center;
         }
+    .avatar-uploader {
+      margin-right:10px;
+      width: 140px;
+      height: 140px;
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .avatar-uploader:hover {
+      border-color: #20a0ff;
+    }
+    .avatar-uploader img{
+      width: 100%;
+      height: 100%;
+    }
+
   }
 </style>
