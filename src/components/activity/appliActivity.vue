@@ -8,38 +8,12 @@
       </div>
       <div class="search_box">
         <div>
-          <span>社团分类：</span>
-          <el-select v-model="sortSociety" placeholder="社团分类">
-            <el-option label="专业学术类" value="1"></el-option>
-            <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
-            <el-option label="体育健身类" value="4"></el-option>
-            <el-option label="公益服务类" value="5"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>活动编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
           <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>活动名称：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
           <span>社团编号：</span>
           <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>活动时间：</span>
-          <el-date-picker
-            v-model="value1"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
@@ -55,27 +29,20 @@
           <span>申请人</span>
           <span>开始时间</span>
           <span>结束时间</span>
-          <span>地点</span>
-          <span>借用物资</span>
-          <span>申请教师</span>
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in activityArr"  >
+          <li class="societyList" v-for="(item,index) in assoEventList"  >
             <span @click="toRouter('/detaileActivity',item.actNum)">{{index+1}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.actNum}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.name}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.societyName}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.applicant}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.starTime}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.starTime}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.adress}}</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" v-show="item.isMaterials==1" >有</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)" v-show="item.isMaterials==2" >无</span>
-            <span @click="toRouter('/detaileActivity',item.actNum)">{{item.teacher}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.id}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.title}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.association_name}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.user_name}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.begin_day}}</span>
+            <span @click="toRouter('/detaileActivity',item.actNum)" >{{item.end_day}}</span>
             <div>
-              <span class="delBtn">同意</span>
-              <span class="refuseBtn" >拒绝</span>
+              <span class="delBtn" @click="deilAppli(item.id,1)">同意</span>
+              <span class="refuseBtn" @click="deilAppli(item.id)">拒绝</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无活动申请</li>
@@ -89,7 +56,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="listCount">
           </el-pagination>
         </div>
       </div>
@@ -158,18 +125,22 @@
         url:'',
         typeId:'',
         associationList:'',
-        showNo:false
+        listCount:1,
+        showNo:false,
+        assoEventList:[],
+        userId:''
       }
     },
     methods: {
       createFunc(){
         this.userRole = localStorage.getItem('userRole');
+        this.userId = localStorage.getItem('userId');
         this.url = this.localhost + 'associationMg/event/teacherGetEventList';
         this.typeId  =localStorage.getItem('typeId');
         this.getTList(1, this.url);
       },
       getTList(val,url,associationId,name){
-        this.associationList=[];
+        this.assoEventList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -179,28 +150,27 @@
         var typeId = this.typeId;
         var json ={
           typeId:typeId,
-          teacherCheck:1,
           start:val
         };
         if(associationId){
-          json.associationId=associationId
+          json.associationId =associationId
         }
         if(name){
-          json.name=name
+          json.name =name
         }
         this.$http.post(url,json).then(
           (success) => {
           var response = success.data;
           console.log(response);
           if(response.msg==666){
-            this.totalNum =parseInt(response.total_num);
-            if(response.associationList.length==0){
+            this.listCount =parseInt(response.listCount);
+            if(response.assoEventList.length==0){
               this.showNo=true
             }else {
               this.showNo=false
             }
-            for(var i =0; i<response.associationList.length;i++){
-              this.associationList.push(response.associationList[i]);
+            for(var i =0; i<response.assoEventList.length;i++){
+              this.assoEventList.push(response.assoEventList[i]);
             }
           }else {
             this.$message.error('错误，请求数据失败');
@@ -216,18 +186,69 @@
         });
       },
       searchItem(){
-
+          if(this.idInput==''&&this.nameInput==''){
+          this.$message({
+            type: 'error',
+            message: '请输入或选择搜索条件!'
+          });
+          this. getTList(1,this.url);
+        }else {
+          var associationId =this.idInput;
+          var name =this.nameInput;
+          this.getTList(1,this.url,associationId,name)
+        }
       },
       toRouter(myRouter,actNum){
         this.$router.push({path: myRouter, query: {'actNum': actNum}})
       },
       /*分页器*/
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        var associationId =this.idInput;
+        var name =this.nameInput;
+        this.getTList(val,this.url,associationId,name)
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
+      deilAppli(id,state){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url = this.localhost + 'associationMg/event/modifyEventStatus';
+        var json={
+          id:id,
+          userId:this.userId
+        }
+        if(state){
+          json.state=state
+        }
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.$message({
+              showClose: true,
+              message: '请求成功！',
+              type: 'success'
+            });
+            this.createFunc();
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      }
     },
     mounted(){
       this.userRole = localStorage.getItem('userRole');

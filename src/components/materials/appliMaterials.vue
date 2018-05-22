@@ -8,42 +8,17 @@
       </div>
       <div class="search_box">
         <div>
-          <span>社团分类：</span>
-          <el-select v-model="sortSociety" placeholder="社团分类">
-            <el-option label="专业学术类" value="1"></el-option>
-            <el-option label="科技创新类" value="2"></el-option>
-            <el-option label="艺术兴趣类" value="2"></el-option>
-            <el-option label="体育健身类" value="4"></el-option>
-            <el-option label="公益服务类" value="5"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>借用编号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
           <span>社团名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>物资名称：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>社团编号：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-        </div>
-        <div>
-          <span>借用时间：</span>
-          <el-date-picker
-            v-model="value1"
-            type="date"
-            placeholder="选择日期">
-          </el-date-picker>
+          <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <div class="searchBtn">
-          <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物质</el-button>
+          <el-button @click="searchItem()" type="primary" >搜索</el-button>
+          <el-button @click="clearSearch()">清空搜索</el-button>
+         <!-- <el-button @click="toRouter('/addMaterials')" type="primary" v-show="userRole==1">申请物质</el-button>-->
         </div>
       </div>
       <div>
@@ -55,22 +30,20 @@
           <span>归还时间</span>
           <span>申请社团</span>
           <span>申请人</span>
-          <span>申请教师</span>
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in materialsArr">
+          <li class="societyList" v-for="(item,index) in assoMaterielList">
             <span  @click="toRouter('/detailMaterials',item.Numbering)">{{index+1}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.Numbering}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.id}}</span>
             <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.content}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.starTime}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.starTime}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.society}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.teacher}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.applicant}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.begin_day}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.end_day}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.association_name}}</span>
+            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.user_name}}</span>
             <div>
-              <span class="delBtn">同意</span>
-              <span class="refuseBtn" >拒绝</span>
+              <span class="delBtn" @click="deilAppli(item.id,1)">同意</span>
+              <span class="refuseBtn" @click="deilAppli(item.id)">拒绝</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无申请</li>
@@ -98,97 +71,22 @@
     components: {},
     data () {
       return {
-        value1:'',
         idInput: '',
         nameInput: '',
-        sortSociety: '',
-        materialsStatus:'',
-        materialsArr: [
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 1,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 2,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 3,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 4,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 2,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-          {
-            Numbering: 1254688,
-            name: '帐篷',
-            num: '5',
-            starTime: '2018.5.12',
-            endTime: '2018.06.16',
-            teacher: '孟山支',
-            society: '跆拳道社团',
-            applicant: '陈小黄',
-            status: 1,
-            content:'5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷5个帐篷'
-          },
-        ],
         currentPage:1,
         userRole:'',
         typeId:'',
         url:'',
         showNo:false,
         assoMaterielList:[],
-        listCount:1
+        listCount:1,
+        userId:''
       }
     },
     methods: {
       createFunc(){
         this.userRole = localStorage.getItem('userRole');
+        this.userId = localStorage.getItem('userId');
         if (this.userRole == 2) {
           this.url = this.localhost + 'associationMg/materiel/teacherGetMateriel';
           this.typeId  =localStorage.getItem('typeId');
@@ -200,7 +98,9 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        var associationId =this.idInput;
+        var name =this.nameInput;
+        this.getTList(val,this.url,associationId,name)
       },
       getTList(val,url,associationId,name){
         this.assoMaterielList=[];
@@ -248,14 +148,67 @@
             this.$message.error('错误，请求数据失败');
           });
       },
+      clearSearch(){
+        this.idInput='';
+        this.nameInput='';
+        this.getTList(1,this.url,this.idInput,this.nameInput)
+      },
       searchItem(){
-
+        if(this.idInput==''&&this.nameInput==''){
+          this.$message({
+            type: 'error',
+            message: '请输入或选择搜索条件!'
+          });
+          this. getTList(1,this.url);
+        }else {
+          var associationId =this.idInput;
+          var name =this.nameInput;
+          this.getTList(1,this.url,associationId,name)
+        }
         },
-
       /*退出社团*/
       toRouter(myRouter, Numbering){
         this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
       },
+      deilAppli(id,state){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+          var url = this.localhost + 'associationMg/materiel/modifyMaterielStatus';
+          var json={
+            id:id,
+            userId:this.userId
+          }
+          if(state){
+            json.state=state
+          }
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+        console.log(response);
+        if(response.msg==666){
+          this.$message({
+            showClose: true,
+            message: '请求成功！',
+            type: 'success'
+          });
+          this.createFunc();
+        }else {
+          this.$message.error('错误，请求数据失败');
+        }
+        setTimeout(() => {
+          loading.close();
+      }, 500);
+      }, (error) => {
+          setTimeout(() => {
+            loading.close();
+        }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      }
     },
     mounted(){
       this.userRole = localStorage.getItem('userRole');

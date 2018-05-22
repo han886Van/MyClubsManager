@@ -195,7 +195,7 @@
         } else if (this.userRole == 2) {
           this.url = this.localhost + 'associationMg/associationAndUser/teacherGetUserList';
           this.typeId  =localStorage.getItem('typeId');
-          this.getTList(1, this.url,this.associationId);
+          this.getTList(1, this.url);
         }
       },
       goBack(){
@@ -204,6 +204,7 @@
       getList(val, url, studentName, grade,studentNum){
         this.lAssociationList=[];
         this.associationList=[];
+        this.assoUserList=[];
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -265,7 +266,7 @@
             this.$message.error('错误，请求数据失败');
           });
       },
-      getTList(val,url,associationId,name){
+      getTList(val,url,studentName,grade,studentNum){
         this.assoUserList=[];
         const loading = this.$loading({
           lock: true,
@@ -276,13 +277,17 @@
         var typeId = this.typeId;
         var json ={
           typeId:typeId,
+          associationId:this.associationId,
           start:val
         };
-        if(associationId){
-          json.associationId=associationId
+        if(studentName){
+          json.studentName=studentName
         }
-        if(name){
-          json.name=name
+        if(grade){
+          json.grade=grade
+        }
+        if(studentNum){
+          json.studentNum=studentNum
         }
         this.$http.post(url,json).then(
           (success) => {
@@ -338,7 +343,12 @@
         this.grade='';
         this.studentNum='';
         var url = this.url;
-        this. getList(1, url)
+        if(this.userRole == 1){
+          this. getList(1, url)
+        }else if(this.userRole == 2) {
+          this.getTList(1, this.url);
+        }
+
       },
       searchItem(){
        var studentName = this.studentName;
@@ -347,7 +357,12 @@
        if(!studentName && !studentNum && !grade){
          this.$message.error('错误，请输入搜索内容');
        }else {
-         this.getList(1, this.url, studentName, grade,studentNum)
+         if(this.userRole == 1){
+             this.getList(1, this.url, studentName, grade,studentNum)
+           }else if(this.userRole == 2){
+             this.getTList(1,this.url,studentName,grade,studentNum)
+           }
+
        }
       },
       toRouter(myRouter, memberId){
@@ -368,7 +383,6 @@
           });
         });
       },
-
       delPost(id){
         const loading = this.$loading({
           lock: true,
@@ -387,7 +401,7 @@
               loading.close();
             }, 500);
             if (response.msg == 666) {
-              this.getList(1, this.url);
+              this.createFunc();
             } else {
               this.$message.error('错误，请求数据失败');
             }
@@ -431,7 +445,7 @@
             loading.close();
           }, 500);
           if (response.msg == 666) {
-            this.getList(1, this.url);
+            this.createFunc();
           } else {
             this.$message.error('错误，请求数据失败');
           }
