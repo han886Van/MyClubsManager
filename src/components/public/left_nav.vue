@@ -106,8 +106,8 @@
           <i class="iconfont icon-huodong"></i>
           <span class="i_word">活动管理</span>
         </template>
-        <el-menu-item index="activity" class="li_son">
-          <span slot="title" class="i_word">申请记录</span>
+        <el-menu-item index="activity" class="li_son" v-show="myRole==1">
+          <span slot="title" class="i_word" >申请记录</span>
         </el-menu-item>
         <el-menu-item index="appliActivity" class="li_son">
           <span slot="title" class="i_word">活动申请</span>
