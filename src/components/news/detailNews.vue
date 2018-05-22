@@ -11,20 +11,6 @@
           <span class="editing" @click="goBack()">返回</span>
         </div>
       </div>
-      <!--association_id:1
-          association_name:"校篮球队"
-          content:"计科女篮冠军!!!!"
-          create_time:1526532007000
-          id:2
-          publish_time:"2018-05-17"
-          state:"1"
-          state_name:"已发布"
-          state_num:"1"
-          title:"计科院新闻"
-          type_id:4
-          type_name:"体育健身类"
-          user_id:2
-          user_name:"刘超群"-->
      <div class="info_deatil">
        <h1 class="title_line">
         {{detailNews.title}}
@@ -38,8 +24,12 @@
          &nbsp;&nbsp;&nbsp;&nbsp;
          {{detailNews.content}}
        </p>
-       <p>
-         <!--<img src="../../assets/img/home1.jpg" alt="">-->
+       <p v-show="detailNews.imgs!='0'">
+         <el-carousel trigger="click" height="400px">
+           <el-carousel-item v-for="item in imgs" :key="item">
+             <img :src="item" alt="">
+           </el-carousel-item>
+         </el-carousel>
        </p>
      </div>
      <!-- <div class="info">
@@ -89,8 +79,8 @@
       return {
         id:'',
         url:'',
-        detailNews:''
-
+        detailNews:'',
+        imgs:''
       }
     },
     methods: {
@@ -121,6 +111,9 @@
             console.log(response);
             if(response.msg==666){
               this.detailNews = response.detailNews
+              if(this.detailNews.imgs!='0'){
+                this.imgs = this.detailNews.imgs.split(",");
+              }
 
             }else {
               this.$message.error('错误，请求数据失败');
@@ -159,7 +152,7 @@
     min-height: 600px;
     border-radius: 8px;
     margin-bottom: 50px;
-    padding: 10px 40px 20px 40px;
+    padding: 10px 40px 60px 40px;
     .top {
       line-height: 50px;
       display: flex;
@@ -229,6 +222,7 @@
       .conter{
         text-align: center;
         margin-top:40px;
+        margin-bottom :42px;
       }
   }
 

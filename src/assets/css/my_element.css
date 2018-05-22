@@ -216,6 +216,7 @@
   width: 128px!important;
 }
 .avatar-uploader {
+  margin-right:10px;
   width: 140px;
   height: 140px;
   border: 1px dashed #d9d9d9;
@@ -226,4 +227,8 @@
 }
 .avatar-uploader:hover {
   border-color: #20a0ff;
+}
+.avatar-uploader img{
+  width: 100%;
+  height: 100%;
 }

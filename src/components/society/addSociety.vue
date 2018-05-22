@@ -42,9 +42,29 @@
               placeholder="请输入内容"
               v-model="applyCom" >
             </el-input></p>
+          <p><span class="title_span">社团头像：</span><el-upload
+            class="avatar-uploader"
+            action="http://localhost:8080/associationMg/attachment/uploadFile"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload></p>
+          <p><span class="title_span">社团图片：</span> <el-upload
+            action="http://localhost:8080/associationMg/attachment/uploadFile"
+            list-type="picture-card"
+            :limit="6"
+            :on-preview="handlePictureCardPreview"
+            :on-success="handlSuccess"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload></p>
           <div><el-button type="primary" @click="addSociety()" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button></div>
         </div>
       </div>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -63,7 +83,12 @@
         userId:'',
         societyPlace:'',
         applyCom:'',
-        briefIntroduction:''
+        briefIntroduction:'',
+        dialogImageUrl: '',
+        imageUrl:'',
+        headImg:'',
+        headImgArr:[],
+        images:''
       }
     },
     methods: {
@@ -75,6 +100,7 @@
       },
       /*创建请求*/
       addSociety(){
+        this.images = this.headImgArr.join(",");
         var name = this.societyName;
         var typeId = this.sortSociety;
         var place = this.societyPlace;
@@ -109,6 +135,12 @@
           applyComments:applyComments,
           briefIntroduction:briefIntroduction,
         };
+        if(this.headImg){
+          json.headImg= this.headImg
+        }
+        if(this.images){
+          json.images= this.images
+        }
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -141,6 +173,26 @@
           });
 
       },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+        this.headImg = file.response.headImg;
+      },
+      handleRemove(file, fileList) {
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+        }
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handlSuccess(response, file, fileList){
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+        }
+      }
     },
 
     mounted(){

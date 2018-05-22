@@ -34,6 +34,26 @@
               v-model="content">
             </el-input>
           </p>
+          <div class="img_box">
+            <span class="title_span">新闻图片：</span>
+            <el-upload
+              action="http://localhost:8080/associationMg/attachment/uploadFile"
+              list-type="picture-card"
+              :limit="6"
+              :on-preview="handlePictureCardPreview"
+              :on-success="handlSuccess"
+              :on-remove="handleRemove">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <!--<div class="avatar-uploader" v-show="imageUrl">
+            <img :src="imageUrl" class="avatar">
+            <input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="postFile">
+          </div>
+            <div class="avatar-uploader">
+              <i class="el-icon-plus" ></i>
+              <input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="postFile">
+            </div>-->
+          </div>
           <p ><span class="title_span">社团账号：</span>
             <el-input placeholder="请输入内容" :disabled="true" v-model="associationId"></el-input>
           </p>
@@ -43,13 +63,15 @@
           <p v-show="userRole==2"><span class="title_span">教师账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
-
           <div class="btn">
             <el-button type="primary" @click="toAdd(1)" >发送新闻</el-button>
             <el-button @click="toAdd(0)" >存为草稿</el-button>
           </div>
-        </div>
       </div>
+    </div>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -62,14 +84,17 @@
       return {
         textarea: '',
         newSociety:'',
-        dialogVisible: false,
         fullscreenLoading: false,
         value4:'',
         userRole:'',
         userId:'',
         title:'',
         content:'',
-
+        imageUrl:'',
+        dialogImageUrl: '',
+        dialogVisible: false,
+        headImgArr:[],
+        images:''
       }
     },
     methods: {
@@ -85,17 +110,18 @@
       },
       /*创建请求*/
       toAdd(state){
-          if(!this.newSociety){
+        this.images = this.headImgArr.join(",");
+        if(!this.newSociety){
             this.$message.error('错误，请输选择新闻类型');
           }else if(!this.title){
             this.$message.error('错误，请输入新闻标题');
           }else if(!this.content){
             this.$message.error('错误，请输入新闻内容');
           }else {
-              this.addNews(this.title,this.content,this.newSociety,state)
+            this.addNews(this.title,this.content,this.newSociety,state,this.images)
           }
       },
-      addNews(title,content,typeId,state)  {
+      addNews(title,content,typeId,state,images)  {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -119,6 +145,9 @@
           typeId:typeId,
           state:state
         };
+        if(images){
+          json.images = images
+        }
         this.$http.post(url,json).then(
           (success) => {
             var response = success.data;
@@ -142,8 +171,21 @@
             this.$message.error('错误，请求数据失败');
           });
       },
-      disabledDate(date){
-        console.log(date);
+      handleRemove(file, fileList) {
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+        }
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handlSuccess(response, file, fileList){
+        this.headImgArr=[];
+          for(var i =0;i<fileList.length;i++){
+              this.headImgArr.push(fileList[i].response.headImg);
+          }
       }
     },
 
@@ -206,9 +248,15 @@
       min-width: 30px;
       text-align: center;
     }
-      .btn{
+    .btn{
         margin-top:60px;
       }
+    .img_box{
+      display: flex;
+      justify-content:flex-start;
+      align-items: center;
+      margin-bottom :20px;
+    }
   }
 
 </style>

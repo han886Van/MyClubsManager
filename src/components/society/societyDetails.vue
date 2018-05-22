@@ -13,28 +13,11 @@
       </div>
       <div class="info">
         <div class="left_box">
-          <img  src="../../assets/img/2.jpg" alt="">
+          <img v-show="detailAssociation.headimg==0" src="../../assets/img/2.jpg" alt="">
+          <img v-show="detailAssociation.headimg!=0" :src="detailAssociation.headimg" alt="">
         </div>
         <div class="right_box">
           <div class="left_item">
-            <!--apply_comments:"锻炼身体，休闲娱乐"
-                association_id:1
-                brief_introduction:"无兄弟，不篮球！"
-                check_comments:"有趣"
-                check_person_id:20
-                check_time:1526531519000
-                create_day:"2018-05-17"
-                create_person_id:4
-                create_time:1526530861000
-                name:"校篮球队"
-                place:"旧篮球场"
-                state:"1"
-                state_name:"同意创建"
-                state_num:"1"
-                total_person:1
-                type_id:4
-                type_name:"体育健身类"
-                user_name:"张三"-->
             <p><span>社团名字：</span><span>{{detailAssociation.name}}</span></p>
             <p ><span>社团ID：</span><span>{{detailAssociation.association_id}}</span></p>
             <p><span>总人数：</span><span>{{detailAssociation.total_person}}</span></p>
@@ -51,12 +34,10 @@
             <p>
               <span>社团分类：</span>
               <span>{{detailAssociation.type_name}}</span>
-
             </p>
             <p>
               <span>专用场地：</span>
               <span>{{detailAssociation.place}}</span>
-
             </p>
           </div>
         </div>
@@ -71,15 +52,17 @@
       <ul class="conten">
         <li class="intro">
           <span>社团简介：</span>
-          <p>{{detailAssociation.check_comments}}</p>
-        </li>
-        <li class="intro">
-          <span>社团口号：</span>
           <p>{{detailAssociation.brief_introduction}}</p>
         </li>
-        <li class="intro">
-          <span>社团职能：</span>
-          <p>{{detailAssociation.apply_comments}}</p>
+        <li class="intro" v-show="detailAssociation.imgs!='0'">
+          <span>社团图片：</span>
+          <div class="intro_img">
+            <el-carousel trigger="click" height="400px">
+            <el-carousel-item v-for="item in imgs" :key="item">
+              <img :src="item" alt="">
+            </el-carousel-item>
+          </el-carousel>
+          </div>
         </li>
       </ul>
     </div>
@@ -127,7 +110,8 @@
         userId: '',
         associationId: '',
         url: '',
-        detailAssociation:''
+        detailAssociation:'',
+        imgs:''
 
       }
     },
@@ -159,7 +143,9 @@
             var response = success.data;
             if (response.msg == 666) {
                 this.detailAssociation=response.detailAssociation;
-              console.log(this.detailAssociation);
+                if(this.detailAssociation.imgs!='0'){
+                  this.imgs = this.detailAssociation.imgs.split(",");
+                }
             } else {
               this.$message.error('错误，社团详情请求数据失败');
               this.goBack()
@@ -267,8 +253,23 @@
         margin-bottom: 40px;
       }
     }
+    .intro_img{
+        margin-top:20px;
+      }
     .intro_title {
       margin-bottom: 20px;
+    }
+    .el-carousel__item img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .el-carousel__item:nth-child(2n) {
+      background-color: #99a9bf;
+    }
+
+    .el-carousel__item:nth-child(2n+1) {
+      background-color: #d3dce6;
     }
   }
 

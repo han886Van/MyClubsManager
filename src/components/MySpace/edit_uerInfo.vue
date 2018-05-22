@@ -84,12 +84,14 @@
         }, 500);
           var response = success.data;
           this.getUser=response.getUser;
-          if(!this.getUser.headImg){
+          if(this.getUser.headimg=='0'){
             if(this.getUser.sex==0){
               this.imageUrl= require('../../assets/img/0.jpg')
             }else {
               this.imageUrl= require('../../assets/img/1.png')
             }
+          }else {
+            this.imageUrl = this.getUser.headimg;
           }
         }, (error) => {
           setTimeout(() => {
@@ -147,6 +149,7 @@
                     message: '修改个人信息成功',
                     type: 'success'
                   });
+                  this.goBack()
                 }else {
 
                   this.$message.error('编辑信息失败哦！');
