@@ -26,7 +26,7 @@
             </el-date-picker>
           </p>
           <p><span class="title_span">申请标题：</span>
-            <el-input placeholder="请输入内容" v-model="title"></el-input>
+            <el-input placeholder="请输入内容" v-model="title" clearable></el-input>
           </p>
           <p><span class="title_span">申请内容：</span>
             <el-input

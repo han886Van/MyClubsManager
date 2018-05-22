@@ -295,8 +295,9 @@
       /**
        * 同意申请加入社团、拒绝申请加入社团、同意申请退出社团、拒绝申请退出
        * id(社团及用户关系id)
-       * 不传userState  拒绝申请加入社团     同意申请退出社团
+       * 不传userState  拒绝申请加入社团     同意申请退出社团 删除社员
        *  userState 1 同意申请加入社团    拒绝申请退出社团为1
+       *
        */
       deilMember(id,userState){
           var url = this.localhost +'associationMg/associationAndUser/modifyApplyAssociationStatus';

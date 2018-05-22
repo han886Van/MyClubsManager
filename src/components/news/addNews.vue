@@ -8,45 +8,45 @@
           <span class="blue">添加新闻</span>
         </div>
         <div>
-          <span class="editing" @click="toRouter('/news')">取消</span>
+          <span class="editing" @click="goBack()">取消</span>
         </div>
       </div>
       <div class="info">
         <div class="edit_input">
           <p>
-            <span>新闻分类：</span>
+            <span class="title_span">新闻分类：</span>
             <el-select v-model="newSociety" placeholder="社团分类">
               <el-option label="专业学术类" value="1"></el-option>
               <el-option label="科技创新类" value="2"></el-option>
-              <el-option label="艺术兴趣类" value="2"></el-option>
+              <el-option label="艺术兴趣类" value="3"></el-option>
               <el-option label="体育健身类" value="4"></el-option>
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
           </p>
           <p><span class="title_span">新闻标题：</span>
-            <el-input placeholder="请输入内容"></el-input>
+            <el-input placeholder="请输入内容" v-model="title" clearable></el-input>
           </p>
           <p><span class="title_span">新闻内容：</span>
             <el-input
               type="textarea"
               resize="none"
               placeholder="请输入内容"
-              v-model="textarea">
+              v-model="content">
             </el-input>
           </p>
-          <p v-show="userRole==1"><span class="title_span">社团账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
+          <p ><span class="title_span">社团账号：</span>
+            <el-input placeholder="请输入内容" :disabled="true" v-model="associationId"></el-input>
           </p>
-          <p v-show="userRole==1"><span class="title_span">社长账号：</span>
-            <el-input placeholder="请输入内容"></el-input>
+          <p ><span class="title_span">申请人账号：</span>
+            <el-input placeholder="请输入内容" :disabled="true" v-model="userId"></el-input>
           </p>
           <p v-show="userRole==2"><span class="title_span">教师账号：</span>
             <el-input placeholder="请输入内容"></el-input>
           </p>
 
           <div class="btn">
-            <el-button type="primary" @click="addNews()" >发送新闻</el-button>
-            <el-button @click="addNews()" >存为草稿</el-button>
+            <el-button type="primary" @click="toAdd(1)" >发送新闻</el-button>
+            <el-button @click="toAdd(0)" >存为草稿</el-button>
           </div>
         </div>
       </div>
@@ -65,42 +65,82 @@
         dialogVisible: false,
         fullscreenLoading: false,
         value4:'',
-        pickerOptions:{
-          disabledDate(time){
-            return  time.getTime() < Date.now()-(24*60*60*1000)
-          }
-        },
-        userRole:''
+        userRole:'',
+        userId:'',
+        title:'',
+        content:'',
 
       }
     },
     methods: {
+      createFunc(){
+        this.associationId = this.$route.query.associationId;
+        this.userId = localStorage.getItem('userId');
+      },
       goBack(){
         this.$router.back(-1)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
       /*创建请求*/
-      addNews() {
+      toAdd(state){
+          if(!this.newSociety){
+            this.$message.error('错误，请输选择新闻类型');
+          }else if(!this.title){
+            this.$message.error('错误，请输入新闻标题');
+          }else if(!this.content){
+            this.$message.error('错误，请输入新闻内容');
+          }else {
+              this.addNews(this.title,this.content,this.newSociety,state)
+          }
+      },
+      addNews(title,content,typeId,state)  {
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
-        setTimeout(() => {
-          loading.close();
-          this.goBack()
-        }, 2000);
-
+        var word = '';
+        if(state){
+          word = '新闻已发布成功！'
+        }else {
+          word = '新闻已存为草稿！'
+        }
+        var url = this.localhost+'associationMg/news/saveOrUpdate';
+        var userId = this.userId;
+        var associationId = this.associationId;
+        var json={
+          userId:userId,
+          associationId:associationId,
+          title:title,
+          content:content,
+          typeId:typeId,
+          state:state
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                message: word,
+                type: 'success'
+              });
+              this.goBack();
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
       },
       disabledDate(date){
         console.log(date);
@@ -111,9 +151,11 @@
       this.userRole = localStorage.getItem('userRole');
     },
     created(){
+      this.createFunc()
+    },
+    watch: {
 
     },
-    watch: {},
   }
 </script>
 
@@ -158,7 +200,7 @@
       }
     }
     .title_span {
-      min-width: 80px;
+      min-width: 98px;
     }
     .tipSpan {
       min-width: 30px;

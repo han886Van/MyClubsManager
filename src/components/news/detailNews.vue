@@ -11,20 +11,35 @@
           <span class="editing" @click="goBack()">返回</span>
         </div>
       </div>
+      <!--association_id:1
+          association_name:"校篮球队"
+          content:"计科女篮冠军!!!!"
+          create_time:1526532007000
+          id:2
+          publish_time:"2018-05-17"
+          state:"1"
+          state_name:"已发布"
+          state_num:"1"
+          title:"计科院新闻"
+          type_id:4
+          type_name:"体育健身类"
+          user_id:2
+          user_name:"刘超群"-->
      <div class="info_deatil">
        <h1 class="title_line">
-        IT协会招新活动
+        {{detailNews.title}}
       </h1>
       <p class="time">
-        <span>IT协会</span>
-        <span>2018-05-12</span>
+        <span>  {{detailNews.publish_time}}</span>
+        <span>  {{detailNews.association_name}}</span>
+        <span>  {{detailNews.user_name}}</span>
       </p>
-       <p>
+       <p class="conter">
          &nbsp;&nbsp;&nbsp;&nbsp;
-         asdjfhasfdhkjsdfhksdhfksdhfksdhfhasdfhkjasdhfkasjdhfksdhfj很快就到付款时间的核辐射的划分空间圣诞节疯狂就舒服点花露水的减肥了坚实的分解落实到附近死定了房间里上课的减肥了开始奋斗就流口水的房间里考试的时代峰峻拉克丝发动机流口水的房间里看书看到解放路口是两款发动机流口水的房间里时代峻峰
+         {{detailNews.content}}
        </p>
        <p>
-         <img src="../../assets/img/home1.jpg" alt="">
+         <!--<img src="../../assets/img/home1.jpg" alt="">-->
        </p>
      </div>
      <!-- <div class="info">
@@ -72,24 +87,60 @@
     components: {},
     data () {
       return {
-        Numbering:''
+        id:'',
+        url:'',
+        detailNews:''
 
       }
     },
     methods: {
+      createFunc(){
+        this.id = this.$route.query.id;
+        this.url=this.localhost+'associationMg/news/getNewsDetail';
+        this.getList();
+      },
       goBack(){
         this.$router.back(-1)
       },
       toRouter(myRouter){
         this.$router.push({path: myRouter})
       },
+      getList(){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json ={
+          id:this.id,
+        };
+        this.$http.post(this.url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+              this.detailNews = response.detailNews
+
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
     },
 
     mounted(){
-      this.Numbering = this.$route.query.Numbering;
     },
     created(){
-
+        this.createFunc()
     },
     watch: {},
   }
@@ -175,7 +226,10 @@
           font-size:14px;
 
         }
-
+      .conter{
+        text-align: center;
+        margin-top:40px;
+      }
   }
 
 </style>

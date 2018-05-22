@@ -287,6 +287,7 @@
       toRouter(myRouter, memberId){
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
+      /*删除社员*/
       delMember(id) {
         this.$confirm('是否删除该成员?', '提示', {
           confirmButtonText: '确定',
@@ -311,7 +312,7 @@
         var json = {
           id:id
         };
-          var url  = this.localhost +'associationMg/associationAndUser/modifyApplyAssociationStatu';
+          var url  = this.localhost +'associationMg/associationAndUser/modifyApplyAssociationStatus';
         this.$http.post(url, json).then(
           (success) => {
             var response = success.data;

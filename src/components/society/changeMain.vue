@@ -157,7 +157,8 @@
         var url = this.localhost+'associationMg/associationAndUser/studentGetAssoUserList';
         var json ={
           associationId:this.associationId,
-          changePresident:1
+          changePresident:1,
+          userId:userId
         };
         this.$http.post(url,json).then(
           (success) => {
