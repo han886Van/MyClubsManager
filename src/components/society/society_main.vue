@@ -352,7 +352,7 @@
         }else if(this.userRole==2){
           if(this.showAll==1||this.showAll==3){
             /*全部社团*/
-            this.url=this.localhost+'associationMg/association/getAssociationApply';
+            this.url=this.localhost+'associationMg/association/getAllAssociation';
             this. getTList(1,this.url);
           }else {
             this.url=this.localhost+'associationMg/association/getAssociationApply';

@@ -135,7 +135,8 @@
               var json={
                 userId:userId,
                 email:this.getUser.email,
-                phone:this.getUser.phone
+                phone:this.getUser.phone,
+                headImg:this.imageUrl,
               };
             this.$http.post(url,json).then(
               (success) => {
