@@ -97,7 +97,7 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in associationList" @click="toRouter('/societyDetails',item.association_id)">
+          <li class="societyList" v-for="(item,index) in associationList" @click="toRouter('/member',item.association_id)">
             <span>{{index+1}}</span>
             <span >{{item.association_id}}</span>
             <span  v-show="item.type_id==1">专业学术类</span>

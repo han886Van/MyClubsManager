@@ -167,16 +167,16 @@
     methods: {
       createFunc(){
         this.userRole = localStorage.getItem('userRole');
+        this.associationId = this.$route.query.associationId;
         if (this.userRole == 1) {
           /*学生*/
           this.userId = localStorage.getItem('userId');
           this.url = this.localhost + 'associationMg/associationAndUser/studentGetAssoUserList';
-          this.associationId = this.$route.query.associationId;
           this.getList(1, this.url);
         } else if (this.userRole == 2) {
-          this.url = this.localhost + 'associationMg/association/getAllAssociation';
+          this.url = this.localhost + 'associationMg/associationAndUser/teacherGetUserList';
           this.typeId  =localStorage.getItem('typeId');
-          this.getTList(1, this.url);
+          this.getTList(1, this.url,this.associationId);
         }
       },
       goBack(){

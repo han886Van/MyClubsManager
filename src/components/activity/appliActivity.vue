@@ -78,6 +78,7 @@
               <span class="refuseBtn" >拒绝</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无活动申请</li>
         </ul>
       </div>
       <div  class="myPagination">
@@ -153,55 +154,68 @@
         nameInput: '',
         sortSociety: '',
         currentPage:1,
-        userRole:''
+        userRole:'',
+        url:'',
+        typeId:'',
+        associationList:'',
+        showNo:false
       }
     },
     methods: {
-      searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
+      createFunc(){
+        this.userRole = localStorage.getItem('userRole');
+        this.url = this.localhost + 'associationMg/event/teacherGetEventList';
+        this.typeId  =localStorage.getItem('typeId');
+        this.getTList(1, this.url);
+      },
+      getTList(val,url,associationId,name){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var typeId = this.typeId;
+        var json ={
+          typeId:typeId,
+          teacherCheck:1,
+          start:val
+        };
+        if(associationId){
+          json.associationId=associationId
         }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
+        if(name){
+          json.name=name
+        }
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.totalNum =parseInt(response.total_num);
+            if(response.associationList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false
+            }
+            for(var i =0; i<response.associationList.length;i++){
+              this.associationList.push(response.associationList[i]);
+            }
+          }else {
+            this.$message.error('错误，请求数据失败');
           }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      },
+      searchItem(){
 
       },
       toRouter(myRouter,actNum){
