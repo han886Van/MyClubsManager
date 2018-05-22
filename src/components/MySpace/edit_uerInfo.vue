@@ -7,7 +7,7 @@
           <span class="editing" @click="goBack()">返回</span>
         </div>
       </div>
-      <div class="info">
+      <div class="info" v-show="userRole!=3">
         <div class="left_box">
           <div class="avatar-uploader">
             <img :src="imageUrl" class="avatar">
@@ -17,6 +17,47 @@
         <div class="right_box">
           <div class="left_item">
             <p v-show="getUser.student_num"><span>学号：</span><span>{{getUser.student_num}}</span></p>
+            <p v-show="getUser.user_name"><span>名字：</span><span>{{getUser.user_name}}</span></p>
+            <p><span>性别：</span>
+              <span v-show="getUser.sex==0">女</span>
+              <span v-show="getUser.sex==1">男</span>
+            </p>
+            <p ><span>出生日期：</span>
+              <span v-show="getUser.birthday_time">{{getUser.birthday_time}}</span>
+              <span v-show="!getUser.birthday_time">暂无</span>
+            </p>
+            <p >
+              <span>电话号码：</span>
+              <el-input v-model="getUser.phone" placeholder="请输入内容" clearable></el-input>
+              <span  class="tip"  v-show="!phoneRegex.test(getUser.phone)">*请输入正确手机号码格式</span>
+            </p>
+          </div>
+          <div class="right_item">
+            <p v-show="getUser.type_name"><span>分类：</span><span>{{getUser.type_name}}</span></p>
+            <p v-show="getUser.grade"><span>年级：</span><span>{{getUser.grade}}</span></p>
+            <p v-show="getUser.major"><span>专业：</span><span>{{getUser.major}}</span></p>
+            <p v-show="getUser.college"><span>学院：</span><span>{{getUser.college}}</span></p>
+            <p v-show="getUser.email">
+              <span>邮箱：</span>
+              <el-input v-model="getUser.email" placeholder="请输入内容" clearable></el-input>
+              <span class="tip" v-show="!emailRegex.test(getUser.email)">*请输入正确邮箱格式</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="info" v-show="userRole==3">
+        <div class="left_box">
+          <div class="avatar-uploader">
+            <img :src="imageUrl" class="avatar">
+            <input type="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="postFile">
+          </div>
+        </div>
+        <div class="right_box">
+          <div class="left_item">
+            <p v-show="getUser.student_num">
+              <span>学号：</span>
+              <span>{{getUser.student_num}}</span>
+            </p>
             <p v-show="getUser.user_name"><span>名字：</span><span>{{getUser.user_name}}</span></p>
             <p><span>性别：</span>
               <span v-show="getUser.sex==0">女</span>
@@ -60,11 +101,13 @@
         phoneRegex :/^[1][3,4,5,7,8][0-9]{9}$/,
         emailRegex :/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
         getUser:'',
-        file:''
+        file:'',
+        userRole:''
       }
     },
     methods:{
       createFunc(){
+        this.userRole = localStorage.getItem('userRole');
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
