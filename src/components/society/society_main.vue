@@ -53,7 +53,7 @@
           <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <el-button @click="searchTItem()" type="primary"  >搜索</el-button>
-        <!--<el-button @click="toRouter('/addSociety')" type="primary">创建社团</el-button>-->
+        <el-button @click="clearSearch()">清空搜索</el-button>
       </div>
       <!--学生-->
       <div class="member" v-show="userRole==1">
@@ -148,26 +148,6 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <!--apply_comments:"熏陶文学氛围"
-              association_id:4
-              brief_introduction:"书中自有黄金屋"
-              check_comments:"有趣"
-              check_person_id:17
-              check_time:1526531528000
-              create_person_id:6
-              create_time:1526531378000
-              name:"文学社"
-              person_num:0
-              place:"一教206"
-              role_name:"未加入"
-              role_name_num:"0"
-              state:"1"
-              state_name:"同意创建"
-              type_id:1
-              type_name:"专业学术类"
-              user_name:"黄宏兴"
-              user_state:"未加入"
-              user_state_num:"0"-->
           <li class="societyList" v-for="(item,index) in associationList">
             <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
@@ -179,22 +159,23 @@
             <span @click="toRouter('/societyDetails',item.association_id)">{{item.name}}</span>
             <span v-show="item.user_name" @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
             <span v-show="!item.user_name" @click="toRouter('/societyDetails',item.association_id)">匿名</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==1|| showAll==3">{{item.place}}</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==0 && showAll==2">编辑申请</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==1 && showAll==2">创建申请</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" >{{item.place}}</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.state==0 && showAll==2">申请创建</span>
+            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.state==3 && showAll==2">申请解散</span>
             <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==3">{{item.person_num}}</span>
             <div v-show="showAll==1||showAll==3">
-              <span class="blue"  @click="toRouter('/edtiSociety',item.association_id)">编辑</span>
               <span class="red_color" @click="dissolution(item.association_id)">删除</span>
             </div>
-            <div v-show="showAll==2">
-              <span  class="blue" >同意</span>
-              <span  class="red_color" >拒绝</span>
+            <!--申请创建-->
+            <div v-show="showAll==2&&item.state==0">
+              <span  class="blue" @click="dissolution(item.association_id,1)">同意</span>
+              <span  class="red_color" @click="dissolution(item.association_id)">拒绝</span>
             </div>
-            <!--<div v-show="showAll==4">
-              <span @click="toRouter('/societyDetails',item.societyId)"  v-show="item.status==1">同意</span>
-              <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.status==2">拒绝</span>
-            </div>-->
+            <!--申请解散-->
+            <div v-show="showAll==2&&item.state==3">
+              <span  class="blue" @click="dissolution(item.association_id)">同意</span>
+              <span  class="red_color" @click="dissolution(item.association_id,1)">拒绝</span>
+            </div>
           </li>
           <li v-show="showNo" class="noList">暂无社团</li>
         </ul>
@@ -421,7 +402,7 @@
           });
       },
       /*老师*/
-      getTList(val,url){
+      getTList(val,url,associationId,name){
         this.associationList=[];
         const loading = this.$loading({
           lock: true,
@@ -434,6 +415,12 @@
           typeId:typeId,
           start:val
         };
+        if(associationId){
+          json.associationId=associationId
+        }
+        if(name){
+          json.name=name
+        }
         this.$http.post(url,json).then(
           (success) => {
           var response = success.data;
@@ -575,53 +562,13 @@
         }else {
           var associationId =this.idInput;
           var name =this.nameInput;
-          this.sendTSearch(1,associationId,name)
+          this.getTList(1,this.url,associationId,name)
         }
       },
-      sendTSearch(val,associationId,name){
-        this.associationList=[];
-        const loading = this.$loading({
-          lock: true,
-          text: '正在发送请求',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        });
-        var typeId = this.typeId;
-        var json ={
-          typeId:typeId,
-          start:val
-        };
-        if(associationId){
-          json.associationId=associationId
-        }
-        if(name){
-          json.name=name
-        }
-        this.$http.post(this.url,json).then(
-          (success) => {
-            var response = success.data;
-            if(response.msg==666){
-              this.totalNum =parseInt(response.total_num);
-              for(var i =0; i<response.associationList.length;i++){
-                this.associationList.push(response.associationList[i]);
-              }
-              if(response.associationList.length==0){
-                this.showNo=true
-              }else {
-                this.showNo=false
-              }
-            }else {
-              this.$message.error('错误，请求数据失败');
-            }
-            setTimeout(() => {
-              loading.close();
-            }, 500);
-          }, (error) => {
-            setTimeout(() => {
-              loading.close();
-            }, 500);
-            this.$message.error('错误，请求数据失败');
-          });
+      clearSearch(){
+        this.idInput='';
+        this.nameInput='';
+        this.getTList(1,this.url,this.idInput,this.nameInput)
       },
       /*退出社团 加入社团*/
       aboutSociety(userState,associationId) {
