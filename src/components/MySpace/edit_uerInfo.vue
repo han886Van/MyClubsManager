@@ -84,12 +84,13 @@
         }, 500);
           var response = success.data;
           this.getUser=response.getUser;
-          if(this.getUser.sex==0){
-            this.imageUrl= require('../../assets/img/0.jpg')
-          }else {
-            this.imageUrl= require('../../assets/img/1.png')
+          if(!this.getUser.headImg){
+            if(this.getUser.sex==0){
+              this.imageUrl= require('../../assets/img/0.jpg')
+            }else {
+              this.imageUrl= require('../../assets/img/1.png')
+            }
           }
-
         }, (error) => {
           setTimeout(() => {
             loading.close();

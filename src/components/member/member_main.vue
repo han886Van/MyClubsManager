@@ -320,6 +320,7 @@
               loading.close();
             }, 500);
             if (response.msg == 666) {
+              this.getList(1, this.url);
             } else {
               this.$message.error('错误，请求数据失败');
             }

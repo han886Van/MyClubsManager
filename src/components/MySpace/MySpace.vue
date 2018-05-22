@@ -10,7 +10,10 @@
         </div>
       </div>
       <div class="info">
-        <div class="left_box">
+        <div class="left_box" v-show="getUser.headImg">
+          <img  :src="getUser.headImg" alt="">
+        </div>
+        <div class="left_box" v-show="!getUser.headImg">
           <img v-show="getUser.sex==0" src="../../assets/img/0.jpg" alt="">
           <img v-show="getUser.sex==1" src="../../assets/img/1.png" alt="">
         </div>
