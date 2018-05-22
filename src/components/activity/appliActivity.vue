@@ -231,7 +231,10 @@
     },
     mounted(){
       this.userRole = localStorage.getItem('userRole');
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 

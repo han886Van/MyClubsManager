@@ -58,14 +58,24 @@
               <span>学号：</span>
               <span>{{getUser.student_num}}</span>
             </p>
-            <p v-show="getUser.user_name"><span>名字：</span><span>{{getUser.user_name}}</span></p>
+            <p v-show="getUser.user_name">
+              <span>名字：</span>
+              <el-input v-model="getUser.user_name" placeholder="请输入内容" clearable></el-input>
+            </p>
             <p><span>性别：</span>
-              <span v-show="getUser.sex==0">女</span>
-              <span v-show="getUser.sex==1">男</span>
+              <el-select v-model="getUser.sex" placeholder="社团分类">
+                <el-option label="女" value="0"></el-option>
+                <el-option label="男" value="1"></el-option>
+              </el-select>
             </p>
             <p ><span>出生日期：</span>
-              <span v-show="getUser.birthday_time">{{getUser.birthday_time}}</span>
-              <span v-show="!getUser.birthday_time">暂无</span>
+              <el-date-picker
+                v-model="getUser.birthday_time"
+                format="yyyy - MM - dd "
+                value-format="yyyy-MM-dd"
+                type="date"
+                placeholder="选择日期">
+              </el-date-picker>
             </p>
             <p >
               <span>电话号码：</span>
