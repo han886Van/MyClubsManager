@@ -116,8 +116,12 @@
           this.$message.error('请输入社团简介！');
         }else if(applyComments==""){
           this.$message.error('请输入申请社团理由！');
+        }else if(!this.headImg){
+          this.$message.error('请输入上传社团头像图片！');
+        }else if(!this.images){
+          this.$message.error('请输入上传社团图片！');
         }else {
-            this.sendPost()
+          this.sendPost()
         }
       },
       sendPost() {

@@ -117,7 +117,9 @@
             this.$message.error('错误，请输入新闻标题');
           }else if(!this.content){
             this.$message.error('错误，请输入新闻内容');
-          }else {
+          }else if(!this.images){
+          this.$message.error('错误，请上传新闻图片');
+        }else {
             this.addNews(this.title,this.content,this.newSociety,state,this.images)
           }
       },
