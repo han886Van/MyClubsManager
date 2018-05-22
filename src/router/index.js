@@ -10,6 +10,7 @@ import news from '@/components/news/news_main'
 import inNew from '@/components/news/inNew'
 import addNews from '@/components/news/addNews'
 import allNews from '@/components/news/allNews'
+import inAllNew from '@/components/news/inAllNew'
 import detailNews from '@/components/news/detailNews'
 import society from '@/components/society/society_main'
 import societyDetails from '@/components/society/societyDetails'
@@ -195,6 +196,10 @@ export default new Router({
       path: '/inNew',
       name: 'inNew',
       component: inNew
+    },{
+      path: '/inAllNew',
+      name: 'inAllNew',
+      component: inAllNew
     },
   ]
 })

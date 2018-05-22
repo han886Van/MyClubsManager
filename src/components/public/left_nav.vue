@@ -122,7 +122,7 @@
         <el-menu-item index="inNew?myRouter=1" class="li_son">
           <span slot="title" class="i_word">发送记录</span>
         </el-menu-item>
-        <el-menu-item index="allNews" class="li_son">
+        <el-menu-item index="inAllNew" class="li_son">
           <span slot="title" class="i_word">全部新闻</span>
         </el-menu-item>
       </el-submenu>

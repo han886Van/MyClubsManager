@@ -10,24 +10,6 @@
         <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="search_box">
-        <!--  <div>
-            <span>社团分类：</span>
-            <el-select v-model="sortSociety" placeholder="社团分类">
-              <el-option label="专业学术类" value="1"></el-option>
-              <el-option label="科技创新类" value="2"></el-option>
-              <el-option label="艺术兴趣类" value="2"></el-option>
-              <el-option label="体育健身类" value="4"></el-option>
-              <el-option label="公益服务类" value="5"></el-option>
-            </el-select>
-          </div>
-          <div>
-            <span>社团名字：</span>
-            <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-          </div>
-          <div>
-            <span>社团编号：</span>
-            <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
-          </div>-->
         <div>
           <span>发布状态：</span>
           <el-select v-model="sendStatus" placeholder="发布状态">
@@ -61,22 +43,6 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <!--association_id:1
-              association_name:"校篮球队"
-              content:"计科女篮冠军!!!!"
-              create_time:1526532007000
-              id:2
-              publish_time:"2018-05-17"
-              role_name:"社长"
-              role_name_num:"1"
-              state:"1"
-              state_name:"已发布"
-              state_num:"1"
-              title:"计科院新闻"
-              type_id:4
-              type_name:"体育健身类"
-              user_id:2
-              user_name:"刘超群"-->
           <li class="societyList" v-for="(item,index) in assoNewsList">
             <span @click="toRouter('/detailNews',item.id)">{{index+1}}</span>
             <span @click="toRouter('/detailNews',item.id)">{{item.id}}</span>
@@ -89,12 +55,9 @@
             <span class="refuseBtn" @click="toRouter('/detailNews',item.id)"
                   v-show="item.state_num==0">草稿箱</span>
             <div>
-             <span class="refuseBtn" @click="delNew(index)"
-                   v-show="item.state_num==1&&isPresident==1">删除</span>
-              <span class="delBtn" @click="sendAgainNew(index)"
-                    v-show="item.state_num==0&&isPresident==1">发送</span>
-              <span class="delBtn" @click="toRouter('/detailNews',item.id)"
-                    v-show="isPresident!=1">查看</span>
+             <span class="refuseBtn" @click="delNew(item.id)"  v-show="item.state_num==1&&isPresident==1">删除</span>
+              <span class="delBtn" @click="sendAgainNew(item.id)" v-show="item.state_num==0&&isPresident==1">发送</span>
+              <span class="delBtn" @click="toRouter('/detailNews',item.id)" v-show="isPresident!=1">查看</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无新闻</li>
@@ -215,7 +178,7 @@
       goBack(){
         this.$router.back(-1)
       },
-      getList(val, userId,state,id,title){
+      getList(val,userId,state,id,title){
         this.assoNewsList = [];
         const loading = this.$loading({
           lock: true,
@@ -277,7 +240,10 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        var state = this.sendStatus;
+        var id = this.idInput;
+        var title = this.nameInput;
+        this.getList(val,this.userId,state,id,title)
       },
       searchItem(){
         var state = this.sendStatus;
@@ -294,43 +260,100 @@
 
       },
       /*退出社团*/
-      toRouter(myRouter, id,associationId){
+      toRouter(myRouter,id,associationId){
         this.$router.push({path: myRouter, query: {'id': id,'associationId':associationId}})
       },
-      delNew(index) {
-        this.$confirm('是否删除该新闻?', '提示', {
+      sendAgainNew(id) {
+        this.$confirm('是否再发送?', '提示', {
+          confirmButtonText: '直接发送',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.sendAgainPost(id);
+        }).catch(() => {
+          this.$message('已取消发送');
+        });
+      },
+      sendAgainPost(id)  {
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url = this.localhost+'associationMg/news/saveOrUpdate';
+        var json={
+          id:id,
+          state:1
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                message: '新闻已发布成功！',
+                type: 'success'
+              });
+              this.getList(1, this.userId)
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
+      delNew(id){
+        this.$confirm('是确定删除新闻?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.delNewPost(id);
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+          this.$message('已取消删除新闻');
         });
       },
-      sendAgainNew(index) {
-        this.$confirm('是否需要编辑再重新发送?', '提示', {
-          confirmButtonText: '直接发送',
-          cancelButtonText: '编辑',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+      delNewPost(id){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
         });
-      },
+        var url = this.localhost+'associationMg/news/deleteNews';
+        var json={
+          id:id
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                message: '新闻删除成功！',
+                type: 'success'
+              });
+              this.getList(1, this.userId)
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      }
     },
     mounted(){
 
