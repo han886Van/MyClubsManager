@@ -325,7 +325,6 @@
         this.showAll = this.$route.query.myRouter;
         this.userRole = localStorage.getItem('userRole');
         this.userId =localStorage.getItem('userId');
-        this.typeId  =localStorage.getItem('typeId');
         if(this.userRole==1){
           /*全部社团*/
           if(this.showAll==5||this.showAll==2){
@@ -341,6 +340,7 @@
             this. getList(1,this.url);
           }
         }else if(this.userRole==2){
+          this.typeId  =localStorage.getItem('typeId');
           if(this.showAll==1||this.showAll==3){
             /*全部社团*/
             this.url=this.localhost+'associationMg/association/getAllAssociation';
@@ -468,7 +468,7 @@
               this.sendSearch(val,this.url,typeId,associationId,name)
             }
           }else if(this.userRole==2){
-            this.sendTSearch(val,this.idInput,this.nameInput)
+            this.getTList(val,this.url,this.idInput,this.nameInput)
           }
 
       },

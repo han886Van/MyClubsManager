@@ -10,9 +10,11 @@
         <span class="blue" @click="goBack()">返回</span>
       </div>
       <div class="top" v-show="userRole==2" >
-        <span>物资管理</span>
+        <div>
+          <span>物资管理</span>
         <span>	&gt;</span>
         <span  class="blue">申请记录</span>
+        </div>
       </div>
       <div class="search_box">
         <!--  <div>

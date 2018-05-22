@@ -114,7 +114,7 @@
         </el-menu-item>
       </el-submenu>
       <!--新闻-->
-      <el-submenu  index="inNew">
+      <el-submenu v-show="myRole==1" index="inNew">
         <template slot="title">
           <i class="iconfont icon-shangwutubiao-"></i>
           <span class="i_word">新闻管理</span>

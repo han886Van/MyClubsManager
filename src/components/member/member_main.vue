@@ -160,7 +160,8 @@
         grade:'',
         studentNum: '',
         userType:'',
-        isPresident:''
+        isPresident:'',
+        typeId:''
       }
     },
     methods: {
@@ -173,9 +174,9 @@
           this.associationId = this.$route.query.associationId;
           this.getList(1, this.url);
         } else if (this.userRole == 2) {
-          this.url = this.localhost + 'associationMg/associationAndUser/teacherGetUserList';
-          this.userType = localStorage.getItem('userType');
-          this.getList(1, this.url);
+          this.url = this.localhost + 'associationMg/association/getAllAssociation';
+          this.typeId  =localStorage.getItem('typeId');
+          this.getTList(1, this.url);
         }
       },
       goBack(){
@@ -244,6 +245,52 @@
             }, 500);
             this.$message.error('错误，请求数据失败');
           });
+      },
+      getTList(val,url,associationId,name){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var typeId = this.typeId;
+        var json ={
+          typeId:typeId,
+          start:val
+        };
+        if(associationId){
+          json.associationId=associationId
+        }
+        if(name){
+          json.name=name
+        }
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.totalNum =parseInt(response.total_num);
+            if(response.associationList.length==0){
+              this.showNo=true
+            }else {
+              this.showNo=false
+            }
+            for(var i =0; i<response.associationList.length;i++){
+              this.associationList.push(response.associationList[i]);
+            }
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
       },
       /*分页器*/
       handleSizeChange(val) {
@@ -339,7 +386,7 @@
     },
     created() {
       this.createFunc()
-    },
+    }
   }
 </script>
 

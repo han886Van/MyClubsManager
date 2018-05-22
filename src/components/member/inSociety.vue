@@ -8,16 +8,14 @@
         <span class="blue">社团-成员</span>
       </div>
       <div class="top" v-show="userRole==2">
-        <span>社团管理</span>
+        <span>成员管理</span>
         <span>	&gt;</span>
         <span v-show="showAll==1" class="blue">全部社团</span>
-        <span v-show="showAll==3" class="blue">全部社团</span>
-        <span v-show="showAll==2" class="blue">申请社团</span>
       </div>
       <div class="top" v-show="userRole==3">
         <span class="blue">社团管理</span>
       </div>
-      <div class="search_box">
+      <div class="search_box" v-show="userRole==1">
         <div>
           <span>社团分类：</span>
           <el-select v-model="sortSociety" placeholder="社团分类">
@@ -38,6 +36,18 @@
           <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <el-button @click="searchItem(1)" type="info" plain>搜索</el-button>
+      </div>
+      <div class="search_box" v-show="userRole==2">
+        <div>
+          <span>社团编号：</span>
+          <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
+        </div>
+        <div>
+          <span>社团名字：</span>
+          <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
+        </div>
+        <el-button @click="searchTItem()" type="primary"  >搜索</el-button>
+        <el-button @click="clearSearch()">清空搜索</el-button>
       </div>
       <!--学生-->
       <div class="member" v-show="userRole==1">
@@ -82,38 +92,25 @@
           <span>名字</span>
           <span>社长</span>
           <span>地点</span>
-          <span v-show="showAll!=3">申请</span>
-          <span v-show="showAll==3">人数</span>
+          <span v-show="showAll==2">申请</span>
+          <span v-show="showAll==3||showAll==1">人数</span>
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in associationList">
-            <span @click="toRouter('/societyDetails',item.association_id)">{{index+1}}</span>
-            <span @click="toRouter('/societyDetails',item.association_id)">{{item.association_id}}</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==1">专业学术类</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==2">科技创新类</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==3">艺术兴趣类</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==4">体育健身类</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.type_id==5">公益服务类</span>
-            <span @click="toRouter('/societyDetails',item.association_id)">{{item.name}}</span>
+          <li class="societyList" v-for="(item,index) in associationList" @click="toRouter('/societyDetails',item.association_id)">
+            <span>{{index+1}}</span>
+            <span >{{item.association_id}}</span>
+            <span  v-show="item.type_id==1">专业学术类</span>
+            <span  v-show="item.type_id==2">科技创新类</span>
+            <span  v-show="item.type_id==3">艺术兴趣类</span>
+            <span  v-show="item.type_id==4">体育健身类</span>
+            <span  v-show="item.type_id==5">公益服务类</span>
+            <span >{{item.name}}</span>
             <span v-show="item.user_name" @click="toRouter('/societyDetails',item.association_id)">{{item.user_name}}</span>
             <span v-show="!item.user_name" @click="toRouter('/societyDetails',item.association_id)">匿名</span>
-            <span @click="toRouter('/societyDetails',item.association_id)">{{item.place}}</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==0 && showAll!=3">编辑申请</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="item.changeName==1 && showAll!=3">创建申请</span>
-            <span @click="toRouter('/societyDetails',item.association_id)" v-show="showAll==3">{{item.person_num}}</span>
-            <div v-show="showAll==1||showAll==3">
-              <span class="blue"  @click="editSociety(index)">编辑</span>
-              <span class="red_color">删除</span>
-            </div>
-            <div v-show="showAll==2">
-              <span  class="blue" >同意</span>
-              <span  class="red_color" >拒绝</span>
-            </div>
-            <div v-show="showAll==4">
-              <span @click="toRouter('/societyDetails',item.societyId)"  v-show="item.status==1">同意</span>
-              <span @click="toRouter('/societyDetails',item.societyId)" v-show="item.status==2">拒绝</span>
-            </div>
+            <span>{{item.place}}</span>
+            <span>{{item.person_num}}</span>
+            <span class="blue">查看社团成员</span>
           </li>
           <li v-show="showNo" class="noList">暂无社团</li>
         </ul>
@@ -265,8 +262,10 @@
           /*已加入社团*/
           this.url=this.localhost+'associationMg/association/getOwnAssociation';
           this. getList(1,this.url);
-        }else if(this.userRole==2){
-
+        }else if (this.userRole == 2) {
+          this.url = this.localhost + 'associationMg/association/getAllAssociation';
+          this.typeId  =localStorage.getItem('typeId');
+          this.getTList(1, this.url);
         }
       },
       getList(val,url){
@@ -313,11 +312,77 @@
             this.$message.error('错误，请求数据失败');
           });
       },
+      /*教师查找*/
+      searchTItem(){
+        if(this.idInput==''&&this.nameInput==''){
+          this.$message({
+            type: 'error',
+            message: '请输入或选择搜索条件!'
+          });
+          this. getTList(1,this.url);
+        }else {
+          var associationId =this.idInput;
+          var name =this.nameInput;
+          this.getTList(1,this.url,associationId,name)
+        }
+      },
+      clearSearch(){
+        this.idInput='';
+        this.nameInput='';
+        this.getTList(1,this.url,this.idInput,this.nameInput)
+      },
+      getTList(val,url,associationId,name){
+        this.associationList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var typeId = this.typeId;
+        var json ={
+          typeId:typeId,
+          start:val
+        };
+        if(associationId){
+          json.associationId=associationId
+        }
+        if(name){
+          json.name=name
+        }
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+              this.totalNum =parseInt(response.total_num);
+              if(response.associationList.length==0){
+                this.showNo=true
+              }else {
+                this.showNo=false
+              }
+              for(var i =0; i<response.associationList.length;i++){
+                this.associationList.push(response.associationList[i]);
+              }
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
       /*分页器*/
       handleSizeChange(val) {
       },
       handleCurrentChange(val) {
         this.currentPage =val;
+        if(this.userRole==1){
         if(this.sortSociety==''&&this.idInput==''&&this.nameInput==''){
           this.getList(val,this.url)
         }else {
@@ -329,6 +394,9 @@
             typeId= ''
           }
           this.sendSearch(val,this.url,typeId,associationId,name)
+         }
+        }else if(this.userRole==2){
+          this.getTList(val,this.url,this.idInput,this.nameInput)
         }
 
       },
