@@ -7,9 +7,9 @@
           <span>	&gt;</span>
           <span class="blue">管理帖子</span>
         </div>
-        <div>
+      <!--  <div>
           <span>时间筛选：</span> <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker> <el-button>搜索</el-button>
-        </div>
+        </div>-->
       </li>
       <li v-for="(item,index) in disList">
         <div class="dis_user flex_box">
@@ -234,7 +234,6 @@
     background: #fff;
     padding: 10px 8px;
     border-radius :8px;
-
     font-size: 18px;
     color: #666;
     padding-bottom: 50px;

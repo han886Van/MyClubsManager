@@ -36,9 +36,10 @@
           <li class="top"></li>
           <li v-for="(item,index) in forumList">
             <div class="dis_user flex_box">
-              <img :src="item.masterPic" alt="">
+              <img v-show="item.headImg!=0"  :src="item.headImg" alt="">
+              <img v-show="item.headImg==0"  src="../../assets/img/1.png" alt="">
               <div>
-                <span>{{item.master}}</span>
+                <span>{{item.user_name}}</span>
                 <span class="span_mar_top">{{item.time}}</span>
               </div>
             </div>
@@ -47,24 +48,23 @@
               <img  v-for="img in item.images" :src="img" alt="">
             </div>
             <div class="edit_btn">
-              <i class="iconfont icon-dianzan orange" @click="isLike(index)"
-                 :class="{'orange_color':item.like}"></i><span v-show="item.like_total!=0" :class="{'orange_color':item.like}">{{item.like_total}}</span>
-              <i class="iconfont icon-pinglun orange" @click="addDis(index)"></i>
-              <span>12</span>
-              <el-button type="text" @click="deletDis" v-show="item.is_own==1"><i
+              <i class="iconfont icon-dianzan orange" @click="oboutLike(item.is_like,item.id),item.is_like=!item.is_like"
+                 :class="{'orange_color':item.is_like}"></i><span v-show="item.like_total!=0" :class="{'orange_color':item.is_like}">{{item.like_total}}</span>
+              <i class="iconfont icon-pinglun orange" @click="addDis(item.id)"></i>
+              <span>{{item.sonList.length}}</span>
+              <el-button type="text" @click="deletDis(item.id)"  v-show="item.is_own==1"><i
                 class="iconfont icon-shanchu orange"></i>
               </el-button>
             </div>
-            <div class="dis_detail flex_box">
-              <img src="../../assets/img/bg2.jpg" alt="">
+            <div class="dis_detail flex_box" v-for="(sonList,index) in item.sonList">
+              <img v-show="sonList.headImg!=0"  :src="sonList.headImg" alt="">
+              <img v-show="sonList.headImg==0"  src="../../assets/img/1.png" alt="">
               <div>
-                <span>小可爱：lallalalallalalalallalal</span>
-                <span class="span_mar_top">2017.08.11&nbsp;&nbsp;&nbsp;12:00
-               <i class="iconfont icon-dianzan orange" @click="isLike(index)"
-                  :class="{'orange_color':item.like}"></i><span :class="{'orange_color':item.like}"
-                                                                class="dis_detail_i">123</span>
-            <i class="iconfont icon-pinglun orange" @click="addDis(index)"></i>
-                  <span class="dis_detail_i">123</span>
+                <span>{{sonList.user_name}}：{{sonList.content}}</span>
+                <span class="span_mar_top">{{sonList.time}}
+               <i class="iconfont icon-dianzan orange"  :class="{'orange_color':sonList.is_like}" @click="oboutLike(sonList.is_like,sonList.id),sonList.is_like=!sonList.is_like"></i>
+                  <span v-show="sonList.like_total!=0" :class="{'orange_color':item.is_like}" class="dis_detail_i">{{sonList.like_total}}</span>
+                  <span v-show="sonList.is_own" class="iconfont orange dis_detail_i icon-shanchu" @click="deletDis(sonList.id)"></span>
             </span>
               </div>
             </div>
@@ -114,48 +114,6 @@
         textarea: '',//发帖子内容
         dianzanIndex: -1,
         value1: '',
-        disList: [
-          {
-            isAccount: true,//1 可删除 0 不可删除
-            master: '小仙女',
-            masterPic: require('../../assets/img/home1.jpg'),
-            innerPic: require('../../assets/img/bg2.jpg'),
-            time: '昨天 12:00',
-            speech: '评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论',
-            like: true,
-            visitor: [{
-              name: '小可爱}],',
-              toAnswer: '小仙女',
-              visitorPic: require('../../assets/img/bg2.jpg'),
-              visitor: 'lallalalallalalalallalal',
-              year: '2017.08.11',
-              time: '12:00'
-            }, {
-              name: '小可爱}],',
-              toAnswer: '小仙女',
-              visitorPic: require('../../assets/img/bg2.jpg'),
-              visitor: 'lallalalallalalalallalal',
-              year: '2017.08.11',
-              time: '12:00'
-            }, {
-              name: '小可爱}],',
-              toAnswer: '小仙女',
-              visitorPic: require('../../assets/img/bg2.jpg'),
-              visitor: 'lallalalallalalalallalal',
-              year: '2017.08.11',
-              time: '12:00'
-            }],
-          },
-          {
-            isAccount: false,//1 可删除 0 不可删除
-            master: '小仙女',
-            masterPic: require('../../assets/img/home1.jpg'),
-            innerPic: '',
-            time: '昨天 12:00',
-            speech: '评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论',
-            like: false,
-          },
-        ],
         currentPage: 1,
         forumList:[],
         listCount:1,
@@ -179,14 +137,14 @@
         this.getList(1)
       },
       getList(val){
-        this.forumList = [];
-        var images;
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         });
+        this.forumList = [];
+        var images;
         var json = {
           start: val,
           userId:this.userId
@@ -194,7 +152,6 @@
        /* if(state){
           json.state=state
         }*/
-
         this.$http.post(this.url, json).then(
           (success) => {
           var response = success.data;
@@ -212,15 +169,18 @@
                  images=''
                }
                 var obj={
-                  content:response.forumList[i].content,
                   id:response.forumList[i].id,
-                  images:images,
+                  content:response.forumList[i].content,
+                  headImg:response.forumList[i].headImg,
+                  sonList:response.forumList[i].sonList,
+                  is_like:response.forumList[i].is_like,
                   is_own:response.forumList[i].is_own,
                   like_total:response.forumList[i].like_total,
                   reply_id:response.forumList[i].reply_id,
                   time:response.forumList[i].time,
                   user_id:response.forumList[i].user_id,
                   user_name:response.forumList[i].user_name,
+                  images:images,
                 };
                 this.forumList.push(obj);
               }
@@ -274,49 +234,63 @@
       },
       /*发送帖子*/
       sendDis() {
-        console.log('发送帖子');
-        this.$message({
-          message: '恭喜你，发帖成功',
-          type: 'success'
-        });
-        //发送错误
-        /* this.$message.error('错了哦，这是一条错误消息');*/
+       var images = this.headImgArr.join(",");
+        var content =this.textarea;
+        console.log(this.textarea);
+        if(!this.textarea){
+         this.$message.error('错误，请输入帖子内容');
+       }else {
+         const loading = this.$loading({
+           lock: true,
+           text: '正在发送请求',
+           spinner: 'el-icon-loading',
+           background: 'rgba(0, 0, 0, 0.7)'
+         });
+         var url= this.localhost + 'associationMg/forum/saveOrUpdate';
+         var  json={
+           content:content,
+           userId:this.userId,
+         };
+         if(images){
+           json.images =images
+         }
+         this.$http.post(url, json).then(
+           (success) => {
+             var response = success.data;
+             console.log(response);
+             if (response.msg == 666) {
+               this.$message({
+                 showClose: true,
+                 message: '帖子发送成功',
+                 type: 'success'
+               });
+               this.textarea='';
+               this.headImgArr=[];
+               this.createFunc()
+             } else {
+               this.$message.error('错误，请求数据失败');
+             }
+             setTimeout(() => {
+               loading.close();
+             }, 500);
+           },
+           (error) => {
+             setTimeout(()=> {
+               loading.close();
+             },500);
+             this.$message.error('错误，请求数据失败');
+           });
+       }
       },
-      //删除评论
-      deletDis() {
-        console.log('删除评论');
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      //取消或者点赞
-      isLike(index){
-        this.disList[index].like = !this.disList[index].like;
-      },
-      addDis(index) {
+      /*评论帖子*/
+      addDis(replyId) {
         this.$prompt('请输评论信息', '评论', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputErrorMessage: '评论不能为空',
           inputPattern: /\S/,
         }).then(({value}) => {
-          var reg = /^\s*$/g;
-          this.$message({
-            type: 'success',
-            message: '已发表评论'
-          });
+          this.disdisDis(replyId,value);
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -324,6 +298,132 @@
           });
         });
       },
+      disdisDis(replyId,content) {
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url= this.localhost + 'associationMg/forum/saveOrUpdate';
+        var  json={
+          content:content,
+          userId:this.userId,
+          replyId:replyId,
+        };
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                showClose: true,
+                message: '帖子评论成功',
+                type: 'success'
+              });
+              this.createFunc()
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          },
+          (error) => {
+            setTimeout(()=> {
+              loading.close();
+            },500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
+      //删除帖子 id
+      deletDis(id) {
+        this.$confirm('是否删除该评论或帖子?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.postDel(id)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      postDel(id){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url= this.localhost +'associationMg/forum/deleteForum';
+        var json = {
+          id: id,
+        };
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if (response.msg == 666) {
+              this.$message({
+                showClose: true,
+                message: '删除成功',
+                type: 'success'
+              });
+              this.createFunc()
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+          },
+          (error) => {
+            setTimeout(()=> {
+              loading.close();
+            },500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
+      oboutLike(inLike,id){
+        var url;
+        var json;
+        console.log(inLike);
+        if(inLike){
+          url= this.localhost +'associationMg/likeComments/cancelLike';
+          json={
+            commentsId:id,
+          }
+          this.postLike(url,json)
+          }else {
+          /*点赞*/
+          url= this.localhost +'associationMg/likeComments/saveOrUpdate';
+          json={
+            commentsId:id,
+            userId:this.userId
+          }
+          this.postLike(url,json)
+          }
+
+      },
+      postLike(url,json){
+        this.$http.post(url, json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if (response.msg == 666) {
+                this.createFunc()
+            } else {
+              this.$message.error('错误，请求数据失败');
+            }
+          },
+          (error) => {
+            this.$message.error('错误，请求数据失败');
+          });
+      },
+
     }
   }
 </script>
@@ -432,5 +532,8 @@
     .imgBox{
       margin-left:60px;
     }
+      .orange_color{
+        color: orange;
+      }
   }
 </style>
