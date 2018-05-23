@@ -30,8 +30,6 @@
       </el-tab-pane>
       <el-tab-pane label="社团论坛" name="second">
         <ul class="dis_box">
-          <!--本人发的可以删除-->
-          <!--不是本人发的不可以删除-->
           <li class="top">
             <span>时间筛选：</span>
             <el-date-picker
@@ -41,22 +39,33 @@
             </el-date-picker>
             <el-button>搜索</el-button>
           </li>
-          <li v-for="(item,index) in disList">
+          <li v-for="(item,index) in forumList">
             <div class="dis_user flex_box">
+              <!--content:"eweweaw"
+                  create_time:1525959067000
+                  id:2
+                  imgs:"0"
+                  is_own:0
+                  like_total:1
+                  reply_id:1
+                  time:"2018-05-10 21:31"
+                  user_id:2
+                  user_name:"刘超群"
+                  -->
               <img :src="item.masterPic" alt="">
               <div>
                 <span>{{item.master}}</span>
                 <span class="span_mar_top">{{item.time}}</span>
               </div>
             </div>
-            <span>{{item.speech}}</span>
+            <span>{{item.content}}</span>
             <div class="dis_img"><img :src="item.innerPic" alt=""></div>
             <div class="edit_btn">
               <i class="iconfont icon-dianzan orange" @click="isLike(index)"
-                 :class="{'orange_color':item.like}"></i><span :class="{'orange_color':item.like}">123</span>
+                 :class="{'orange_color':item.like}"></i><span v-show="item.like_total!=0" :class="{'orange_color':item.like}">{{item.like_total}}</span>
               <i class="iconfont icon-pinglun orange" @click="addDis(index)"></i>
               <span>12</span>
-              <el-button type="text" @click="deletDis" v-show="item.isAccount"><i
+              <el-button type="text" @click="deletDis" v-show="item.is_own==1"><i
                 class="iconfont icon-shanchu orange"></i>
               </el-button>
             </div>
@@ -83,7 +92,7 @@
               :current-page="currentPage"
               :page-size="10"
               layout="total, prev, pager, next, jumper"
-              :total="400">
+              :total="listCount">
             </el-pagination>
           </div>
         </div>
@@ -167,13 +176,75 @@
             like: false,
           },
         ],
-        currentPage: 1
+        currentPage: 1,
+        forumList:[],
+        listCount:1,
       }
     },
     mounted(){
 
     },
+    created() {
+      this.createFunc()
+    },
     methods: {
+      createFunc(){
+        this.userId = localStorage.getItem('userId');
+        this.url = this.localhost + 'associationMg/forum/getForums';
+        this.getList(1)
+      },
+      getList(val,state,id,title){
+        this.forumList = [];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var json = {
+          start: val,
+          userId:this.userId
+        };
+        if(state){
+          json.state=state
+        }
+        if(id){
+          json.id=id
+        }
+        if(title){
+          json.title=title
+        }
+        this.$http.post(this.url, json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if (response.msg == 666) {
+            this.listCount = parseInt(response.listCount);
+            if (response.forumList.length == 0) {
+              this.showNo = true
+            } else {
+              this.showNo = false;
+              for (var i = 0; i < response.forumList.length; i++) {
+                this.forumList.push(response.forumList[i]);
+              }
+            }
+          } else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+        },
+        (error) => {
+          setTimeout(()=> {
+            loading.close();
+          },500);
+          this.$message.error('错误，请求数据失败');
+        });
+        setTimeout(() => {
+          loading.close();
+      }, 500);
+      },
       /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

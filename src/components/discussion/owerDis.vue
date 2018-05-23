@@ -3,9 +3,9 @@
     <ul class="dis_box">
       <li class="top">
         <div>
-          <span>新闻管理</span>
+          <span>论坛</span>
           <span>	&gt;</span>
-          <span class="blue">全部新闻</span>
+          <span class="blue">管理帖子</span>
         </div>
         <div>
           <span>时间筛选：</span> <el-date-picker v-model="value1" type="date" placeholder="选择日期"></el-date-picker> <el-button>搜索</el-button>
