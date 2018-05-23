@@ -89,7 +89,7 @@
             </p>
             <p>
               <span>分类：</span>
-              <el-select v-model="getUser.type_id" placeholder="社团分类">
+              <el-select v-model="getUser.type_id" placeholder="教师分类">
                 <el-option label="专业学术类" value="1"></el-option>
                 <el-option label="科技创新类" value="2"></el-option>
                 <el-option label="艺术兴趣类" value="3"></el-option>
@@ -301,6 +301,7 @@
             birthday :this.getUser.birthday_time,
             phone : this.getUser.phone,
             typeId : this.getUser.type_id,
+            email : this.getUser.email,
             userType:2
           };
           this.$http.post(url,json).then(
@@ -309,7 +310,7 @@
               console.log(response);
               if (response.msg==666){
                 this.$message({
-                  message: '修改个人信息成功',
+                  message: '成功创建教师',
                   type: 'success'
                 });
                 this.goBack()

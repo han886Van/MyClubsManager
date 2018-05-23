@@ -236,6 +236,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+        this.currentPage = val;
         var userId = this.idInput;
         var userName = this.nameInput;
         var typeId = this.teacherSort;

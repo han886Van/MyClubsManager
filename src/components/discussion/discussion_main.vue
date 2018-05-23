@@ -208,6 +208,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+      this.currentPage = val;
       this.getList(val)
       },
       handleRemove(file, fileList) {

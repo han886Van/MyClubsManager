@@ -179,7 +179,8 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.getList(val)
+        this.getList(val);
+        this.currentPage = val;
       },
       handleRemove(file, fileList) {
         this.headImgArr=[];

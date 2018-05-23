@@ -27,7 +27,7 @@
       <div>
         <div class="title">
           <span>序号</span>
-          <span>账号</span>
+          <span>编号</span>
           <span>学号</span>
           <span>姓名</span>
           <span>性别</span>
@@ -251,6 +251,8 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+        this.currentPage = val;
+        console.log(this.currentPage);
         var userId = this.idInput;
         var userName = this.nameInput;
         var grade = this.grade;
@@ -293,7 +295,8 @@
                 message: '成功删除学生！',
                 type: 'success'
               });
-              this.getStudent(1)
+              this.currentPage = 1;
+              this.createFunc()
             }else {
               this.$message.error('错误，请求数据失败');
             }
@@ -315,6 +318,12 @@
     created() {
       this.createFunc()
     },
+    watch: {
+      currentPage: function () {
+        console.log('监听到currentPage发生变化');
+        console.log(this.currentPage);
+      }
+    }
   }
 </script>
 

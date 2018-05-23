@@ -98,6 +98,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+        this.currentPage = val;
         var associationId =this.idInput;
         var name =this.nameInput;
         this.getTList(val,this.url,associationId,name)

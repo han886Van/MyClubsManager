@@ -240,6 +240,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+        this.currentPage = val;
         var state = this.sendStatus;
         var id = this.idInput;
         var title = this.nameInput;

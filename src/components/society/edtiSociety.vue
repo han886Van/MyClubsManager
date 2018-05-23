@@ -57,6 +57,8 @@
               action="http://localhost:8080/associationMg/attachment/uploadFile"
               list-type="picture-card"
               :limit="6"
+              :file-list="headImgArr"
+              :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
               :on-success="handlSuccess"
               :on-remove="handleRemove">
@@ -225,6 +227,24 @@
               this.changeUserId = this.$route.query.changeUserId;
             }
             console.log(this.detailAssociation);
+            if( this.detailAssociation.headImg!=0){
+              this.imageUrl = this.detailAssociation.headimg;
+            }
+            if(this.detailAssociation.imgs!='0'){
+              console.log('11111');
+              console.log(this.detailAssociation.imgs);
+              console.log(this.detailAssociation.imgs.split(","));
+              this.headImgArr= [];
+              var imgs = this.detailAssociation.imgs.split(",")
+               for(var i=0; i<imgs.length;i++){
+                var boj={
+                    url:imgs[i]
+                };
+                this.headImgArr.push(boj)
+              }
+              console.log(this.headImgArr,'headImgArr');
+
+            }
           } else {
             this.$message.error('错误，社团详情请求数据失败');
 //              this.goBack()
@@ -240,6 +260,9 @@
 //            this.goBack()
         });
 
+      },
+      handleExceed(){
+        this.$message.error('抱歉，最多只能传6张图片');
       },
     },
 

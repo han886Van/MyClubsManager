@@ -13,7 +13,7 @@
       </div>
       <div class="info">
         <div class="edit_input">
-          <p><span >社长账号：</span><el-input
+          <p><span >社长编号：</span><el-input
             placeholder=""
             v-model="userId"
             :disabled="true">
@@ -23,7 +23,7 @@
             <el-select v-model="sortSociety" placeholder="社团分类">
               <el-option label="专业学术类" value="1"></el-option>
               <el-option label="科技创新类" value="2"></el-option>
-              <el-option label="艺术兴趣类" value="2"></el-option>
+              <el-option label="艺术兴趣类" value="3"></el-option>
               <el-option label="体育健身类" value="4"></el-option>
               <el-option label="公益服务类" value="5"></el-option>
             </el-select>
@@ -163,7 +163,7 @@
                 type: 'success',
                 message: '创建社团请求发送成功！'
               });
-              this.toRouter('/society?myRouter=5')
+              this.toRouter('society?myRouter=4')
             }else {
               this.$message.error('错误，创建社团失败！');
             }

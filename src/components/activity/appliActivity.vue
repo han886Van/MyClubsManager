@@ -208,6 +208,7 @@
         this.getTList(val,this.url,associationId,name)
       },
       handleCurrentChange(val) {
+        this.currentPage = val;
         console.log(`当前页: ${val}`);
       },
       deilAppli(id,state){

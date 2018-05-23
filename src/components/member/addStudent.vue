@@ -83,7 +83,7 @@
             </p>
             <p>
               <span>学号：</span>
-              <el-input v-model="getUser.student_num" placeholder="请输入内容" clearable></el-input>
+              <el-input v-model="getUser.studentNum" placeholder="请输入内容" clearable></el-input>
             </p>
             <p>
               <span>名字：</span>
@@ -158,7 +158,8 @@
           major:"",
           phone:"",
           sex:"0",
-          userId:''
+          userId:'',
+          studentNum:''
         },
         file:'',
         userRole:''
@@ -285,6 +286,8 @@
           this.$message.error('用户密码不能为空！');
         }else if(!userName) {
           this.$message.error('用户姓名不能为空！');
+        }else if(!this.getUser.studentNum) {
+          this.$message.error('学生学号不能为空！');
         }else if(!college) {
           this.$message.error('学院不能为空！');
         }else if(!major) {
@@ -300,9 +303,11 @@
           var json={
             userType:3,
             account : this.getUser.account,
+            studentNum : this.getUser.studentNum,
             password :this.getUser.password,
             college : this.getUser.college,
             major : this.getUser.major,
+            email : this.getUser.email,
             grade: this.getUser.grade,
             headImg : this.imageUrl,
             userName :this.getUser.user_name,
