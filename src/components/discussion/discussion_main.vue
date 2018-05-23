@@ -41,17 +41,6 @@
           </li>
           <li v-for="(item,index) in forumList">
             <div class="dis_user flex_box">
-              <!--content:"eweweaw"
-                  create_time:1525959067000
-                  id:2
-                  imgs:"0"
-                  is_own:0
-                  like_total:1
-                  reply_id:1
-                  time:"2018-05-10 21:31"
-                  user_id:2
-                  user_name:"刘超群"
-                  -->
               <img :src="item.masterPic" alt="">
               <div>
                 <span>{{item.master}}</span>
@@ -59,7 +48,9 @@
               </div>
             </div>
             <span>{{item.content}}</span>
-            <div class="dis_img"><img :src="item.innerPic" alt=""></div>
+            <div class="dis_img" v-show="item.images">
+              <img  v-for="img in item.images" :src="img" alt="">
+            </div>
             <div class="edit_btn">
               <i class="iconfont icon-dianzan orange" @click="isLike(index)"
                  :class="{'orange_color':item.like}"></i><span v-show="item.like_total!=0" :class="{'orange_color':item.like}">{{item.like_total}}</span>
@@ -193,8 +184,9 @@
         this.url = this.localhost + 'associationMg/forum/getForums';
         this.getList(1)
       },
-      getList(val,state,id,title){
+      getList(val){
         this.forumList = [];
+        var images;
         const loading = this.$loading({
           lock: true,
           text: '正在发送请求',
@@ -205,15 +197,10 @@
           start: val,
           userId:this.userId
         };
-        if(state){
+       /* if(state){
           json.state=state
-        }
-        if(id){
-          json.id=id
-        }
-        if(title){
-          json.title=title
-        }
+        }*/
+
         this.$http.post(this.url, json).then(
           (success) => {
           var response = success.data;
@@ -225,8 +212,25 @@
             } else {
               this.showNo = false;
               for (var i = 0; i < response.forumList.length; i++) {
-                this.forumList.push(response.forumList[i]);
+               if(response.forumList[i].imgs!='0'){
+                 images= response.forumList[i].imgs.split(",")
+               }else {
+                 images=''
+               }
+                var obj={
+                  content:response.forumList[i].content,
+                  id:response.forumList[i].id,
+                  images:images,
+                  is_own:response.forumList[i].is_own,
+                  like_total:response.forumList[i].like_total,
+                  reply_id:response.forumList[i].reply_id,
+                  time:response.forumList[i].time,
+                  user_id:response.forumList[i].user_id,
+                  user_name:response.forumList[i].user_name,
+                };
+                this.forumList.push(obj);
               }
+              console.log(this.forumList);
             }
           } else {
             this.$message.error('错误，请求数据失败');
@@ -250,7 +254,7 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      this.getList(val)
       },
       handleClick(tab, event) {
         console.log(tab, event);

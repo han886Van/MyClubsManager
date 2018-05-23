@@ -9,15 +9,15 @@
       <div class="search_box">
         <div>
           <span>学生账号：</span>
-          <el-input v-model="idInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="idInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>学生名字：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="nameInput" placeholder="请输入内容" clearable></el-input>
         </div>
         <div>
           <span>学生年级：</span>
-          <el-input v-model="grade" placeholder="请输入内容"></el-input>
+          <el-input v-model="grade" placeholder="请输入内容" clearable></el-input>
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
@@ -49,7 +49,7 @@
             <span @click="toRouter('/detailMember',item.user_id)">{{item.college}}</span>
             <div>
               <span class="editBtn" @click="toRouter('/addStudent',item.user_id,1)">编辑</span>
-              <span class="delBtn" @click="delMember(index)">删除</span>
+              <span class="delBtn" @click="delMember(item.user_id)">删除</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无学生成员</li>
@@ -205,7 +205,7 @@
           json.userName=userName
         }
         if(grade){
-          json.typeId=grade
+          json.grade=grade
         }
         this.$http.post(url,json).then(
           (success) => {
@@ -236,12 +236,12 @@
           });
       },
       searchItem(){
-        /*userId(编号userId)、userName(名字 可模糊查询)、typeId(老师类别id)*/
         var userId = this.idInput;
         var userName = this.nameInput;
         var grade = this.grade;
         if(!userId&&!userName&&!grade){
           this.$message.error('错误，请输入搜索信息');
+          this.getStudent(1)
         }else {
           this.getStudent(1,userId,userName,grade)
         }
@@ -259,16 +259,13 @@
       toRouter(myRouter,memberId,role){
         this.$router.push({path: myRouter, query: {'memberId': memberId,'role':role}})
       },
-      delMember(index) {
+      delMember(userId) {
         this.$confirm('是否删除该成员?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+            this. postDel(userId)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -276,6 +273,41 @@
           });
         });
       },
+      postDel(userId){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url = this.localhost+'associationMg/user/deleteUser';
+        var json ={
+          userId:userId,
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+              this.$message({
+                message: '成功删除学生！',
+                type: 'success'
+              });
+              this.getStudent(1)
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      }
     },
     mounted(){
 

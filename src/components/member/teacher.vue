@@ -54,7 +54,7 @@
              <span @click="toRouter('/detailMember',item.user_id)" v-show="item.type_id==5">公益服务类</span>
             <div>
               <span class="editBtn" @click="toRouter('/addTeacher',item.user_id)" >编辑</span>
-              <span class="delBtn" @click="delMember(index)">删除</span>
+              <span class="delBtn" @click="delMember(item.user_id)">删除</span>
             </div>
           </li>
           <li v-show="showNo" class="noList">暂无学生成员</li>
@@ -248,6 +248,7 @@
           var typeId = this.teacherSort;
           if(!userId&&!userName&&!typeId){
             this.$message.error('错误，请输入搜索信息');
+            this.getTeacher(1)
           }else if(typeId==6){
             this.getTeacher(1,userId,userName)
           }else {
@@ -257,16 +258,13 @@
       toRouter(myRouter,memberId){
         this.$router.push({path: myRouter, query: {'memberId': memberId}})
       },
-      delMember(index) {
+      delMember(userId) {
         this.$confirm('是否删除该成员?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this. postDel(userId)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -274,6 +272,41 @@
           });
         });
       },
+      postDel(userId){
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url = this.localhost+'associationMg/user/deleteUser';
+        var json ={
+          userId:userId,
+        };
+        this.$http.post(url,json).then(
+          (success) => {
+          var response = success.data;
+          console.log(response);
+          if(response.msg==666){
+            this.$message({
+              message: '成功删除教师！',
+              type: 'success'
+            });
+            this.getTeacher(1)
+          }else {
+            this.$message.error('错误，请求数据失败');
+          }
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+
+        }, (error) => {
+          setTimeout(() => {
+            loading.close();
+          }, 500);
+          this.$message.error('错误，请求数据失败');
+        });
+      }
     },
     mounted(){
 
