@@ -13,25 +13,6 @@
       </div>
       <div class="info">
         <div class="left_box">
-         <!--apply_comments:"123123"
-             association_id:1
-             association_name:"校篮球队"
-             begin_day:"2018-05-15"
-             begin_time:1526363414000
-             check_person:"季磊"
-             check_person_id:7
-             content:"计科院各班级比赛，决出名次并可领取相应奖励"
-             create_time:1526889643000
-             end_day:"2018-05-15"
-             end_time:1526363420000
-             id:2
-             state:"1"
-             state_name:"同意申请"
-             state_num:"1"
-             title:"计科篮球赛活动申请1"
-             user_id:4
-             user_name:"张三"
--->
           <p>
             <span class="span_title">申请社团：</span>
             <span>{{detailEvent.association_name}}</span>
@@ -51,6 +32,7 @@
             <span class="delBtn"  v-show="detailEvent.state_num==1">通过审核</span>
             <span class="delBtn"  v-show="detailEvent.state_num==2">未通过审核</span>
           </p>
+
         </div>
         <div class="right_box">
           <p>
@@ -66,6 +48,11 @@
           <p>
             <span class="span_title">活动内容：</span>
             <span>{{detailEvent.content}}</span>
+          </p>
+          <p>
+            <span class="span_title">申请理由：</span>
+            <span v-show="detailEvent.check_person!='0'">{{detailEvent.apply_comments}}</span>
+            <span v-show="detailEvent.check_person=='0'">暂无</span>
           </p>
         </div>
       </div>

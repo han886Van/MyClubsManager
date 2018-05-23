@@ -181,7 +181,7 @@
           var url = this.localhost + 'associationMg/materiel/modifyMaterielStatus';
           var json={
             id:id,
-            userId:this.userId
+            checkPersonId:this.userId
           }
           if(state){
             json.state=state

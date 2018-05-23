@@ -124,7 +124,7 @@
           associationId:associationId,
           title:this.title,
           content:this.content,
-          apply_comments:this.applyComments,
+          applyComments:this.applyComments,
           beginTime:this.value4[0],
           endTime:this.value4[1],
           state:0,

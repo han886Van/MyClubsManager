@@ -221,7 +221,7 @@
         var url = this.localhost + 'associationMg/event/modifyEventStatus';
         var json={
           id:id,
-          userId:this.userId
+          checkPersonId:this.userId
         }
         if(state){
           json.state=state

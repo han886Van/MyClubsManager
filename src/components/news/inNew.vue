@@ -3,7 +3,7 @@
     <div class="bgc">
       <!--学生-->
       <div class="top" v-show="userRole==1">
-        <span>活动管理</span>
+        <span>新闻管理</span>
       </div>
       <div class="top" v-show="userRole==2">
         <span>社团管理</span>
