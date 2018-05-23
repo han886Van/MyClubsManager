@@ -34,13 +34,13 @@
         </div>
         <ul class="list">
           <li class="societyList" v-for="(item,index) in assoMaterielList">
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{index+1}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.id}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.content}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.begin_day}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.end_day}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.association_name}}</span>
-            <span  @click="toRouter('/detailMaterials',item.Numbering)">{{item.user_name}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{index+1}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.id}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.content}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.begin_day}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.end_day}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.association_name}}</span>
+            <span  @click="toRouter('/detailMaterials',item.id)">{{item.user_name}}</span>
             <div>
               <span class="delBtn" @click="deilAppli(item.id,1)">同意</span>
               <span class="refuseBtn" @click="deilAppli(item.id)">拒绝</span>
@@ -168,8 +168,8 @@
         }
         },
       /*退出社团*/
-      toRouter(myRouter, Numbering){
-        this.$router.push({path: myRouter, query: {'Numbering': Numbering}})
+      toRouter(myRouter, id){
+        this.$router.push({path: myRouter, query: {'id': id}})
       },
       deilAppli(id,state){
         const loading = this.$loading({
