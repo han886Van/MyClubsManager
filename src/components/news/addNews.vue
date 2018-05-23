@@ -40,6 +40,7 @@
               action="http://localhost:8080/associationMg/attachment/uploadFile"
               list-type="picture-card"
               :limit="6"
+              :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
               :on-success="handlSuccess"
               :on-remove="handleRemove">
@@ -188,7 +189,10 @@
           for(var i =0;i<fileList.length;i++){
               this.headImgArr.push(fileList[i].response.headImg);
           }
-      }
+      },
+      handleExceed(){
+        this.$message.error('抱歉，最多只能传6张图片');
+      },
     },
 
     mounted(){

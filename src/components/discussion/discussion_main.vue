@@ -1,10 +1,11 @@
 <template>
   <div class="discussion">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" >
       <el-tab-pane label="新增帖子" name="first">
         <ul class="dis_box">
           <li>
-            <div style="display: flex; justify-content: space-between;align-items: center;"><span>发帖：</span>
+            <div style="display: flex; justify-content: space-between;align-items: center;">
+              <span>发帖：</span>
               <el-input
                 type="textarea"
                 resize="none"
@@ -12,16 +13,18 @@
                 v-model="textarea">
               </el-input>
             </div>
+          <div class="imgBox">
             <el-upload
-              class="upload-demo"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :file-list="fileList2"
-              list-type="picture">
-              <el-button size="small" type="primary">上传图片</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              action="http://localhost:8080/associationMg/attachment/uploadFile"
+              list-type="picture-card"
+              :limit=9
+              :on-preview="handlePictureCardPreview"
+              :on-success="handlSuccess"
+              :on-exceed="handleExceed"
+              :on-remove="handleRemove">
+              <i class="el-icon-plus"></i>
             </el-upload>
+          </div>
             <div class="send_btn">
               <el-button  @click="sendDis" type="primary">发帖</el-button>
             </div>
@@ -30,15 +33,7 @@
       </el-tab-pane>
       <el-tab-pane label="社团论坛" name="second">
         <ul class="dis_box">
-          <li class="top">
-            <span>时间筛选：</span>
-            <el-date-picker
-              v-model="value1"
-              type="date"
-              placeholder="选择日期">
-            </el-date-picker>
-            <el-button>搜索</el-button>
-          </li>
+          <li class="top"></li>
           <li v-for="(item,index) in forumList">
             <div class="dis_user flex_box">
               <img :src="item.masterPic" alt="">
@@ -74,6 +69,7 @@
               </div>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无帖子</li>
         </ul>
         <div class="myPagination">
           <div>
@@ -101,7 +97,9 @@
     <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
   </span>
     </el-dialog>
-
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
@@ -114,15 +112,6 @@
         activeName: 'second',
         centerDialogVisible: false,//添加评论模块
         textarea: '',//发帖子内容
-        fileList2: [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }, {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-          {name: 'bg.jpeg', url: require('../../assets/img/home1.jpg')}
-        ],
         dianzanIndex: -1,
         value1: '',
         disList: [
@@ -170,6 +159,11 @@
         currentPage: 1,
         forumList:[],
         listCount:1,
+        showNo:false,
+        briefIntroduction:'',
+        dialogImageUrl: '',
+        dialogVisible: false,
+        headImgArr:[],
       }
     },
     mounted(){
@@ -233,6 +227,7 @@
               console.log(this.forumList);
             }
           } else {
+            this.showNo = true
             this.$message.error('错误，请求数据失败');
           }
           setTimeout(() => {
@@ -256,20 +251,26 @@
       handleCurrentChange(val) {
       this.getList(val)
       },
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
-      /*
-       * 上传文件方法
-       * */
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+          console.log(this.headImgArr,'handleRemove');
+        }
       },
-      /*
-       * 上传文件方法
-       * */
-      handlePreview(file) {
-        console.log(file);
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      handlSuccess(response, file, fileList){
+        this.headImgArr=[];
+        for(var i =0;i<fileList.length;i++){
+          this.headImgArr.push(fileList[i].response.headImg);
+          console.log(this.headImgArr,'handlSuccess');
+        }
+      },
+      handleExceed(){
+        this.$message.error('抱歉，最多只能传9张图片');
       },
       /*发送帖子*/
       sendDis() {
@@ -340,6 +341,7 @@
       cursor: pointer;
     }
     .dis_box {
+      min-height:340px;
       li {
         width: 1024px
         padding: 20px;
@@ -347,6 +349,7 @@
         font-size: 16px;
         border-bottom: 1px solid #ccc;
       }
+
       li:nth-last-child(1) {
         border-bottom: none;
       }
@@ -420,6 +423,14 @@
     }
     .send_btn {
       float: right;
+    }
+    .noList{
+      font-size: 22px;
+      text-align: center
+      justify-content :center !important;
+    }
+    .imgBox{
+      margin-left:60px;
     }
   }
 </style>

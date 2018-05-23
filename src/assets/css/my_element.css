@@ -21,15 +21,13 @@
   padding:0;
   border:none;
 }
-.discussion .el-upload-list__item{
-  width: 48%;
-}
-.discussion .el-upload-list {
+
+/*.discussion .el-upload-list {
   display: flex;
   justify-content:space-between;
   align-content:center;
   flex-wrap: wrap;
-}
+}*/
 .discussion .el-textarea__inner{
   height: 100px;
   margin-bottom: 10px;
