@@ -63,7 +63,7 @@
               <el-input v-model="getUser.user_name" placeholder="请输入内容" clearable></el-input>
             </p>
             <p><span>性别：</span>
-              <el-select v-model="getUser.sex" placeholder="社团分类">
+              <el-select v-model="getUser.sex" placeholder="性别">
                 <el-option label="女" value="0"></el-option>
                 <el-option label="男" value="1"></el-option>
               </el-select>
@@ -84,10 +84,24 @@
             </p>
           </div>
           <div class="right_item">
-            <p v-show="getUser.type_name"><span>分类：</span><span>{{getUser.type_name}}</span></p>
-            <p v-show="getUser.grade"><span>年级：</span><span>{{getUser.grade}}</span></p>
-            <p v-show="getUser.major"><span>专业：</span><span>{{getUser.major}}</span></p>
-            <p v-show="getUser.college"><span>学院：</span><span>{{getUser.college}}</span></p>
+            <p v-show="getUser.type_name"><span>分类：</span>
+              <el-select v-model="getUser.type_name" placeholder="社团分类">
+                <el-option label="专业学术类" value="1"></el-option>
+                <el-option label="科技创新类" value="2"></el-option>
+                <el-option label="艺术兴趣类" value="3"></el-option>
+                <el-option label="体育健身类" value="4"></el-option>
+                <el-option label="公益服务类" value="5"></el-option>
+              </el-select>
+            </p>
+            <p v-show="getUser.grade"><span>年级：</span>
+              <el-input v-model="getUser.grade" placeholder="请输入内容" clearable></el-input>
+            </p>
+            <p v-show="getUser.major"><span>专业：</span>
+              <el-input v-model="getUser.major" placeholder="请输入内容" clearable></el-input>
+            </p>
+            <p v-show="getUser.college"><span>学院：</span>
+              <el-input v-model="getUser.college" placeholder="请输入内容" clearable></el-input>
+            </p>
             <p v-show="getUser.email">
               <span>邮箱：</span>
               <el-input v-model="getUser.email" placeholder="请输入内容" clearable></el-input>
@@ -237,6 +251,8 @@
             userId:userId,
             headImg :this.imageUrl,
             userName: this.getUser.user_name,
+            major: this.getUser.major,
+            grade: this.getUser.grade,
             sex :this.getUser.sex,
             birthday :this.getUser.birthday_time,
             phone :this.getUser.phone,

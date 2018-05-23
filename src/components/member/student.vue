@@ -8,7 +8,7 @@
       </div>
       <div class="search_box">
         <div>
-          <span>学生编号：</span>
+          <span>学生账号：</span>
           <el-input v-model="idInput" placeholder="请输入内容"></el-input>
         </div>
         <div>
@@ -17,7 +17,7 @@
         </div>
         <div>
           <span>学生年级：</span>
-          <el-input v-model="nameInput" placeholder="请输入内容"></el-input>
+          <el-input v-model="grade" placeholder="请输入内容"></el-input>
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
@@ -27,6 +27,7 @@
       <div>
         <div class="title">
           <span>序号</span>
+          <span>账号</span>
           <span>学号</span>
           <span>姓名</span>
           <span>性别</span>
@@ -36,25 +37,22 @@
           <span>操作</span>
         </div>
         <ul class="list">
-          <li class="societyList" v-for="(item,index) in hadArr">
-            <span @click="toRouter('/detailMember',item.studentId)">{{index+1}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.studentId}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.studentName}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sex==0">女</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sex==1">男</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.grade}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.profession}}</span>
-            <span @click="toRouter('/detailMember',item.memberId)">{{item.college}}</span>
-           <!-- <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==1">专业学术类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==2">科技创新类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==3">艺术兴趣类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==4">体育健身类</span>
-            <span @click="toRouter('/detailMember',item.memberId)" v-show="item.sort==5">公益服务类</span>-->
+          <li class="societyList" v-for="(item,index) in userList">
+            <span @click="toRouter('/detailMember',item.user_id)">{{index+1}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_id}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.student_num}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.user_name}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.sex==0">女</span>
+            <span @click="toRouter('/detailMember',item.user_id)" v-show="item.sex==1">男</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.grade}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.major}}</span>
+            <span @click="toRouter('/detailMember',item.user_id)">{{item.college}}</span>
             <div>
-              <span class="editBtn" @click="toRouter('/addStudent',item.studentId)">编辑</span>
+              <span class="editBtn" @click="toRouter('/addStudent',item.user_id,1)">编辑</span>
               <span class="delBtn" @click="delMember(index)">删除</span>
             </div>
           </li>
+          <li v-show="showNo" class="noList">暂无学生成员</li>
         </ul>
       </div>
       <div  class="myPagination">
@@ -65,7 +63,7 @@
             :current-page="currentPage"
             :page-size="10"
             layout="total, prev, pager, next, jumper"
-            :total="400">
+            :total="totalNum">
           </el-pagination>
         </div>
       </div>
@@ -174,69 +172,92 @@
           },
 
         ],
-        sortSociety:'',
+        grade:'',
         nameInput:'',
         idInput:'',
-        currentPage:1
+        currentPage:1,
+        totalNum:1,
+        userList:[],
+        showNo:false
       }
     },
     methods: {
+      createFunc(){
+          this.getStudent(1)
+      },
+      getStudent(val,userId,userName,grade){
+        this.userList=[];
+        const loading = this.$loading({
+          lock: true,
+          text: '正在发送请求',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+        var url = this.localhost+'associationMg/user/getUserList';
+        var json ={
+          userType:3,
+          start:val
+        };
+        if(userId){
+          json.userId=userId
+        }
+        if(userName){
+          json.userName=userName
+        }
+        if(grade){
+          json.typeId=grade
+        }
+        this.$http.post(url,json).then(
+          (success) => {
+            var response = success.data;
+            console.log(response);
+            if(response.msg==666){
+                this.totalNum=response.total_num;
+                if(response.userList.length>0){
+                    this.showNo=false;
+                  for(var i=0;i<response.userList.length;i++){
+                    this.userList.push(response.userList[i])
+                  }
+                }else {
+                  this.showNo=true;
+                }
+            }else {
+              this.$message.error('错误，请求数据失败');
+            }
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+
+          }, (error) => {
+            setTimeout(() => {
+              loading.close();
+            }, 500);
+            this.$message.error('错误，请求数据失败');
+          });
+      },
+      searchItem(){
+        /*userId(编号userId)、userName(名字 可模糊查询)、typeId(老师类别id)*/
+        var userId = this.idInput;
+        var userName = this.nameInput;
+        var grade = this.grade;
+        if(!userId&&!userName&&!grade){
+          this.$message.error('错误，请输入搜索信息');
+        }else {
+          this.getStudent(1,userId,userName,grade)
+        }
+      },
       /*分页器*/
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        var userId = this.idInput;
+        var userName = this.nameInput;
+        var grade = this.grade;
+        this.getStudent(val,userId,userName,grade)
       },
-      searchItem(){
-        var searchArr = [];
-        var lastArr = [];
-        var idInput = this.idInput;
-        var sortSociety = this.sortSociety;
-        var nameInput = this.nameInput;
-        if (isNaN(idInput) && idInput != '') {
-          this.$message({
-            type: 'error',
-            message: '社团编号请输入数字!'
-          });
-        }
-        searchArr.push({name: 'sortSociety', value: sortSociety});
-        searchArr.push({name: 'nameInput', value: nameInput});
-        searchArr.push({name: 'idInput', value: idInput});
-        for (var i = 0; i < searchArr.length; i++) {
-          if (searchArr[i].value != '') {
-            lastArr.push(searchArr[i]);
-          }
-        }
-        console.log(searchArr);
-        console.log(lastArr);
-        if (lastArr.length > 0) {
-          console.log('发送请求');
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请输入或选择搜索条件!'
-          });
-        }
-        /*请求*/
-        /*   this.$http.post(url).then(
-         (success) => {
-         this.Indicator.close();
-         var response = success.data;
-         this.SET_USER_LOGIN(false);
-         this.mineObj.mineName = '请登录';
-         this.$router.push({path: '/login'})
-         },(error) => {
-         this.Indicator.close();
-         this.Toast({
-         message: '总部信息加载失败',
-         duration: 2000
-         });
-         });*/
-
-      },
-      toRouter(myRouter,studentId){
-        this.$router.push({path: myRouter, query: {'studentId': studentId}})
+      toRouter(myRouter,memberId,role){
+        this.$router.push({path: myRouter, query: {'memberId': memberId,'role':role}})
       },
       delMember(index) {
         this.$confirm('是否删除该成员?', '提示', {
@@ -258,7 +279,10 @@
     },
     mounted(){
 
-    }
+    },
+    created() {
+      this.createFunc()
+    },
   }
 </script>
 

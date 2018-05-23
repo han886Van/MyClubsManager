@@ -50,10 +50,10 @@
         </el-menu-item>-->
       </el-submenu>
       <!--管理员-->
-      <el-menu-item v-show="myRole==3" index="society">
+      <!--<el-menu-item v-show="myRole==3" index="society">
         <i class="iconfont icon-shangwuzhantubiaoku__jishutuandui"></i>
         <span slot="title" class="i_word">社团管理</span>
-      </el-menu-item>
+      </el-menu-item>-->
       <!--成员管理-->
       <el-submenu index="inSociety" v-show="myRole!=3">
         <template slot="title">
