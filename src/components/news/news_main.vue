@@ -28,7 +28,7 @@
         </div>
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button v-show="isPresident==1" @click="toRouter('/addNews',0,associationId)" type="primary">添加新闻</el-button>
+          <el-button v-show="isPresident=='1'" @click="toRouter('/addNews',0,associationId)" type="primary">添加新闻</el-button>
         </div>
       </div>
       <div>
@@ -206,13 +206,13 @@
            console.log(response);
         if (response.msg == 666) {
           this.listCount = parseInt(response.listCount);
+          this.isPresident =response.isPresident;
           if (response.assoNewsList.length == 0) {
             this.showNo = true
           } else {
             this.showNo = false;
             for (var i = 0; i < response.assoNewsList.length; i++) {
               if (this.userRole == 1) {
-                this.isPresident =response.isPresident;
                 this.assoNewsList.push(response.assoNewsList[i]);
               } else {
                 this.assoNewsList.push(response.assoNewsList[i]);

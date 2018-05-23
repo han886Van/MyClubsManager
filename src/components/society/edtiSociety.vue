@@ -39,7 +39,7 @@
             type="textarea"
             resize="none"
             placeholder="请输入内容"
-            v-model="detailAssociation.check_comments">
+            v-model="detailAssociation.brief_introduction">
           </el-input>
           </p>
           <p class="headImg"><span class="title_span">社团头像：</span>
@@ -143,7 +143,7 @@
         var name = this.detailAssociation.name;
         var typeId = this.detailAssociation.type_id;
         var place = this.detailAssociation.place;
-        var briefIntroduction = this.detailAssociation.check_comments;
+        var briefIntroduction = this.detailAssociation.brief_introduction;
         if(!typeId){
           this.$message.error('请选择社团类型！');
         }else if(!name){

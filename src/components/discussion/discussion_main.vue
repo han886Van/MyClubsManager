@@ -18,6 +18,7 @@
               action="http://localhost:8080/associationMg/attachment/uploadFile"
               list-type="picture-card"
               :limit=9
+              :file-list="headImgArr"
               :on-preview="handlePictureCardPreview"
               :on-success="handlSuccess"
               :on-exceed="handleExceed"
@@ -224,6 +225,7 @@
       },
       handlSuccess(response, file, fileList){
         this.headImgArr=[];
+        console.log(fileList);
         for(var i =0;i<fileList.length;i++){
           this.headImgArr.push(fileList[i].response.headImg);
           console.log(this.headImgArr,'handlSuccess');
@@ -266,7 +268,8 @@
                });
                this.textarea='';
                this.headImgArr=[];
-               this.createFunc()
+               this.createFunc();
+               console.log(this.headImgArr,'headImgArr');
              } else {
                this.$message.error('错误，请求数据失败');
              }

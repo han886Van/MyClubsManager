@@ -87,7 +87,7 @@
             <span @click="toRouter('/detailMember',item.user_id)">{{item.user_type_name}}</span>
             <div>
               <span class="blue" v-show="isPresident==1" @click="changeMember('/changeMain',item.association_id)">更换</span>
-              <span class="blue" v-show="isPresident!=1">查看</span>
+              <span @click="toRouter('/detailMember',item.user_id)" class="blue" v-show="isPresident!=1">查看</span>
             </div>
           </li>
           <!--社员-->

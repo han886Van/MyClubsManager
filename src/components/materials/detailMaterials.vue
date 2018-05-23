@@ -46,11 +46,11 @@
           </p>
           <p>
             <span>申请内容：</span>
-            <span>{{detailMateriel.apply_comments}}</span>
+            <span>{{detailMateriel.content}}</span>
           </p>
           <p>
             <span>申请理由：</span>
-            <span>{{detailMateriel.content}}</span>
+            <span>{{detailMateriel.apply_comments}}</span>
           </p>
         </div>
       </div>

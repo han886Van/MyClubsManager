@@ -203,6 +203,7 @@
           var response = success.data;
           console.log(response);
           if(response.msg==666){
+            this.isPresident = response.isPresident
             this.totalNum =parseInt(response.listCount);
            if(response.assoEventList.length==0){
               this.showNo=true
@@ -211,7 +212,6 @@
              for(var i =0; i<response.assoEventList.length;i++){
                if(this.userRole==1){
                  this.assoEventList.push(response.assoEventList[i]);
-                 this.isPresident = response.isPresident
                }else{
                  this.assoEventList.push(response.assoEventList[i]);
                }

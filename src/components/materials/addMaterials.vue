@@ -44,10 +44,10 @@
               v-model="applyComments">
             </el-input>
           </p>
-          <p><span class="title_span">社团账号：</span>
+          <p><span class="title_span">社团编号：</span>
             <el-input placeholder="请输入内容" :disabled="true" v-model="associationId"></el-input>
           </p>
-          <p><span class="title_span">社长账号：</span>
+          <p><span class="title_span">社长编号：</span>
             <el-input placeholder="请输入内容" :disabled="true" v-model="userId"></el-input>
           </p>
           <div>
