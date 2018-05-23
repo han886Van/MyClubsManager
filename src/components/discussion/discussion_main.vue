@@ -52,7 +52,7 @@
                  :class="{'orange_color':item.is_like}"></i><span v-show="item.like_total!=0" :class="{'orange_color':item.is_like}">{{item.like_total}}</span>
               <i class="iconfont icon-pinglun orange" @click="addDis(item.id)"></i>
               <span>{{item.sonList.length}}</span>
-              <el-button type="text" @click="deletDis(item.id)"  v-show="item.is_own==1"><i
+              <el-button type="text" @click="deletDis(item.id)"  v-show="item.is_own==1||userRole==3"><i
                 class="iconfont icon-shanchu orange"></i>
               </el-button>
             </div>
@@ -63,8 +63,8 @@
                 <span>{{sonList.user_name}}：{{sonList.content}}</span>
                 <span class="span_mar_top">{{sonList.time}}
                <i class="iconfont icon-dianzan orange"  :class="{'orange_color':sonList.is_like}" @click="oboutLike(sonList.is_like,sonList.id),sonList.is_like=!sonList.is_like"></i>
-                  <span v-show="sonList.like_total!=0" :class="{'orange_color':item.is_like}" class="dis_detail_i">{{sonList.like_total}}</span>
-                  <span v-show="sonList.is_own" class="iconfont orange dis_detail_i icon-shanchu" @click="deletDis(sonList.id)"></span>
+                  <span v-show="sonList.like_total!=0" :class="{'orange_color':item.is_like}" class="dis_detail_i orange">{{sonList.like_total}}</span>
+                  <span v-show="sonList.is_own||userRole==3" class="iconfont orange dis_detail_i icon-shanchu" @click="deletDis(sonList.id)"></span>
             </span>
               </div>
             </div>
@@ -132,6 +132,7 @@
     },
     methods: {
       createFunc(){
+        this.userRole = localStorage.getItem('userRole');
         this.userId = localStorage.getItem('userId');
         this.url = this.localhost + 'associationMg/forum/getForums';
         this.getList(1)
