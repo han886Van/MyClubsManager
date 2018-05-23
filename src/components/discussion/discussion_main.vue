@@ -33,7 +33,6 @@
       </el-tab-pane>
       <el-tab-pane label="社团论坛" name="second">
         <ul class="dis_box">
-          <li class="top"></li>
           <li v-for="(item,index) in forumList">
             <div class="dis_user flex_box">
               <img v-show="item.headImg!=0"  :src="item.headImg" alt="">
