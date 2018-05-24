@@ -57,7 +57,6 @@
               action="http://localhost:8080/associationMg/attachment/uploadFile"
               list-type="picture-card"
               :limit="6"
-              :file-list="headImgArr"
               :on-exceed="handleExceed"
               :on-preview="handlePictureCardPreview"
               :on-success="handlSuccess"
@@ -230,7 +229,7 @@
             if( this.detailAssociation.headImg!=0){
               this.imageUrl = this.detailAssociation.headimg;
             }
-            if(this.detailAssociation.imgs!='0'){
+            /*if(this.detailAssociation.imgs!='0'){
               console.log('11111');
               console.log(this.detailAssociation.imgs);
               console.log(this.detailAssociation.imgs.split(","));
@@ -244,7 +243,7 @@
               }
               console.log(this.headImgArr,'headImgArr');
 
-            }
+            }*/
           } else {
             this.$message.error('错误，社团详情请求数据失败');
 //              this.goBack()
