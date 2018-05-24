@@ -207,18 +207,23 @@
         if (response.msg == 666) {
           this.listCount = parseInt(response.listCount);
           this.isPresident =response.isPresident;
-          if (response.assoNewsList.length == 0) {
-            this.showNo = true
-          } else {
-            this.showNo = false;
-            for (var i = 0; i < response.assoNewsList.length; i++) {
-              if (this.userRole == 1) {
-                this.assoNewsList.push(response.assoNewsList[i]);
-              } else {
-                this.assoNewsList.push(response.assoNewsList[i]);
+          if(this.isPresident=='1'){
+            if (response.assoNewsList.length == 0) {
+              this.showNo = true
+            } else {
+              this.showNo = false;
+              for (var i = 0; i < response.assoNewsList.length; i++) {
+                if (this.userRole == 1) {
+                  this.assoNewsList.push(response.assoNewsList[i]);
+                } else {
+                  this.assoNewsList.push(response.assoNewsList[i]);
+                }
               }
             }
+          }else{
+            this.showNo = true
           }
+
         } else {
           this.$message.error('错误，请求数据失败');
         }

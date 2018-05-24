@@ -613,7 +613,10 @@
             var response = success.data;
             console.log(response);
             if(response.msg==666){
-
+              this.$message({
+                type: 'success',
+                message: '请求发送成功'
+              });
             }else {
               this.$message.error('错误，申请失败');
             }

@@ -54,7 +54,7 @@
         </div>-->
         <div class="searchBtn">
           <el-button @click="searchItem()" type="info" plain>搜索</el-button>
-          <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1||isPresident==1">申请物资</el-button>
+          <el-button @click="toRouter('/addMaterials',0,associationId)" type="primary" v-show="userRole==1&&isPresident==1">申请物资</el-button>
         </div>
       </div>
       <div>
